@@ -30,11 +30,11 @@ public class ParseUtilTest {
 
 	@Test
 	public void testGetCriticalDamagePositive() throws Exception {
-		List<String> collection = Arrays.asList("This", "item", "has", "+10 Critical Damage");
+		List<String> collection = Arrays.asList("This", "item", "has", "+10% Critical Damage");
 		String format = "%value% Critical Damage";
 
 		double actual = ParseUtil.getCriticalDamage(collection, format);
-		double expected = 10D;
+		double expected = 0.1D;
 
 		Assert.assertTrue("Actual value is not equal to expected value", actual == expected);
 	}
@@ -107,11 +107,11 @@ public class ParseUtilTest {
 
 	@Test
 	public void testGetCriticalDamageNegative() throws Exception {
-		List<String> collection = Arrays.asList("This", "item", "has", "+100 Critical Damage");
+		List<String> collection = Arrays.asList("This", "item", "has", "+100% Critical Damage");
 		String format = "%value% Critical Damage";
 
 		double actual = ParseUtil.getCriticalDamage(collection, format);
-		double expected = 10D;
+		double expected = 0.1D;
 
 		Assert.assertFalse("Actual value is equal to expected value", actual == expected);
 	}
