@@ -14,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
@@ -232,6 +233,28 @@ public class CoreListener implements Listener {
 		event.getPlayer().setMaxHealth(baseMaxHealth + d);
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onEntityTargetEventLowest(EntityTargetEvent event) {
+		if (event.isCancelled() || !(event.getEntity() instanceof
+				LivingEntity) || event.getEntity() instanceof Player) {
+			return;
+		}
+		LivingEntity entity = (LivingEntity) event.getEntity();
+		ItemStack[] armorContents = entity.getEquipment().getArmorContents();
+		double d = 0.0;
+		for (ItemStack is : armorContents) {
+			d += ParseUtil.getHealth(getItemStackLore(is), getPlugin().getSettingsManager()
+					.getHealthFormat());
+		}
+		d += ParseUtil.getHealth(getItemStackLore(entity.getEquipment().getItemInHand()),
+				getPlugin().getSettingsManager().getHealthFormat());
+		double currentHealth = entity.getHealth();
+		entity.resetMaxHealth();
+		double baseMaxHealth = entity.getMaxHealth();
+		entity.setMaxHealth(baseMaxHealth + d);
+		entity.setHealth(Math.min(Math.max(currentHealth, 0), entity.getMaxHealth()));
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
