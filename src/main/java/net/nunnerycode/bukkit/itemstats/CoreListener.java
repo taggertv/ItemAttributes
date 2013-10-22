@@ -424,23 +424,30 @@ public final class CoreListener implements Listener {
 		handleLevelRequirementCheck(player);
 	}
 
-	@EventHandler(priority = EventPriority.LOW)
-	public void onEntityDamageEventLow(EntityDamageEvent event) {
-		if (event.isCancelled() || event instanceof EntityDamageByEntityEvent || !(event.getEntity() instanceof
-				LivingEntity)) {
-			return;
-		}
-		double damageReduction = 0.0;
-		for (ItemStack is : ((LivingEntity) event.getEntity()).getEquipment().getArmorContents()) {
-			damageReduction += ParseUtil.getArmor(getItemStackLore(is), getPlugin().getSettingsManager()
-					.getArmorFormat());
-		}
-		if (((LivingEntity) event.getEntity()).getEquipment().getItemInHand().hasItemMeta() && ((LivingEntity) event
-				.getEntity()).getEquipment().getItemInHand().getItemMeta().hasLore()) {
-			damageReduction += ParseUtil.getArmor(getItemStackLore(((LivingEntity) event.getEntity()).getEquipment()
-					.getItemInHand()), getPlugin().getSettingsManager().getArmorFormat());
-		}
-		event.setDamage(Math.max(event.getDamage() - damageReduction, 0.0));
-	}
+//	@EventHandler(priority = EventPriority.LOW)
+//	public void onEntityDamageEventLow(EntityDamageEvent event) {
+//		if (event.isCancelled() || event instanceof EntityDamageByEntityEvent || !(event.getEntity() instanceof
+//				LivingEntity)) {
+//			return;
+//		}
+//		EntityDamageEvent.DamageCause damageCause = event.getCause();
+//		if (damageCause == EntityDamageEvent.DamageCause.FIRE_TICK || damageCause == EntityDamageEvent.DamageCause
+//				.DROWNING || damageCause == EntityDamageEvent.DamageCause.POISON || damageCause == EntityDamageEvent
+//				.DamageCause.STARVATION || damageCause == EntityDamageEvent.DamageCause.SUFFOCATION || damageCause ==
+//				EntityDamageEvent.DamageCause.SUICIDE || damageCause == EntityDamageEvent.DamageCause.THORNS) {
+//			return;
+//		}
+//		double damageReduction = 0.0;
+//		for (ItemStack is : ((LivingEntity) event.getEntity()).getEquipment().getArmorContents()) {
+//			damageReduction += ParseUtil.getArmor(getItemStackLore(is), getPlugin().getSettingsManager()
+//					.getArmorFormat());
+//		}
+//		if (((LivingEntity) event.getEntity()).getEquipment().getItemInHand().hasItemMeta() && ((LivingEntity) event
+//				.getEntity()).getEquipment().getItemInHand().getItemMeta().hasLore()) {
+//			damageReduction += ParseUtil.getArmor(getItemStackLore(((LivingEntity) event.getEntity()).getEquipment()
+//					.getItemInHand()), getPlugin().getSettingsManager().getArmorFormat());
+//		}
+//		event.setDamage(Math.max(event.getDamage() - damageReduction, 0.0));
+//	}
 
 }
