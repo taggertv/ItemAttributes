@@ -42,6 +42,74 @@ public class CoreListener implements Listener {
 		}
 	}
 
+	private void handleLevelRequirementCheckSlot(Player player, int i) {
+		ItemStack itemInHand = player.getInventory().getItem(i);
+		ItemStack helmet = player.getEquipment().getHelmet();
+		ItemStack chestplate = player.getEquipment().getChestplate();
+		ItemStack leggings = player.getEquipment().getLeggings();
+		ItemStack boots = player.getEquipment().getBoots();
+
+		// item in hand check
+		int level = ParseUtil.getLevelRequired(getItemStackLore(itemInHand), getPlugin().getSettingsManager()
+				.getLevelRequirementFormat());
+		if (player.getLevel() < level) {
+			if (player.getInventory().firstEmpty() >= 0) {
+				player.getInventory().addItem(itemInHand);
+			} else {
+				player.getWorld().dropItem(player.getLocation(), itemInHand);
+			}
+			player.getInventory().setItem(i, null);
+		}
+
+		// helmet check
+		level = ParseUtil.getLevelRequired(getItemStackLore(helmet), getPlugin().getSettingsManager()
+				.getLevelRequirementFormat());
+		if (player.getLevel() < level) {
+			if (player.getInventory().firstEmpty() >= 0) {
+				player.getInventory().addItem(helmet);
+			} else {
+				player.getWorld().dropItem(player.getLocation(), helmet);
+			}
+			player.getEquipment().setHelmet(null);
+		}
+
+		// chestplate check
+		level = ParseUtil.getLevelRequired(getItemStackLore(chestplate), getPlugin().getSettingsManager()
+				.getLevelRequirementFormat());
+		if (player.getLevel() < level) {
+			if (player.getInventory().firstEmpty() >= 0) {
+				player.getInventory().addItem(chestplate);
+			} else {
+				player.getWorld().dropItem(player.getLocation(), chestplate);
+			}
+			player.getEquipment().setChestplate(null);
+		}
+
+		// leggings check
+		level = ParseUtil.getLevelRequired(getItemStackLore(leggings), getPlugin().getSettingsManager()
+				.getLevelRequirementFormat());
+		if (player.getLevel() < level) {
+			if (player.getInventory().firstEmpty() >= 0) {
+				player.getInventory().addItem(leggings);
+			} else {
+				player.getWorld().dropItem(player.getLocation(), leggings);
+			}
+			player.getEquipment().setLeggings(null);
+		}
+
+		// boots check
+		level = ParseUtil.getLevelRequired(getItemStackLore(boots), getPlugin().getSettingsManager()
+				.getLevelRequirementFormat());
+		if (player.getLevel() < level) {
+			if (player.getInventory().firstEmpty() >= 0) {
+				player.getInventory().addItem(boots);
+			} else {
+				player.getWorld().dropItem(player.getLocation(), boots);
+			}
+			player.getEquipment().setBoots(null);
+		}
+	}
+
 	private void handleLevelRequirementCheck(Player player) {
 		ItemStack itemInHand = player.getEquipment().getItemInHand();
 		ItemStack helmet = player.getEquipment().getHelmet();
@@ -110,6 +178,18 @@ public class CoreListener implements Listener {
 		}
 	}
 
+	public ItemStatsPlugin getPlugin() {
+		return plugin;
+	}
+
+	public List<String> getItemStackLore(ItemStack itemStack) {
+		List<String> lore = new ArrayList<String>();
+		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
+			lore.addAll(itemStack.getItemMeta().getLore());
+		}
+		return lore;
+	}
+
 	@EventHandler(priority = EventPriority.LOW)
 	public void onInventoryCloseEventLow(InventoryCloseEvent event) {
 		for (HumanEntity he : event.getViewers()) {
@@ -131,16 +211,10 @@ public class CoreListener implements Listener {
 		}
 	}
 
-	public List<String> getItemStackLore(ItemStack itemStack) {
-		List<String> lore = new ArrayList<String>();
-		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
-			lore.addAll(itemStack.getItemMeta().getLore());
-		}
-		return lore;
-	}
-
-	public ItemStatsPlugin getPlugin() {
-		return plugin;
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerJoinEventLowest(PlayerJoinEvent event) {
+   		Player player = event.getPlayer();
+		handleLevelRequirementCheck(player);
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
@@ -158,6 +232,12 @@ public class CoreListener implements Listener {
 		event.getPlayer().setMaxHealth(baseMaxHealth + d);
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerRespawnEventLowest(PlayerRespawnEvent event) {
+		Player player = event.getPlayer();
+		handleLevelRequirementCheck(player);
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
@@ -194,6 +274,12 @@ public class CoreListener implements Listener {
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
 	}
 
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onItemHeldEventLowest(PlayerItemHeldEvent event) {
+		Player player = event.getPlayer();
+		handleLevelRequirementCheckSlot(player, event.getNewSlot());
+	}
+
 	@EventHandler(priority = EventPriority.LOW)
 	public void onItemHeldEventLow(PlayerItemHeldEvent event) {
 		ItemStack[] armorContents = event.getPlayer().getEquipment().getArmorContents();
@@ -209,6 +295,15 @@ public class CoreListener implements Listener {
 		event.getPlayer().setMaxHealth(baseMaxHealth + d);
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onEntityRegainHealthEventLowest(EntityRegainHealthEvent event) {
+		if (!(event.getEntity() instanceof Player)) {
+			return;
+		}
+		Player player = (Player) event.getEntity();
+		handleLevelRequirementCheck(player);
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
@@ -294,6 +389,16 @@ public class CoreListener implements Listener {
 			default:
 				return null;
 		}
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onEntityDamageEventLowest(EntityDamageEvent event) {
+		if (event.isCancelled() || event instanceof EntityDamageByEntityEvent || !(event.getEntity() instanceof
+				Player)) {
+			return;
+		}
+		Player player = (Player) event.getEntity();
+		handleLevelRequirementCheck(player);
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
