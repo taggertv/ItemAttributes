@@ -31,8 +31,8 @@ public class CoreListener implements Listener {
 		this.plugin = plugin;
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onInventoryCloseEvent(InventoryCloseEvent event) {
+	@EventHandler(priority = EventPriority.LOW)
+	public void onInventoryCloseEventLow(InventoryCloseEvent event) {
 		for (HumanEntity he : event.getViewers()) {
 			ItemStack[] armorContents = he.getEquipment().getArmorContents();
 			double d = 0.0;
@@ -52,10 +52,6 @@ public class CoreListener implements Listener {
 		}
 	}
 
-	public ItemStatsPlugin getPlugin() {
-		return plugin;
-	}
-
 	public List<String> getItemStackLore(ItemStack itemStack) {
 		List<String> lore = new ArrayList<String>();
 		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
@@ -64,8 +60,29 @@ public class CoreListener implements Listener {
 		return lore;
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerJoinEvent(PlayerJoinEvent event) {
+	public ItemStatsPlugin getPlugin() {
+		return plugin;
+	}
+
+	@EventHandler(priority = EventPriority.LOW)
+	public void onPlayerJoinEventLow(PlayerJoinEvent event) {
+		ItemStack[] armorContents = event.getPlayer().getEquipment().getArmorContents();
+		double d = 0.0;
+		for (ItemStack is : armorContents) {
+			d += ParseUtil.getHealth(getItemStackLore(is), getPlugin().getSettingsManager()
+					.getHealthFormat());
+		}
+		d += ParseUtil.getHealth(getItemStackLore(event.getPlayer().getItemInHand()),
+				getPlugin().getSettingsManager().getHealthFormat());
+		double currentHealth = event.getPlayer().getHealth();
+		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
+		event.getPlayer().setMaxHealth(baseMaxHealth + d);
+		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
+		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
+	}
+
+	@EventHandler(priority = EventPriority.LOW)
+	public void onPlayerRespawnEventLow(PlayerRespawnEvent event) {
 		ItemStack[] armorContents = event.getPlayer().getEquipment().getArmorContents();
 		double d = 0.0;
 		for (ItemStack is : armorContents) {
@@ -82,7 +99,7 @@ public class CoreListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerRespawnEvent(PlayerRespawnEvent event) {
+	public void onItemBreakEventLowest(PlayerItemBreakEvent event) {
 		ItemStack[] armorContents = event.getPlayer().getEquipment().getArmorContents();
 		double d = 0.0;
 		for (ItemStack is : armorContents) {
@@ -98,25 +115,8 @@ public class CoreListener implements Listener {
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onItemBreakEvent(PlayerItemBreakEvent event) {
-		ItemStack[] armorContents = event.getPlayer().getEquipment().getArmorContents();
-		double d = 0.0;
-		for (ItemStack is : armorContents) {
-			d += ParseUtil.getHealth(getItemStackLore(is), getPlugin().getSettingsManager()
-					.getHealthFormat());
-		}
-		d += ParseUtil.getHealth(getItemStackLore(event.getPlayer().getItemInHand()),
-				getPlugin().getSettingsManager().getHealthFormat());
-		double currentHealth = event.getPlayer().getHealth();
-		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
-		event.getPlayer().setMaxHealth(baseMaxHealth + d);
-		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
-		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onItemHeldEvent(PlayerItemHeldEvent event) {
+	@EventHandler(priority = EventPriority.LOW)
+	public void onItemHeldEventLow(PlayerItemHeldEvent event) {
 		ItemStack[] armorContents = event.getPlayer().getEquipment().getArmorContents();
 		double d = 0.0;
 		for (ItemStack is : armorContents) {
@@ -132,8 +132,8 @@ public class CoreListener implements Listener {
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onEntityRegainHealthEvent(EntityRegainHealthEvent event) {
+	@EventHandler(priority = EventPriority.LOW)
+	public void onEntityRegainHealthEventLow(EntityRegainHealthEvent event) {
 		double amount = event.getAmount();
 		if (event.getEntity() instanceof LivingEntity) {
 			LivingEntity le = (LivingEntity) event.getEntity();
@@ -149,7 +149,7 @@ public class CoreListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onProjectileLaunchEvent(ProjectileLaunchEvent event) {
+	public void onProjectileLaunchEventMonitor(ProjectileLaunchEvent event) {
 		Projectile projectile = event.getEntity();
 		if (projectile.getShooter() == null) {
 			return;
@@ -217,8 +217,8 @@ public class CoreListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onEntityDamageEvent(EntityDamageEvent event) {
+	@EventHandler(priority = EventPriority.LOW)
+	public void onEntityDamageEventLow(EntityDamageEvent event) {
 		if (event.isCancelled() || event instanceof EntityDamageByEntityEvent || !(event.getEntity() instanceof
 				LivingEntity)) {
 			return;
