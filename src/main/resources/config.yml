@@ -1,3 +1,5 @@
+options:
+  base-player-health: 20.0
 core-stats:
   health:
     format: "%value% Health"
