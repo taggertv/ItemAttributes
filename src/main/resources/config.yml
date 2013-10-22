@@ -15,4 +15,4 @@ core-stats:
     format: "%value% Critical Damage"
   level-requirement:
     format: "Level Required: %value%"
-version: "1.0.0"
+version: "1.0.1"

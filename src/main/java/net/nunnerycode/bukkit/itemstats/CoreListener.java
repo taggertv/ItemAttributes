@@ -1,5 +1,7 @@
 package net.nunnerycode.bukkit.itemstats;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
@@ -35,19 +37,13 @@ public class CoreListener implements Listener {
 			ItemStack[] armorContents = he.getEquipment().getArmorContents();
 			double d = 0.0;
 			for (ItemStack is : armorContents) {
-				if (is.hasItemMeta() && is.getItemMeta().hasLore()) {
-					d += ParseUtil.getHealth(is.getItemMeta().getLore(), getPlugin().getSettingsManager()
-							.getHealthFormat());
-				}
+				d += ParseUtil.getHealth(getItemStackLore(is), getPlugin().getSettingsManager()
+						.getHealthFormat());
 			}
-			if (he.getEquipment().getItemInHand().hasItemMeta() && he.getEquipment().getItemInHand().getItemMeta()
-					.hasLore()) {
-				d += ParseUtil.getHealth(he.getEquipment().getItemInHand().getItemMeta().getLore(),
-						getPlugin().getSettingsManager().getHealthFormat());
-			}
+			d += ParseUtil.getHealth(getItemStackLore(he.getEquipment().getItemInHand()),
+					getPlugin().getSettingsManager().getHealthFormat());
 			double currentHealth = he.getHealth();
-			he.resetMaxHealth();
-			double baseMaxHealth = he.getMaxHealth();
+			double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 			he.setMaxHealth(baseMaxHealth + d);
 			he.setHealth(Math.min(Math.max(currentHealth, 0), he.getMaxHealth()));
 			if (he instanceof Player) {
@@ -60,24 +56,26 @@ public class CoreListener implements Listener {
 		return plugin;
 	}
 
+	public List<String> getItemStackLore(ItemStack itemStack) {
+		List<String> lore = new ArrayList<String>();
+		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
+			lore.addAll(itemStack.getItemMeta().getLore());
+		}
+		return lore;
+	}
+
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerJoinEvent(PlayerJoinEvent event) {
 		ItemStack[] armorContents = event.getPlayer().getEquipment().getArmorContents();
 		double d = 0.0;
 		for (ItemStack is : armorContents) {
-			if (is.hasItemMeta() && is.getItemMeta().hasLore()) {
-				d += ParseUtil.getHealth(is.getItemMeta().getLore(), getPlugin().getSettingsManager()
-						.getHealthFormat());
-			}
+			d += ParseUtil.getHealth(getItemStackLore(is), getPlugin().getSettingsManager()
+					.getHealthFormat());
 		}
-		if (event.getPlayer().getEquipment().getItemInHand().hasItemMeta() && event.getPlayer().getEquipment()
-				.getItemInHand().getItemMeta().hasLore()) {
-			d += ParseUtil.getHealth(event.getPlayer().getEquipment().getItemInHand().getItemMeta().getLore(),
-					getPlugin().getSettingsManager().getHealthFormat());
-		}
+		d += ParseUtil.getHealth(getItemStackLore(event.getPlayer().getItemInHand()),
+				getPlugin().getSettingsManager().getHealthFormat());
 		double currentHealth = event.getPlayer().getHealth();
-		event.getPlayer().resetMaxHealth();
-		double baseMaxHealth = event.getPlayer().getMaxHealth();
+		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 		event.getPlayer().setMaxHealth(baseMaxHealth + d);
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
@@ -88,19 +86,13 @@ public class CoreListener implements Listener {
 		ItemStack[] armorContents = event.getPlayer().getEquipment().getArmorContents();
 		double d = 0.0;
 		for (ItemStack is : armorContents) {
-			if (is.hasItemMeta() && is.getItemMeta().hasLore()) {
-				d += ParseUtil.getHealth(is.getItemMeta().getLore(), getPlugin().getSettingsManager()
-						.getHealthFormat());
-			}
+			d += ParseUtil.getHealth(getItemStackLore(is), getPlugin().getSettingsManager()
+					.getHealthFormat());
 		}
-		if (event.getPlayer().getEquipment().getItemInHand().hasItemMeta() && event.getPlayer().getEquipment()
-				.getItemInHand().getItemMeta().hasLore()) {
-			d += ParseUtil.getHealth(event.getPlayer().getEquipment().getItemInHand().getItemMeta().getLore(),
-					getPlugin().getSettingsManager().getHealthFormat());
-		}
+		d += ParseUtil.getHealth(getItemStackLore(event.getPlayer().getItemInHand()),
+				getPlugin().getSettingsManager().getHealthFormat());
 		double currentHealth = event.getPlayer().getHealth();
-		event.getPlayer().resetMaxHealth();
-		double baseMaxHealth = event.getPlayer().getMaxHealth();
+		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 		event.getPlayer().setMaxHealth(baseMaxHealth + d);
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
@@ -111,19 +103,13 @@ public class CoreListener implements Listener {
 		ItemStack[] armorContents = event.getPlayer().getEquipment().getArmorContents();
 		double d = 0.0;
 		for (ItemStack is : armorContents) {
-			if (is.hasItemMeta() && is.getItemMeta().hasLore()) {
-				d += ParseUtil.getHealth(is.getItemMeta().getLore(), getPlugin().getSettingsManager()
-						.getHealthFormat());
-			}
+			d += ParseUtil.getHealth(getItemStackLore(is), getPlugin().getSettingsManager()
+					.getHealthFormat());
 		}
-		if (event.getPlayer().getEquipment().getItemInHand().hasItemMeta() && event.getPlayer().getEquipment()
-				.getItemInHand().getItemMeta().hasLore()) {
-			d += ParseUtil.getHealth(event.getPlayer().getEquipment().getItemInHand().getItemMeta().getLore(),
-					getPlugin().getSettingsManager().getHealthFormat());
-		}
+		d += ParseUtil.getHealth(getItemStackLore(event.getPlayer().getItemInHand()),
+				getPlugin().getSettingsManager().getHealthFormat());
 		double currentHealth = event.getPlayer().getHealth();
-		event.getPlayer().resetMaxHealth();
-		double baseMaxHealth = event.getPlayer().getMaxHealth();
+		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 		event.getPlayer().setMaxHealth(baseMaxHealth + d);
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
@@ -134,19 +120,13 @@ public class CoreListener implements Listener {
 		ItemStack[] armorContents = event.getPlayer().getEquipment().getArmorContents();
 		double d = 0.0;
 		for (ItemStack is : armorContents) {
-			if (is.hasItemMeta() && is.getItemMeta().hasLore()) {
-				d += ParseUtil.getHealth(is.getItemMeta().getLore(), getPlugin().getSettingsManager()
-						.getHealthFormat());
-			}
+			d += ParseUtil.getHealth(getItemStackLore(is), getPlugin().getSettingsManager()
+					.getHealthFormat());
 		}
-		if (event.getPlayer().getInventory().getItem(event.getNewSlot()).hasItemMeta() && event.getPlayer()
-				.getInventory().getItem(event.getNewSlot()).getItemMeta().hasLore()) {
-			d += ParseUtil.getHealth(event.getPlayer().getInventory().getItem(event.getNewSlot()).getItemMeta()
-					.getLore(), getPlugin().getSettingsManager().getHealthFormat());
-		}
+		d += ParseUtil.getHealth(getItemStackLore(event.getPlayer().getInventory().getItem(event.getNewSlot())),
+				getPlugin().getSettingsManager().getHealthFormat());
 		double currentHealth = event.getPlayer().getHealth();
-		event.getPlayer().resetMaxHealth();
-		double baseMaxHealth = event.getPlayer().getMaxHealth();
+		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 		event.getPlayer().setMaxHealth(baseMaxHealth + d);
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
@@ -159,16 +139,11 @@ public class CoreListener implements Listener {
 			LivingEntity le = (LivingEntity) event.getEntity();
 			ItemStack[] armorContents = le.getEquipment().getArmorContents();
 			for (ItemStack is : armorContents) {
-				if (is.hasItemMeta() && is.getItemMeta().hasLore()) {
-					amount += ParseUtil.getRegeneration(is.getItemMeta().getLore(), getPlugin().getSettingsManager()
-							.getRegenerationFormat());
-				}
+				amount += ParseUtil.getRegeneration(getItemStackLore(is), getPlugin().getSettingsManager()
+						.getRegenerationFormat());
 			}
-			if (le.getEquipment().getItemInHand().hasItemMeta() && le.getEquipment().getItemInHand().getItemMeta()
-					.hasLore()) {
-				amount += ParseUtil.getRegeneration(le.getEquipment().getItemInHand().getItemMeta().getLore(),
-						getPlugin().getSettingsManager().getRegenerationFormat());
-			}
+			amount += ParseUtil.getRegeneration(getItemStackLore(le.getEquipment().getItemInHand()),
+					getPlugin().getSettingsManager().getRegenerationFormat());
 		}
 		event.setAmount(amount);
 	}
@@ -215,27 +190,6 @@ public class CoreListener implements Listener {
 		event.getEntity().setMetadata("itemstats.damage", new FixedMetadataValue(getPlugin(), totalDamage));
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onEntityDamageEvent(EntityDamageEvent event) {
-		if (event.isCancelled() || event instanceof EntityDamageByEntityEvent || !(event.getEntity() instanceof
-				LivingEntity)) {
-			return;
-		}
-		double damageReduction = 0.0;
-		for (ItemStack is : ((LivingEntity) event.getEntity()).getEquipment().getArmorContents()) {
-			if (is.hasItemMeta() && is.getItemMeta().hasLore()) {
-				damageReduction += ParseUtil.getHealth(is.getItemMeta().getLore(), getPlugin().getSettingsManager()
-						.getHealthFormat());
-			}
-		}
-		if (((LivingEntity) event.getEntity()).getEquipment().getItemInHand().hasItemMeta() && ((LivingEntity) event
-				.getEntity()).getEquipment().getItemInHand().getItemMeta().hasLore()) {
-			damageReduction += ParseUtil.getArmor(((LivingEntity) event.getEntity()).getEquipment().getItemInHand()
-					.getItemMeta().getLore(), getPlugin().getSettingsManager().getArmorFormat());
-		}
-		event.setDamage(Math.max(event.getDamage() - damageReduction, 0.0));
-	}
-
 	private Material getMaterialFromEntityType(EntityType entityType) {
 		switch (entityType) {
 			case ARROW:
@@ -261,6 +215,25 @@ public class CoreListener implements Listener {
 			default:
 				return null;
 		}
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onEntityDamageEvent(EntityDamageEvent event) {
+		if (event.isCancelled() || event instanceof EntityDamageByEntityEvent || !(event.getEntity() instanceof
+				LivingEntity)) {
+			return;
+		}
+		double damageReduction = 0.0;
+		for (ItemStack is : ((LivingEntity) event.getEntity()).getEquipment().getArmorContents()) {
+			damageReduction += ParseUtil.getArmor(getItemStackLore(is), getPlugin().getSettingsManager()
+					.getArmorFormat());
+		}
+		if (((LivingEntity) event.getEntity()).getEquipment().getItemInHand().hasItemMeta() && ((LivingEntity) event
+				.getEntity()).getEquipment().getItemInHand().getItemMeta().hasLore()) {
+			damageReduction += ParseUtil.getArmor(getItemStackLore(((LivingEntity) event.getEntity()).getEquipment()
+					.getItemInHand()), getPlugin().getSettingsManager().getArmorFormat());
+		}
+		event.setDamage(Math.max(event.getDamage() - damageReduction, 0.0));
 	}
 
 }
