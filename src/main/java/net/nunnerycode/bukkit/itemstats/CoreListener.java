@@ -31,6 +31,85 @@ public class CoreListener implements Listener {
 		this.plugin = plugin;
 	}
 
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onInventoryCloseEventLowest(InventoryCloseEvent event) {
+		for (HumanEntity he : event.getViewers()) {
+			if (!(he instanceof Player)) {
+				continue;
+			}
+			Player player = (Player) he;
+			handleLevelRequirementCheck(player);
+		}
+	}
+
+	private void handleLevelRequirementCheck(Player player) {
+		ItemStack itemInHand = player.getEquipment().getItemInHand();
+		ItemStack helmet = player.getEquipment().getHelmet();
+		ItemStack chestplate = player.getEquipment().getChestplate();
+		ItemStack leggings = player.getEquipment().getLeggings();
+		ItemStack boots = player.getEquipment().getBoots();
+
+		// item in hand check
+		int level = ParseUtil.getLevelRequired(getItemStackLore(itemInHand), getPlugin().getSettingsManager()
+				.getLevelRequirementFormat());
+		if (player.getLevel() < level) {
+			if (player.getInventory().firstEmpty() >= 0) {
+				player.getInventory().addItem(itemInHand);
+			} else {
+				player.getWorld().dropItem(player.getLocation(), itemInHand);
+			}
+			player.getEquipment().setItemInHand(null);
+		}
+
+		// helmet check
+		level = ParseUtil.getLevelRequired(getItemStackLore(helmet), getPlugin().getSettingsManager()
+				.getLevelRequirementFormat());
+		if (player.getLevel() < level) {
+			if (player.getInventory().firstEmpty() >= 0) {
+				player.getInventory().addItem(helmet);
+			} else {
+				player.getWorld().dropItem(player.getLocation(), helmet);
+			}
+			player.getEquipment().setHelmet(null);
+		}
+
+		// chestplate check
+		level = ParseUtil.getLevelRequired(getItemStackLore(chestplate), getPlugin().getSettingsManager()
+				.getLevelRequirementFormat());
+		if (player.getLevel() < level) {
+			if (player.getInventory().firstEmpty() >= 0) {
+				player.getInventory().addItem(chestplate);
+			} else {
+				player.getWorld().dropItem(player.getLocation(), chestplate);
+			}
+			player.getEquipment().setChestplate(null);
+		}
+
+		// leggings check
+		level = ParseUtil.getLevelRequired(getItemStackLore(leggings), getPlugin().getSettingsManager()
+				.getLevelRequirementFormat());
+		if (player.getLevel() < level) {
+			if (player.getInventory().firstEmpty() >= 0) {
+				player.getInventory().addItem(leggings);
+			} else {
+				player.getWorld().dropItem(player.getLocation(), leggings);
+			}
+			player.getEquipment().setLeggings(null);
+		}
+
+		// boots check
+		level = ParseUtil.getLevelRequired(getItemStackLore(boots), getPlugin().getSettingsManager()
+				.getLevelRequirementFormat());
+		if (player.getLevel() < level) {
+			if (player.getInventory().firstEmpty() >= 0) {
+				player.getInventory().addItem(boots);
+			} else {
+				player.getWorld().dropItem(player.getLocation(), boots);
+			}
+			player.getEquipment().setBoots(null);
+		}
+	}
+
 	@EventHandler(priority = EventPriority.LOW)
 	public void onInventoryCloseEventLow(InventoryCloseEvent event) {
 		for (HumanEntity he : event.getViewers()) {
