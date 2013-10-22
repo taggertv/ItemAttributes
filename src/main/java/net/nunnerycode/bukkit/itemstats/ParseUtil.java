@@ -17,7 +17,7 @@ public final class ParseUtil {
 		for (String s : collection) {
 			String stripped = ChatColor.stripColor(s);
 			String withoutNumbers = stripped.replaceAll("[0-9\\+%\\-]", "").trim();
-			String withoutLetters = stripped.replaceAll("[a-zA-Z\\+%\\-:]", "").trim();
+			String withoutLetters = stripped.replaceAll("[a-zA-Z\\+%:]", "").trim();
 			String withoutVariables = format.replaceAll("%(?s)(.*?)%", "").trim();
 			if (!withoutNumbers.equals(withoutVariables)) {
 				continue;
@@ -35,7 +35,7 @@ public final class ParseUtil {
 		for (String s : collection) {
 			String stripped = ChatColor.stripColor(s);
 			String withoutNumbers = stripped.replaceAll("[0-9\\+%\\-]", "").trim();
-			String withoutLetters = stripped.replaceAll("[a-zA-Z\\+%\\-:]", "").trim();
+			String withoutLetters = stripped.replaceAll("[a-zA-Z\\+%:]", "").trim();
 			String withoutVariables = format.replaceAll("%(?s)(.*?)%", "").trim();
 			if (!withoutNumbers.equals(withoutVariables)) {
 				continue;
@@ -53,7 +53,7 @@ public final class ParseUtil {
 		for (String s : collection) {
 			String stripped = ChatColor.stripColor(s);
 			String withoutNumbers = stripped.replaceAll("[0-9\\+%\\-]", "").trim();
-			String withoutLetters = stripped.replaceAll("[a-zA-Z\\+%\\-:]", "").trim();
+			String withoutLetters = stripped.replaceAll("[a-zA-Z\\+%:]", "").trim();
 			String withoutVariables = format.replaceAll("%(?s)(.*?)%", "").trim();
 			if (!withoutNumbers.equals(withoutVariables)) {
 				continue;
@@ -71,7 +71,7 @@ public final class ParseUtil {
 		for (String s : collection) {
 			String stripped = ChatColor.stripColor(s);
 			String withoutNumbers = stripped.replaceAll("[0-9\\+%\\-]", "").trim();
-			String withoutLetters = stripped.replaceAll("[a-zA-Z\\+%\\-:]", "").trim();
+			String withoutLetters = stripped.replaceAll("[a-zA-Z\\+%:]", "").trim();
 			String withoutVariables = format.replaceAll("%(?s)(.*?)%", "").trim();
 			if (!withoutNumbers.equals(withoutVariables)) {
 				continue;
@@ -89,7 +89,7 @@ public final class ParseUtil {
 		for (String s : collection) {
 			String stripped = ChatColor.stripColor(s);
 			String withoutNumbers = stripped.replaceAll("[0-9\\+%\\-]", "").trim();
-			String withoutLetters = stripped.replaceAll("[a-zA-Z\\+%\\-:]", "").trim();
+			String withoutLetters = stripped.replaceAll("[a-zA-Z\\+%:]", "").trim();
 			String withoutVariables = format.replaceAll("%(?s)(.*?)%", "").trim();
 			if (!withoutNumbers.equals(withoutVariables)) {
 				continue;
@@ -107,7 +107,7 @@ public final class ParseUtil {
 		for (String s : collection) {
 			String stripped = ChatColor.stripColor(s);
 			String withoutNumbers = stripped.replaceAll("[0-9\\+%\\-]", "").trim();
-			String withoutLetters = stripped.replaceAll("[a-zA-Z\\+%\\-:]", "").trim();
+			String withoutLetters = stripped.replaceAll("[a-zA-Z\\+%:]", "").trim();
 			String withoutVariables = format.replaceAll("%(?s)(.*?)%", "").trim();
 			if (!withoutNumbers.equals(withoutVariables)) {
 				continue;
@@ -125,7 +125,7 @@ public final class ParseUtil {
 		for (String s : collection) {
 			String stripped = ChatColor.stripColor(s);
 			String withoutNumbers = stripped.replaceAll("[0-9\\+%\\-]", "").trim();
-			String withoutLetters = stripped.replaceAll("[a-zA-Z\\+%\\-:]", "").trim();
+			String withoutLetters = stripped.replaceAll("[a-zA-Z\\+%:]", "").trim();
 			String withoutVariables = format.replaceAll("%(?s)(.*?)%", "").trim();
 			if (!withoutNumbers.equals(withoutVariables)) {
 				continue;
