@@ -1,0 +1,16 @@
+core-stats:
+  health:
+    format: "%value% Health"
+  damage:
+    format: "%value% Damage"
+  regeneration:
+    format: "%value% Regeneration"
+  armor:
+    format: "%value% Armor"
+  critical-rate:
+    format: "%value% Critical Rate"
+  critical-damage:
+    format: "%value% Critical Damage"
+  level-requirement:
+    format: "Level Required: %value%"
+version: "1.0.0"
