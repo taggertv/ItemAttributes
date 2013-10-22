@@ -24,7 +24,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
-public class CoreListener implements Listener {
+public final class CoreListener implements Listener {
 
 	private final ItemStatsPlugin plugin;
 
