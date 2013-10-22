@@ -58,7 +58,7 @@ public final class ParseUtil {
 			if (!withoutNumbers.equals(withoutVariables)) {
 				continue;
 			}
-			d += NumberUtils.toDouble(withoutLetters, 0.0);
+			d += NumberUtils.toDouble(withoutLetters, 0.0) / 100D;
 		}
 		return d;
 	}
