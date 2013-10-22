@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import net.nunnerycode.java.libraries.cannonball.DebugPrinter;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,6 +16,7 @@ public final class ItemStatsPlugin extends JavaPlugin {
 	private CommentedConventYamlConfiguration languageYAML;
 	private LanguageManager languageManager;
 	private SettingsManager settingsManager;
+	private CoreListener coreListener;
 
 	@Override
 	public void onDisable() {
@@ -35,6 +37,10 @@ public final class ItemStatsPlugin extends JavaPlugin {
 
 		languageManager = new LanguageManager(this);
 		languageManager.load();
+
+		coreListener = new CoreListener(this);
+
+		Bukkit.getServer().getPluginManager().registerEvents(coreListener, this);
 
 		debugPrinter = new DebugPrinter(getDataFolder().getPath() + "/log/", "debug.log");
 		debugPrinter.debug(Level.INFO, "v" + getDescription().getVersion() + " enabled");
