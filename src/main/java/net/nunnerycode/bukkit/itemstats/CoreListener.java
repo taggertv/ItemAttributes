@@ -13,6 +13,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
@@ -25,6 +26,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 
 public final class CoreListener implements Listener {
 
@@ -32,6 +34,16 @@ public final class CoreListener implements Listener {
 
 	public CoreListener(ItemStatsPlugin plugin) {
 		this.plugin = plugin;
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onCreatureSpawnEvent(CreatureSpawnEvent event) {
+		if (event.isCancelled()) {
+			return;
+		}
+		double maxHealth = event.getEntity().getMaxHealth();
+		MetadataValue metadataValue = new FixedMetadataValue(getPlugin(), maxHealth);
+		event.getEntity().setMetadata("itemstats.basehealth", metadataValue);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -218,6 +230,15 @@ public final class CoreListener implements Listener {
 		double currentHealth = entity.getHealth();
 		entity.resetMaxHealth();
 		double baseMaxHealth = entity.getMaxHealth();
+		if (entity.hasMetadata("itemstats.basehealth")) {
+			List<MetadataValue> metadataValueList = entity.getMetadata("itemstats.basehealth");
+			for (MetadataValue mv : metadataValueList) {
+				if (mv.getOwningPlugin().equals(getPlugin())) {
+					baseMaxHealth = mv.asDouble();
+					break;
+				}
+			}
+		}
 		entity.setMaxHealth(baseMaxHealth + d);
 		entity.setHealth(Math.min(Math.max(currentHealth, 0), entity.getMaxHealth()));
 	}
