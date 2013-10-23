@@ -4,6 +4,7 @@ public final class SettingsManager {
 
 	private ItemStatsPlugin plugin;
 	private double basePlayerHealth;
+	private int secondsBetweenHealthUpdates;
 	private String healthFormat;
 	private String damageFormat;
 	private String regenerationFormat;
@@ -21,6 +22,8 @@ public final class SettingsManager {
 
 	public void load() {
 		basePlayerHealth = getPlugin().getConfigYAML().getDouble("options.base-player-health", 20.0);
+		secondsBetweenHealthUpdates = getPlugin().getConfigYAML().getInt("options.seconds-between-health-updates",
+				10);
 		healthFormat = getPlugin().getConfigYAML().getString("core-stats.health.format", "%value% Health");
 		damageFormat = getPlugin().getConfigYAML().getString("core-stats.damage.format", "%value% Damage");
 		regenerationFormat = getPlugin().getConfigYAML().getString("core-stats.regeneration.format",
@@ -86,5 +89,9 @@ public final class SettingsManager {
 
 	public String getWitherImmunityFormat() {
 		return witherImmunityFormat;
+	}
+
+	public int getSecondsBetweenHealthUpdates() {
+		return secondsBetweenHealthUpdates;
 	}
 }
