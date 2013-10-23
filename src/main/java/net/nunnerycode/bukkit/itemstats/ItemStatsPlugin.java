@@ -17,6 +17,7 @@ public final class ItemStatsPlugin extends JavaPlugin {
 	private LanguageManager languageManager;
 	private SettingsManager settingsManager;
 	private CoreListener coreListener;
+	private HealthUpdateTask healthUpdateTask;
 
 	@Override
 	public void onDisable() {
@@ -39,6 +40,7 @@ public final class ItemStatsPlugin extends JavaPlugin {
 		languageManager.load();
 
 		coreListener = new CoreListener(this);
+		healthUpdateTask = new HealthUpdateTask(this);
 
 		Bukkit.getServer().getPluginManager().registerEvents(coreListener, this);
 
