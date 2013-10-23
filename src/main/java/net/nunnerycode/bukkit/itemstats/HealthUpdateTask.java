@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class HealthUpdateTask extends BukkitRunnable {
+public final class HealthUpdateTask extends BukkitRunnable {
 
 	private final ItemStatsPlugin plugin;
 
