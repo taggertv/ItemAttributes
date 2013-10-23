@@ -11,6 +11,9 @@ public final class SettingsManager {
 	private String criticalRateFormat;
 	private String criticalDamageFormat;
 	private String levelRequirementFormat;
+	private String poisonImmunityFormat;
+	private String fireImmunityFormat;
+	private String witherImmunityFormat;
 
 	public SettingsManager(ItemStatsPlugin plugin) {
 		this.plugin = plugin;
@@ -29,6 +32,12 @@ public final class SettingsManager {
 				"%value% Critical Damage");
 		levelRequirementFormat = getPlugin().getConfigYAML().getString("core-stats.level-requirement.format",
 				"Level Required: %value%");
+		poisonImmunityFormat = getPlugin().getConfigYAML().getString("core-stats.poison-immunity.format",
+				"Poison Immunity");
+		fireImmunityFormat = getPlugin().getConfigYAML().getString("core-stats.fire-immunity.format",
+				"Fire Immunity");
+		witherImmunityFormat = getPlugin().getConfigYAML().getString("core-stats.wither-immunity.format",
+				"Wither Immunity");
 	}
 
 	public ItemStatsPlugin getPlugin() {
