@@ -458,6 +458,21 @@ public final class CoreListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
+	public void onEntityDamageByEntityEventLowest(EntityDamageByEntityEvent event) {
+		if (event.isCancelled()) {
+			return;
+		}
+
+		if (event.getEntity() instanceof Player) {
+			handleLevelRequirementCheck((Player) event.getEntity());
+		}
+
+		if (event.getDamager() instanceof Player) {
+			handleLevelRequirementCheck((Player) event.getDamager());
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityDamageEventLowest(EntityDamageEvent event) {
 		if (event.isCancelled() || event instanceof EntityDamageByEntityEvent || !(event.getEntity() instanceof
 				Player)) {
