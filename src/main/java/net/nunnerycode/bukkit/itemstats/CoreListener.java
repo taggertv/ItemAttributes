@@ -566,6 +566,9 @@ public final class CoreListener implements Listener {
 
 		if (RandomUtils.nextDouble() < damagerCriticalChance) {
 			damagerEquipmentDamage *= 1.00 + damagerCriticalDamage;
+			if (event.getDamager() instanceof Player) {
+				getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "critical-hit");
+			}
 		}
 
 		double damagedEquipmentReduction = 0D;
