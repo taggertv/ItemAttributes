@@ -7,6 +7,8 @@ public final class SettingsManager {
 	private int secondsBetweenHealthUpdates;
 	private String healthFormat;
 	private String damageFormat;
+	private String meleeDamageFormat;
+	private String rangedDamageFormat;
 	private String regenerationFormat;
 	private String armorFormat;
 	private String criticalRateFormat;
@@ -26,6 +28,10 @@ public final class SettingsManager {
 				10);
 		healthFormat = getPlugin().getConfigYAML().getString("core-stats.health.format", "%value% Health");
 		damageFormat = getPlugin().getConfigYAML().getString("core-stats.damage.format", "%value% Damage");
+		meleeDamageFormat = getPlugin().getConfigYAML().getString("core-stats.melee-damage.format",
+				"%value% Melee Damage");
+		rangedDamageFormat = getPlugin().getConfigYAML().getString("core-stats.ranged-damage.format",
+				"%value% Ranged Damage");
 		regenerationFormat = getPlugin().getConfigYAML().getString("core-stats.regeneration.format",
 				"%value% Regeneration");
 		armorFormat = getPlugin().getConfigYAML().getString("core-stats.armor.format", "%value% Armor");
@@ -93,5 +99,13 @@ public final class SettingsManager {
 
 	public int getSecondsBetweenHealthUpdates() {
 		return secondsBetweenHealthUpdates;
+	}
+
+	public String getMeleeDamageFormat() {
+		return meleeDamageFormat;
+	}
+
+	public String getRangedDamageFormat() {
+		return rangedDamageFormat;
 	}
 }
