@@ -6,6 +6,7 @@ import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
@@ -505,13 +506,36 @@ public final class CoreListener implements Listener {
 		double damage = 0D;
 
 		double damagerEquipmentDamage = 0D;
-		if (event.getDamager() instanceof LivingEntity) {
+
+		Entity damagingEntity = event.getEntity();
+
+		if (damagingEntity instanceof Projectile) {
+			Projectile projectile = (Projectile) damagingEntity;
+			LivingEntity shooter = projectile.getShooter();
+			if (shooter != null) {
+				ItemStack[] armor = shooter.getEquipment().getArmorContents();
+				for (ItemStack is : armor) {
+					damagerEquipmentDamage += ParseUtil.getRangedDamage(getItemStackLore(is),
+							getPlugin().getSettingsManager().getRangedDamageFormat());
+					damagerEquipmentDamage += ParseUtil.getDamage(getItemStackLore(is),
+							getPlugin().getSettingsManager().getDamageFormat());
+				}
+				damagerEquipmentDamage += ParseUtil.getRangedDamage(getItemStackLore(shooter.getEquipment()
+						.getItemInHand()), getPlugin().getSettingsManager().getRangedDamageFormat());
+				damagerEquipmentDamage += ParseUtil.getDamage(getItemStackLore(shooter.getEquipment()
+						.getItemInHand()), getPlugin().getSettingsManager().getDamageFormat());
+			}
+		} else if (damagingEntity instanceof LivingEntity) {
 			LivingEntity damager = (LivingEntity) event.getDamager();
 			ItemStack[] armor = damager.getEquipment().getArmorContents();
 			for (ItemStack is : armor) {
+				damagerEquipmentDamage += ParseUtil.getMeleeDamage(getItemStackLore(is),
+						getPlugin().getSettingsManager().getMeleeDamageFormat());
 				damagerEquipmentDamage += ParseUtil.getDamage(getItemStackLore(is), getPlugin().getSettingsManager()
 						.getDamageFormat());
 			}
+			damagerEquipmentDamage += ParseUtil.getMeleeDamage(getItemStackLore(damager.getEquipment().getItemInHand
+					()), getPlugin().getSettingsManager().getMeleeDamageFormat());
 			damagerEquipmentDamage += ParseUtil.getDamage(getItemStackLore(damager.getEquipment().getItemInHand()),
 					getPlugin().getSettingsManager().getDamageFormat());
 		}
