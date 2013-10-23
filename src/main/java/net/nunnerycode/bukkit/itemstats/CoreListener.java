@@ -37,7 +37,7 @@ public final class CoreListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onInventoryCloseEventLowest(InventoryCloseEvent event) {
 		for (HumanEntity he : event.getViewers()) {
-			if (!(he instanceof Player)) {
+			if (!(he instanceof Player) || he.isDead()) {
 				continue;
 			}
 			Player player = (Player) he;
