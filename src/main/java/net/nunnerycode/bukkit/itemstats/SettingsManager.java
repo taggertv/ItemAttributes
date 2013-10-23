@@ -75,4 +75,16 @@ public final class SettingsManager {
 	public double getBasePlayerHealth() {
 		return basePlayerHealth;
 	}
+
+	public String getPoisonImmunityFormat() {
+		return poisonImmunityFormat;
+	}
+
+	public String getFireImmunityFormat() {
+		return fireImmunityFormat;
+	}
+
+	public String getWitherImmunityFormat() {
+		return witherImmunityFormat;
+	}
 }
