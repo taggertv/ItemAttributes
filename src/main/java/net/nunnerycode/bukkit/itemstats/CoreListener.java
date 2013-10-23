@@ -46,6 +46,10 @@ public final class CoreListener implements Listener {
 		event.getEntity().setMetadata("itemstats.basehealth", metadataValue);
 	}
 
+	public ItemStatsPlugin getPlugin() {
+		return plugin;
+	}
+
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onInventoryCloseEventLowest(InventoryCloseEvent event) {
 		for (HumanEntity he : event.getViewers()) {
@@ -135,18 +139,6 @@ public final class CoreListener implements Listener {
 		}
 	}
 
-	public ItemStatsPlugin getPlugin() {
-		return plugin;
-	}
-
-	public List<String> getItemStackLore(ItemStack itemStack) {
-		List<String> lore = new ArrayList<String>();
-		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
-			lore.addAll(itemStack.getItemMeta().getLore());
-		}
-		return lore;
-	}
-
 	private String getItemName(ItemStack itemStack) {
 		String name = "";
 		if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName()) {
@@ -165,6 +157,14 @@ public final class CoreListener implements Listener {
 		return name;
 	}
 
+	public List<String> getItemStackLore(ItemStack itemStack) {
+		List<String> lore = new ArrayList<String>();
+		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
+			lore.addAll(itemStack.getItemMeta().getLore());
+		}
+		return lore;
+	}
+
 	@EventHandler(priority = EventPriority.LOW)
 	public void onInventoryCloseEventLow(InventoryCloseEvent event) {
 		for (HumanEntity he : event.getViewers()) {
@@ -181,7 +181,7 @@ public final class CoreListener implements Listener {
 					getPlugin().getSettingsManager().getHealthFormat());
 			double currentHealth = he.getHealth();
 			double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
-			he.setMaxHealth(baseMaxHealth + d);
+			he.setMaxHealth(Math.max(baseMaxHealth + d, 1));
 			he.setHealth(Math.min(Math.max(currentHealth, 0), he.getMaxHealth()));
 			if (he instanceof Player) {
 				((Player) he).setHealthScale(he.getMaxHealth());
@@ -207,7 +207,7 @@ public final class CoreListener implements Listener {
 				getPlugin().getSettingsManager().getHealthFormat());
 		double currentHealth = event.getPlayer().getHealth();
 		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
-		event.getPlayer().setMaxHealth(baseMaxHealth + d);
+		event.getPlayer().setMaxHealth(Math.max(baseMaxHealth + d, 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
 	}
@@ -239,7 +239,7 @@ public final class CoreListener implements Listener {
 				}
 			}
 		}
-		entity.setMaxHealth(baseMaxHealth + d);
+		entity.setMaxHealth(Math.max(baseMaxHealth + d, 1));
 		entity.setHealth(Math.min(Math.max(currentHealth, 0), entity.getMaxHealth()));
 	}
 
@@ -261,7 +261,7 @@ public final class CoreListener implements Listener {
 				getPlugin().getSettingsManager().getHealthFormat());
 		double currentHealth = event.getPlayer().getHealth();
 		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
-		event.getPlayer().setMaxHealth(baseMaxHealth + d);
+		event.getPlayer().setMaxHealth(Math.max(baseMaxHealth + d, 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
 	}
@@ -278,7 +278,7 @@ public final class CoreListener implements Listener {
 				getPlugin().getSettingsManager().getHealthFormat());
 		double currentHealth = event.getPlayer().getHealth();
 		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
-		event.getPlayer().setMaxHealth(baseMaxHealth + d);
+		event.getPlayer().setMaxHealth(Math.max(baseMaxHealth + d, 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
 	}
@@ -379,7 +379,7 @@ public final class CoreListener implements Listener {
 				getPlugin().getSettingsManager().getHealthFormat());
 		double currentHealth = event.getPlayer().getHealth();
 		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
-		event.getPlayer().setMaxHealth(baseMaxHealth + d);
+		event.getPlayer().setMaxHealth(Math.max(baseMaxHealth + d, 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
 	}
