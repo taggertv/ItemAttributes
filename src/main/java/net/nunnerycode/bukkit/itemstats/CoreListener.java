@@ -156,6 +156,9 @@ public final class CoreListener implements Listener {
 	@EventHandler(priority = EventPriority.LOW)
 	public void onInventoryCloseEventLow(InventoryCloseEvent event) {
 		for (HumanEntity he : event.getViewers()) {
+			if (he.isDead()) {
+				continue;
+			}
 			ItemStack[] armorContents = he.getEquipment().getArmorContents();
 			double d = 0.0;
 			for (ItemStack is : armorContents) {
