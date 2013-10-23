@@ -1,5 +1,6 @@
 package net.nunnerycode.bukkit.itemstats;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.math.RandomUtils;
@@ -33,9 +34,11 @@ import org.bukkit.metadata.MetadataValue;
 public final class CoreListener implements Listener {
 
 	private final ItemStatsPlugin plugin;
+	private final DecimalFormat decimalFormat;
 
 	public CoreListener(ItemStatsPlugin plugin) {
 		this.plugin = plugin;
+		decimalFormat = new DecimalFormat("#.##");
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -564,13 +567,6 @@ public final class CoreListener implements Listener {
 					()), getPlugin().getSettingsManager().getCriticalDamageFormat());
 		}
 
-		if (RandomUtils.nextDouble() < damagerCriticalChance) {
-			damagerEquipmentDamage *= 1.00 + damagerCriticalDamage;
-			if (event.getDamager() instanceof Player) {
-				getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "critical-hit");
-			}
-		}
-
 		double damagedEquipmentReduction = 0D;
 		if (event.getEntity() instanceof LivingEntity) {
 			LivingEntity entity = (LivingEntity) event.getEntity();
@@ -584,6 +580,15 @@ public final class CoreListener implements Listener {
 		}
 
 		damage = Math.max(originalDamage + damagerEquipmentDamage + damagedEquipmentReduction, 0);
+
+		if (RandomUtils.nextDouble() < damagerCriticalChance) {
+			double critPercentage = (1.00 + damagerCriticalDamage);
+			damage *= critPercentage;
+			if (event.getDamager() instanceof Player) {
+				getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "critical-hit",
+						new String[][]{{"%percentage%", decimalFormat.format(critPercentage * 100)}});
+			}
+		}
 
 		event.setDamage(damage);
 	}

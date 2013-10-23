@@ -1,4 +1,4 @@
 messages:
   unable-to-use: "&CYou are unable to use %itemname% until you are level %level%."
-  critical-hit: "&AYou scored a critical hit!"
+  critical-hit: "&AYou scored a critical hit and dealt %percentage%% of your normal damage!"
 version: "1.0.1"
