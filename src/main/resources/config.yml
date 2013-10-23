@@ -5,6 +5,10 @@ core-stats:
     format: "%value% Health"
   damage:
     format: "%value% Damage"
+  melee-damage:
+    format: "%value% Melee Damage"
+  ranged-damage:
+    format: "%value% Ranged Damage"
   regeneration:
     format: "%value% Regeneration"
   armor:
@@ -21,4 +25,4 @@ core-stats:
     format: "Poison Immunity"
   wither-immunity:
     format: "Wither Immunity"
-version: "1.0.2"
+version: "1.0.3"
