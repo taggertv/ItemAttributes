@@ -2,6 +2,7 @@ package net.nunnerycode.bukkit.itemstats;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -491,6 +492,73 @@ public final class CoreListener implements Listener {
 		if (event.getDamager() instanceof Player) {
 			handleLevelRequirementCheck((Player) event.getDamager());
 		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW)
+	public void onEntityDamageByEntityEventLow(EntityDamageByEntityEvent event) {
+		if (event.isCancelled()) {
+			return;
+		}
+
+		double originalDamage = event.getDamage();
+
+		double damage = 0D;
+
+		double damagerEquipmentDamage = 0D;
+		if (event.getDamager() instanceof LivingEntity) {
+			LivingEntity damager = (LivingEntity) event.getDamager();
+			ItemStack[] armor = damager.getEquipment().getArmorContents();
+			for (ItemStack is : armor) {
+				damagerEquipmentDamage += ParseUtil.getDamage(getItemStackLore(is), getPlugin().getSettingsManager()
+						.getDamageFormat());
+			}
+			damagerEquipmentDamage += ParseUtil.getDamage(getItemStackLore(damager.getEquipment().getItemInHand()),
+					getPlugin().getSettingsManager().getDamageFormat());
+		}
+
+		double damagerCriticalChance = 0D;
+		if (event.getDamager() instanceof LivingEntity) {
+			LivingEntity damager = (LivingEntity) event.getDamager();
+			ItemStack[] armor = damager.getEquipment().getArmorContents();
+			for (ItemStack is : armor) {
+				damagerCriticalChance += ParseUtil.getCriticalRate(getItemStackLore(is), getPlugin().getSettingsManager()
+						.getCriticalRateFormat());
+			}
+			damagerCriticalChance += ParseUtil.getCriticalRate(getItemStackLore(damager.getEquipment().getItemInHand()),
+					getPlugin().getSettingsManager().getCriticalRateFormat());
+		}
+
+		double damagerCriticalDamage = 0D;
+		if (event.getDamager() instanceof LivingEntity) {
+			LivingEntity damager = (LivingEntity) event.getDamager();
+			ItemStack[] armor = damager.getEquipment().getArmorContents();
+			for (ItemStack is : armor) {
+				damagerCriticalDamage += ParseUtil.getCriticalDamage(getItemStackLore(is),
+						getPlugin().getSettingsManager().getCriticalDamageFormat());
+			}
+			damagerCriticalDamage += ParseUtil.getCriticalDamage(getItemStackLore(damager.getEquipment().getItemInHand
+					()), getPlugin().getSettingsManager().getCriticalDamageFormat());
+		}
+
+		if (RandomUtils.nextDouble() < damagerCriticalChance) {
+			damagerEquipmentDamage *= 1.00 + damagerCriticalDamage;
+		}
+
+		double damagedEquipmentReduction = 0D;
+		if (event.getEntity() instanceof LivingEntity) {
+			LivingEntity entity = (LivingEntity) event.getEntity();
+			ItemStack[] armor = entity.getEquipment().getArmorContents();
+			for (ItemStack is : armor) {
+				damagedEquipmentReduction += ParseUtil.getArmor(getItemStackLore(is), getPlugin().getSettingsManager()
+						.getArmorFormat());
+			}
+			damagedEquipmentReduction += ParseUtil.getArmor(getItemStackLore(entity.getEquipment().getItemInHand()),
+					getPlugin().getSettingsManager().getArmorFormat());
+		}
+
+		damage = Math.max(originalDamage + damagerEquipmentDamage + damagedEquipmentReduction, 0);
+
+		event.setDamage(damage);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
