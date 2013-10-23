@@ -1,3 +1,4 @@
 messages:
   unable-to-use: "&CYou are unable to use %itemname% until you are level %level%."
-version: "1.0.0"
+  critical-hit: "&AYou scored a critical hit!"
+version: "1.0.1"
