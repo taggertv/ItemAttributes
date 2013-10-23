@@ -2,6 +2,8 @@ package net.nunnerycode.bukkit.itemstats;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.text.WordUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
@@ -43,74 +45,6 @@ public final class CoreListener implements Listener {
 		}
 	}
 
-	private void handleLevelRequirementCheckSlot(Player player, int i) {
-		ItemStack itemInHand = player.getInventory().getItem(i);
-		ItemStack helmet = player.getEquipment().getHelmet();
-		ItemStack chestplate = player.getEquipment().getChestplate();
-		ItemStack leggings = player.getEquipment().getLeggings();
-		ItemStack boots = player.getEquipment().getBoots();
-
-		// item in hand check
-		int level = ParseUtil.getLevelRequired(getItemStackLore(itemInHand), getPlugin().getSettingsManager()
-				.getLevelRequirementFormat());
-		if (player.getLevel() < level) {
-			if (player.getInventory().firstEmpty() >= 0) {
-				player.getInventory().addItem(itemInHand);
-			} else {
-				player.getWorld().dropItem(player.getLocation(), itemInHand);
-			}
-			player.getInventory().setItem(i, null);
-		}
-
-		// helmet check
-		level = ParseUtil.getLevelRequired(getItemStackLore(helmet), getPlugin().getSettingsManager()
-				.getLevelRequirementFormat());
-		if (player.getLevel() < level) {
-			if (player.getInventory().firstEmpty() >= 0) {
-				player.getInventory().addItem(helmet);
-			} else {
-				player.getWorld().dropItem(player.getLocation(), helmet);
-			}
-			player.getEquipment().setHelmet(null);
-		}
-
-		// chestplate check
-		level = ParseUtil.getLevelRequired(getItemStackLore(chestplate), getPlugin().getSettingsManager()
-				.getLevelRequirementFormat());
-		if (player.getLevel() < level) {
-			if (player.getInventory().firstEmpty() >= 0) {
-				player.getInventory().addItem(chestplate);
-			} else {
-				player.getWorld().dropItem(player.getLocation(), chestplate);
-			}
-			player.getEquipment().setChestplate(null);
-		}
-
-		// leggings check
-		level = ParseUtil.getLevelRequired(getItemStackLore(leggings), getPlugin().getSettingsManager()
-				.getLevelRequirementFormat());
-		if (player.getLevel() < level) {
-			if (player.getInventory().firstEmpty() >= 0) {
-				player.getInventory().addItem(leggings);
-			} else {
-				player.getWorld().dropItem(player.getLocation(), leggings);
-			}
-			player.getEquipment().setLeggings(null);
-		}
-
-		// boots check
-		level = ParseUtil.getLevelRequired(getItemStackLore(boots), getPlugin().getSettingsManager()
-				.getLevelRequirementFormat());
-		if (player.getLevel() < level) {
-			if (player.getInventory().firstEmpty() >= 0) {
-				player.getInventory().addItem(boots);
-			} else {
-				player.getWorld().dropItem(player.getLocation(), boots);
-			}
-			player.getEquipment().setBoots(null);
-		}
-	}
-
 	private void handleLevelRequirementCheck(Player player) {
 		ItemStack itemInHand = player.getEquipment().getItemInHand();
 		ItemStack helmet = player.getEquipment().getHelmet();
@@ -128,6 +62,8 @@ public final class CoreListener implements Listener {
 				player.getWorld().dropItem(player.getLocation(), itemInHand);
 			}
 			player.getEquipment().setItemInHand(null);
+			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
+					new String[][]{{"%itemname%", getItemName(itemInHand)}, {"%level%", String.valueOf(level)}});
 		}
 
 		// helmet check
@@ -140,6 +76,8 @@ public final class CoreListener implements Listener {
 				player.getWorld().dropItem(player.getLocation(), helmet);
 			}
 			player.getEquipment().setHelmet(null);
+			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
+					new String[][]{{"%itemname%", getItemName(helmet)}, {"%level%", String.valueOf(level)}});
 		}
 
 		// chestplate check
@@ -152,6 +90,8 @@ public final class CoreListener implements Listener {
 				player.getWorld().dropItem(player.getLocation(), chestplate);
 			}
 			player.getEquipment().setChestplate(null);
+			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
+					new String[][]{{"%itemname%", getItemName(chestplate)}, {"%level%", String.valueOf(level)}});
 		}
 
 		// leggings check
@@ -164,6 +104,8 @@ public final class CoreListener implements Listener {
 				player.getWorld().dropItem(player.getLocation(), leggings);
 			}
 			player.getEquipment().setLeggings(null);
+			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
+					new String[][]{{"%itemname%", getItemName(leggings)}, {"%level%", String.valueOf(level)}});
 		}
 
 		// boots check
@@ -176,6 +118,8 @@ public final class CoreListener implements Listener {
 				player.getWorld().dropItem(player.getLocation(), boots);
 			}
 			player.getEquipment().setBoots(null);
+			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
+					new String[][]{{"%itemname%", getItemName(boots)}, {"%level%", String.valueOf(level)}});
 		}
 	}
 
@@ -189,6 +133,24 @@ public final class CoreListener implements Listener {
 			lore.addAll(itemStack.getItemMeta().getLore());
 		}
 		return lore;
+	}
+
+	private String getItemName(ItemStack itemStack) {
+		String name = "";
+		if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName()) {
+			name = ChatColor.stripColor(itemStack.getItemMeta().getDisplayName());
+		} else {
+			String matName = itemStack.getType().name();
+			String[] splitMatName = matName.split("_");
+			for (int i = 0; i < splitMatName.length; i++) {
+				if (i < splitMatName.length - 1) {
+					name = name.concat(WordUtils.capitalizeFully(splitMatName[i]).concat(" "));
+				} else {
+					name = name.concat(WordUtils.capitalizeFully(splitMatName[i]));
+				}
+			}
+		}
+		return name;
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
@@ -214,7 +176,7 @@ public final class CoreListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerJoinEventLowest(PlayerJoinEvent event) {
-   		Player player = event.getPlayer();
+		Player player = event.getPlayer();
 		handleLevelRequirementCheck(player);
 	}
 
@@ -301,6 +263,84 @@ public final class CoreListener implements Listener {
 	public void onItemHeldEventLowest(PlayerItemHeldEvent event) {
 		Player player = event.getPlayer();
 		handleLevelRequirementCheckSlot(player, event.getNewSlot());
+	}
+
+	private void handleLevelRequirementCheckSlot(Player player, int i) {
+		ItemStack itemInHand = player.getInventory().getItem(i);
+		ItemStack helmet = player.getEquipment().getHelmet();
+		ItemStack chestplate = player.getEquipment().getChestplate();
+		ItemStack leggings = player.getEquipment().getLeggings();
+		ItemStack boots = player.getEquipment().getBoots();
+
+		// item in hand check
+		int level = ParseUtil.getLevelRequired(getItemStackLore(itemInHand), getPlugin().getSettingsManager()
+				.getLevelRequirementFormat());
+		if (player.getLevel() < level) {
+			if (player.getInventory().firstEmpty() >= 0) {
+				player.getInventory().addItem(itemInHand);
+			} else {
+				player.getWorld().dropItem(player.getLocation(), itemInHand);
+			}
+			player.getInventory().setItem(i, null);
+			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
+					new String[][]{{"%itemname%", getItemName(itemInHand)}, {"%level%", String.valueOf(level)}});
+		}
+
+		// helmet check
+		level = ParseUtil.getLevelRequired(getItemStackLore(helmet), getPlugin().getSettingsManager()
+				.getLevelRequirementFormat());
+		if (player.getLevel() < level) {
+			if (player.getInventory().firstEmpty() >= 0) {
+				player.getInventory().addItem(helmet);
+			} else {
+				player.getWorld().dropItem(player.getLocation(), helmet);
+			}
+			player.getEquipment().setHelmet(null);
+			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
+					new String[][]{{"%itemname%", getItemName(helmet)}, {"%level%", String.valueOf(level)}});
+		}
+
+		// chestplate check
+		level = ParseUtil.getLevelRequired(getItemStackLore(chestplate), getPlugin().getSettingsManager()
+				.getLevelRequirementFormat());
+		if (player.getLevel() < level) {
+			if (player.getInventory().firstEmpty() >= 0) {
+				player.getInventory().addItem(chestplate);
+			} else {
+				player.getWorld().dropItem(player.getLocation(), chestplate);
+			}
+			player.getEquipment().setChestplate(null);
+			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
+					new String[][]{{"%itemname%", getItemName(chestplate)}, {"%level%", String.valueOf(level)}});
+		}
+
+		// leggings check
+		level = ParseUtil.getLevelRequired(getItemStackLore(leggings), getPlugin().getSettingsManager()
+				.getLevelRequirementFormat());
+		if (player.getLevel() < level) {
+			if (player.getInventory().firstEmpty() >= 0) {
+				player.getInventory().addItem(leggings);
+			} else {
+				player.getWorld().dropItem(player.getLocation(), leggings);
+			}
+			player.getEquipment().setLeggings(null);
+			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
+					new String[][]{{"%itemname%", getItemName(leggings)}, {"%level%", String.valueOf(level)}});
+		}
+
+		// boots check
+		level = ParseUtil.getLevelRequired(getItemStackLore(boots), getPlugin().getSettingsManager()
+				.getLevelRequirementFormat());
+		if (player.getLevel() < level) {
+			if (player.getInventory().firstEmpty() >= 0) {
+				player.getInventory().addItem(boots);
+			} else {
+				player.getWorld().dropItem(player.getLocation(), boots);
+			}
+			player.getEquipment().setBoots(null);
+			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
+					new String[][]{{"%itemname%", getItemName(boots)}, {"%level%", String.valueOf(level)}});
+		}
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
