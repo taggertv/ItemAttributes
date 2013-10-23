@@ -17,7 +17,8 @@ public class HealthUpdateTask extends BukkitRunnable {
 
 	public HealthUpdateTask(ItemStatsPlugin plugin) {
 		this.plugin = plugin;
-		this.runTaskTimer(getPlugin(), 20L * 10, 20L * 10);
+		this.runTaskTimer(getPlugin(), 20L * getPlugin().getSettingsManager().getSecondsBetweenHealthUpdates(),
+				20L * getPlugin().getSettingsManager().getSecondsBetweenHealthUpdates());
 	}
 
 	@Override
