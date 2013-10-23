@@ -11,7 +11,7 @@ public final class ParseUtil {
 
 	public static double getHealth(Collection<String> collection, String format) {
 		double d = 0.0;
-		if (collection == null || collection.isEmpty()) {
+		if (collection == null || collection.isEmpty() || format == null || format.isEmpty()) {
 			return d;
 		}
 		for (String s : collection) {
@@ -29,7 +29,7 @@ public final class ParseUtil {
 
 	public static double getDamage(Collection<String> collection, String format) {
 		double d = 0.0;
-		if (collection == null || collection.isEmpty()) {
+		if (collection == null || collection.isEmpty() || format == null || format.isEmpty()) {
 			return d;
 		}
 		for (String s : collection) {
@@ -63,9 +63,45 @@ public final class ParseUtil {
 		return d;
 	}
 
+	public static boolean hasPoisonImmunity(Collection<String> collection, String format) {
+		boolean b = false;
+		if (collection == null || collection.isEmpty() || format == null || format.isEmpty()) {
+			return b;
+		}
+		b = containsIgnoreCase(collection, format);
+		return b;
+	}
+
+	public static boolean hasFireImmunity(Collection<String> collection, String format) {
+		boolean b = false;
+		if (collection == null || collection.isEmpty() || format == null || format.isEmpty()) {
+			return b;
+		}
+		b = containsIgnoreCase(collection, format);
+		return b;
+	}
+
+	public static boolean hasWitherImmunity(Collection<String> collection, String format) {
+		boolean b = false;
+		if (collection == null || collection.isEmpty() || format == null || format.isEmpty()) {
+			return b;
+		}
+		b = containsIgnoreCase(collection, format);
+		return b;
+	}
+
+	private static boolean containsIgnoreCase(Collection<String> collection, String string) {
+		for (String s : collection) {
+			if (ChatColor.stripColor(s).equalsIgnoreCase(ChatColor.stripColor(string))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static double getRegeneration(Collection<String> collection, String format) {
 		double d = 0.0;
-		if (collection == null || collection.isEmpty()) {
+		if (collection == null || collection.isEmpty() || format == null || format.isEmpty()) {
 			return d;
 		}
 		for (String s : collection) {
@@ -83,7 +119,7 @@ public final class ParseUtil {
 
 	public static double getArmor(Collection<String> collection, String format) {
 		double d = 0.0;
-		if (collection == null || collection.isEmpty()) {
+		if (collection == null || collection.isEmpty() || format == null || format.isEmpty()) {
 			return d;
 		}
 		for (String s : collection) {
