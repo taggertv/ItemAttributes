@@ -7,7 +7,6 @@ import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
@@ -144,6 +143,14 @@ public final class CoreListener implements Listener {
 		}
 	}
 
+	public List<String> getItemStackLore(ItemStack itemStack) {
+		List<String> lore = new ArrayList<String>();
+		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
+			lore.addAll(itemStack.getItemMeta().getLore());
+		}
+		return lore;
+	}
+
 	private String getItemName(ItemStack itemStack) {
 		String name = "";
 		if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName()) {
@@ -160,14 +167,6 @@ public final class CoreListener implements Listener {
 			}
 		}
 		return name;
-	}
-
-	public List<String> getItemStackLore(ItemStack itemStack) {
-		List<String> lore = new ArrayList<String>();
-		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
-			lore.addAll(itemStack.getItemMeta().getLore());
-		}
-		return lore;
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
@@ -442,18 +441,51 @@ public final class CoreListener implements Listener {
 		}
 
 		double arrowDamage = 0.0D;
-		if (shotItem.hasItemMeta() && shotItem.getItemMeta().hasLore()) {
-			arrowDamage = ParseUtil.getDamage(shotItem.getItemMeta().getLore(), getPlugin().getSettingsManager()
-					.getDamageFormat());
-		}
+		arrowDamage += ParseUtil.getDamage(getItemStackLore(shotItem), getPlugin().getSettingsManager()
+				.getDamageFormat());
+		arrowDamage += ParseUtil.getRangedDamage(getItemStackLore(shotItem), getPlugin().getSettingsManager()
+				.getRangedDamageFormat());
+
 		double bowDamage = 0.0;
-		if (shootingItem != null && shootingItem.hasItemMeta() && shootingItem.getItemMeta().hasLore()) {
-			bowDamage = ParseUtil.getDamage(shootingItem.getItemMeta().getLore(), getPlugin().getSettingsManager()
+		if (shootingItem != null) {
+			bowDamage += ParseUtil.getDamage(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
 					.getDamageFormat());
 		}
-		double totalDamage = arrowDamage + bowDamage;
+
+		double armorDamage = 0.0;
+		for (ItemStack is : le.getEquipment().getArmorContents()) {
+			armorDamage += ParseUtil.getDamage(getItemStackLore(is), getPlugin().getSettingsManager()
+					.getDamageFormat());
+			armorDamage += ParseUtil.getRangedDamage(getItemStackLore(is), getPlugin().getSettingsManager()
+					.getRangedDamageFormat());
+		}
+		double totalDamage = arrowDamage + bowDamage + armorDamage;
+
+		double criticalRate = 0.0;
+		double criticalDamage = 0.0;
+
+		criticalRate += ParseUtil.getCriticalRate(getItemStackLore(shotItem), getPlugin().getSettingsManager()
+				.getCriticalRateFormat());
+		criticalDamage += ParseUtil.getCriticalDamage(getItemStackLore(shotItem), getPlugin().getSettingsManager()
+				.getCriticalDamageFormat());
+
+		if (shootingItem != null) {
+			criticalRate += ParseUtil.getCriticalRate(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
+					.getCriticalRateFormat());
+			criticalDamage += ParseUtil.getCriticalDamage(getItemStackLore(shootingItem),
+					getPlugin().getSettingsManager().getCriticalDamageFormat());
+		}
+
+		for (ItemStack is : le.getEquipment().getArmorContents()) {
+			criticalRate += ParseUtil.getCriticalRate(getItemStackLore(is), getPlugin().getSettingsManager()
+					.getCriticalRateFormat());
+			criticalDamage += ParseUtil.getCriticalDamage(getItemStackLore(is), getPlugin().getSettingsManager()
+					.getCriticalDamageFormat());
+		}
 
 		event.getEntity().setMetadata("itemstats.damage", new FixedMetadataValue(getPlugin(), totalDamage));
+		event.getEntity().setMetadata("itemstats.criticalrate", new FixedMetadataValue(getPlugin(), criticalRate));
+		event.getEntity().setMetadata("itemstats.criticaldamage", new FixedMetadataValue(getPlugin(), criticalDamage));
 	}
 
 	private Material getMaterialFromEntityType(EntityType entityType) {
@@ -506,29 +538,45 @@ public final class CoreListener implements Listener {
 
 		double originalDamage = event.getDamage();
 
-		double damage = 0D;
+		double damage;
 
 		double damagerEquipmentDamage = 0D;
+		double damagerCriticalChance = 0D;
+		double damagerCriticalDamage = 0D;
 
-		Entity damagingEntity = event.getEntity();
-
-		if (damagingEntity instanceof Projectile) {
-			Projectile projectile = (Projectile) damagingEntity;
+		if (event.getDamager() instanceof Projectile) {
+			Projectile projectile = (Projectile) event.getDamager();
 			LivingEntity shooter = projectile.getShooter();
 			if (shooter != null) {
-				ItemStack[] armor = shooter.getEquipment().getArmorContents();
-				for (ItemStack is : armor) {
-					damagerEquipmentDamage += ParseUtil.getRangedDamage(getItemStackLore(is),
-							getPlugin().getSettingsManager().getRangedDamageFormat());
-					damagerEquipmentDamage += ParseUtil.getDamage(getItemStackLore(is),
-							getPlugin().getSettingsManager().getDamageFormat());
+				if (projectile.hasMetadata("itemstats.damage")) {
+					List<MetadataValue> metadataValueList = projectile.getMetadata("itemstats.damage");
+					for (MetadataValue mv : metadataValueList) {
+						if (mv.getOwningPlugin().equals(getPlugin())) {
+							damagerEquipmentDamage = mv.asDouble();
+							break;
+						}
+					}
 				}
-				damagerEquipmentDamage += ParseUtil.getRangedDamage(getItemStackLore(shooter.getEquipment()
-						.getItemInHand()), getPlugin().getSettingsManager().getRangedDamageFormat());
-				damagerEquipmentDamage += ParseUtil.getDamage(getItemStackLore(shooter.getEquipment()
-						.getItemInHand()), getPlugin().getSettingsManager().getDamageFormat());
+				if (projectile.hasMetadata("itemstats.criticalrate")) {
+					List<MetadataValue> metadataValueList = projectile.getMetadata("itemstats.criticalrate");
+					for (MetadataValue mv : metadataValueList) {
+						if (mv.getOwningPlugin().equals(getPlugin())) {
+							damagerCriticalChance = mv.asDouble();
+							break;
+						}
+					}
+				}
+				if (projectile.hasMetadata("itemstats.criticaldamage")) {
+					List<MetadataValue> metadataValueList = projectile.getMetadata("itemstats.criticaldamage");
+					for (MetadataValue mv : metadataValueList) {
+						if (mv.getOwningPlugin().equals(getPlugin())) {
+							damagerCriticalDamage = mv.asDouble();
+							break;
+						}
+					}
+				}
 			}
-		} else if (damagingEntity instanceof LivingEntity) {
+		} else if (event.getDamager() instanceof LivingEntity) {
 			LivingEntity damager = (LivingEntity) event.getDamager();
 			ItemStack[] armor = damager.getEquipment().getArmorContents();
 			for (ItemStack is : armor) {
@@ -536,33 +584,17 @@ public final class CoreListener implements Listener {
 						getPlugin().getSettingsManager().getMeleeDamageFormat());
 				damagerEquipmentDamage += ParseUtil.getDamage(getItemStackLore(is), getPlugin().getSettingsManager()
 						.getDamageFormat());
+				damagerCriticalChance += ParseUtil.getCriticalRate(getItemStackLore(is), getPlugin().getSettingsManager()
+						.getCriticalRateFormat());
+				damagerCriticalDamage += ParseUtil.getCriticalDamage(getItemStackLore(is),
+						getPlugin().getSettingsManager().getCriticalDamageFormat());
 			}
 			damagerEquipmentDamage += ParseUtil.getMeleeDamage(getItemStackLore(damager.getEquipment().getItemInHand
 					()), getPlugin().getSettingsManager().getMeleeDamageFormat());
 			damagerEquipmentDamage += ParseUtil.getDamage(getItemStackLore(damager.getEquipment().getItemInHand()),
 					getPlugin().getSettingsManager().getDamageFormat());
-		}
-
-		double damagerCriticalChance = 0D;
-		if (event.getDamager() instanceof LivingEntity) {
-			LivingEntity damager = (LivingEntity) event.getDamager();
-			ItemStack[] armor = damager.getEquipment().getArmorContents();
-			for (ItemStack is : armor) {
-				damagerCriticalChance += ParseUtil.getCriticalRate(getItemStackLore(is), getPlugin().getSettingsManager()
-						.getCriticalRateFormat());
-			}
 			damagerCriticalChance += ParseUtil.getCriticalRate(getItemStackLore(damager.getEquipment().getItemInHand()),
 					getPlugin().getSettingsManager().getCriticalRateFormat());
-		}
-
-		double damagerCriticalDamage = 0D;
-		if (event.getDamager() instanceof LivingEntity) {
-			LivingEntity damager = (LivingEntity) event.getDamager();
-			ItemStack[] armor = damager.getEquipment().getArmorContents();
-			for (ItemStack is : armor) {
-				damagerCriticalDamage += ParseUtil.getCriticalDamage(getItemStackLore(is),
-						getPlugin().getSettingsManager().getCriticalDamageFormat());
-			}
 			damagerCriticalDamage += ParseUtil.getCriticalDamage(getItemStackLore(damager.getEquipment().getItemInHand
 					()), getPlugin().getSettingsManager().getCriticalDamageFormat());
 		}
