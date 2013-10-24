@@ -619,6 +619,10 @@ public final class CoreListener implements Listener {
 			if (event.getDamager() instanceof Player) {
 				getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "critical-hit",
 						new String[][]{{"%percentage%", decimalFormat.format(critPercentage * 100)}});
+			} else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter()
+					instanceof Player) {
+				getPlugin().getLanguageManager().sendMessage((Player) ((Projectile) event.getDamager()).getShooter(),
+						"critical-hit", new String[][]{{"%percentage%", decimalFormat.format(critPercentage * 100)}});
 			}
 		}
 
