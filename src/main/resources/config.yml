@@ -1,5 +1,7 @@
 options:
   base-player-health: 20.0
+  base-critical-damage: 20.0
+  base-critical-rate: 5.0
   seconds-between-health-updates: 10
 core-stats:
   health:
@@ -26,4 +28,4 @@ core-stats:
     format: "Poison Immunity"
   wither-immunity:
     format: "Wither Immunity"
-version: "1.0.4"
+version: "1.0.5"
