@@ -4,6 +4,8 @@ public final class SettingsManager {
 
 	private ItemStatsPlugin plugin;
 	private double basePlayerHealth;
+	private double baseCriticalRate;
+	private double baseCriticalDamage;
 	private int secondsBetweenHealthUpdates;
 	private String healthFormat;
 	private String damageFormat;
@@ -24,6 +26,8 @@ public final class SettingsManager {
 
 	public void load() {
 		basePlayerHealth = getPlugin().getConfigYAML().getDouble("options.base-player-health", 20.0);
+		baseCriticalRate = getPlugin().getConfigYAML().getDouble("options.base-critical-rate", 5.0);
+		baseCriticalDamage = getPlugin().getConfigYAML().getDouble("options.base-critical-damage", 20.0);
 		secondsBetweenHealthUpdates = getPlugin().getConfigYAML().getInt("options.seconds-between-health-updates",
 				10);
 		healthFormat = getPlugin().getConfigYAML().getString("core-stats.health.format", "%value% Health");
@@ -47,6 +51,27 @@ public final class SettingsManager {
 				"Fire Immunity");
 		witherImmunityFormat = getPlugin().getConfigYAML().getString("core-stats.wither-immunity.format",
 				"Wither Immunity");
+	}
+
+	public void save() {
+		getPlugin().getConfigYAML().set("version", getPlugin().getConfigYAML().getVersion());
+		getPlugin().getConfigYAML().set("options.base-player-health", basePlayerHealth);
+		getPlugin().getConfigYAML().set("options.base-critical-rate", baseCriticalRate);
+		getPlugin().getConfigYAML().set("options.base-critical-damage", baseCriticalDamage);
+		getPlugin().getConfigYAML().set("options.seconds-between-health-updates", secondsBetweenHealthUpdates);
+		getPlugin().getConfigYAML().set("core-stats.health.format", healthFormat);
+		getPlugin().getConfigYAML().set("core-stats.damage.format", damageFormat);
+		getPlugin().getConfigYAML().set("core-stats.ranged-damage.format", rangedDamageFormat);
+		getPlugin().getConfigYAML().set("core-stats.melee-damage.format", meleeDamageFormat);
+		getPlugin().getConfigYAML().set("core-stats.regeneration.format", regenerationFormat);
+		getPlugin().getConfigYAML().set("core-stats.armor.format", armorFormat);
+		getPlugin().getConfigYAML().set("core-stats.critical-rate.format", criticalRateFormat);
+		getPlugin().getConfigYAML().set("core-stats.critical-damage.format", criticalDamageFormat);
+		getPlugin().getConfigYAML().set("core-stats.level-requirement.format", levelRequirementFormat);
+		getPlugin().getConfigYAML().set("core-stats.poison-immunity.format", poisonImmunityFormat);
+		getPlugin().getConfigYAML().set("core-stats.fire-immunity.format", fireImmunityFormat);
+		getPlugin().getConfigYAML().set("core-stats.wither-immunity.format", witherImmunityFormat);
+		getPlugin().getConfigYAML().save();
 	}
 
 	public ItemStatsPlugin getPlugin() {
@@ -107,5 +132,13 @@ public final class SettingsManager {
 
 	public String getRangedDamageFormat() {
 		return rangedDamageFormat;
+	}
+
+	public double getBaseCriticalRate() {
+		return baseCriticalRate;
+	}
+
+	public double getBaseCriticalDamage() {
+		return baseCriticalDamage;
 	}
 }
