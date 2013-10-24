@@ -538,8 +538,8 @@ public final class CoreListener implements Listener {
 		double damage;
 
 		double damagerEquipmentDamage = 0D;
-		double damagerCriticalChance = 0D;
-		double damagerCriticalDamage = 0D;
+		double damagerCriticalChance = getPlugin().getSettingsManager().getBaseCriticalRate();
+		double damagerCriticalDamage = getPlugin().getSettingsManager().getBaseCriticalDamage();
 
 		if (event.getDamager() instanceof Projectile) {
 			Projectile projectile = (Projectile) event.getDamager();
