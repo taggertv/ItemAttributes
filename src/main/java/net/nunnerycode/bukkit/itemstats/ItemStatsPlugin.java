@@ -19,8 +19,13 @@ public final class ItemStatsPlugin extends JavaPlugin {
 	private CoreListener coreListener;
 	private HealthUpdateTask healthUpdateTask;
 
+	public CoreListener getCoreListener() {
+		return coreListener;
+	}
+
 	@Override
 	public void onDisable() {
+		settingsManager.save();
 		debugPrinter.debug(Level.INFO, "v" + getDescription().getVersion() + " disabled");
 	}
 
@@ -84,5 +89,9 @@ public final class ItemStatsPlugin extends JavaPlugin {
 
 	public SettingsManager getSettingsManager() {
 		return settingsManager;
+	}
+
+	public HealthUpdateTask getHealthUpdateTask() {
+		return healthUpdateTask;
 	}
 }
