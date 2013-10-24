@@ -549,7 +549,7 @@ public final class CoreListener implements Listener {
 					List<MetadataValue> metadataValueList = projectile.getMetadata("itemstats.damage");
 					for (MetadataValue mv : metadataValueList) {
 						if (mv.getOwningPlugin().equals(getPlugin())) {
-							damagerEquipmentDamage = mv.asDouble();
+							damagerEquipmentDamage += mv.asDouble();
 							break;
 						}
 					}
@@ -558,7 +558,7 @@ public final class CoreListener implements Listener {
 					List<MetadataValue> metadataValueList = projectile.getMetadata("itemstats.criticalrate");
 					for (MetadataValue mv : metadataValueList) {
 						if (mv.getOwningPlugin().equals(getPlugin())) {
-							damagerCriticalChance = mv.asDouble();
+							damagerCriticalChance += mv.asDouble();
 							break;
 						}
 					}
@@ -567,7 +567,7 @@ public final class CoreListener implements Listener {
 					List<MetadataValue> metadataValueList = projectile.getMetadata("itemstats.criticaldamage");
 					for (MetadataValue mv : metadataValueList) {
 						if (mv.getOwningPlugin().equals(getPlugin())) {
-							damagerCriticalDamage = mv.asDouble();
+							damagerCriticalDamage += mv.asDouble();
 							break;
 						}
 					}
