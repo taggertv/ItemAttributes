@@ -22,10 +22,12 @@ core-stats:
     format: "%value% Critical Damage"
   level-requirement:
     format: "Level Required: %value%"
+  armor-penetration:
+    format: "%value% Armor Penetration"
   fire-immunity:
     format: "Fire Immunity"
   poison-immunity:
     format: "Poison Immunity"
   wither-immunity:
     format: "Wither Immunity"
-version: "1.0.5"
+version: "1.0.6"
