@@ -423,13 +423,14 @@ public final class CoreListener implements Listener {
 		Material shotItemMaterial = getMaterialFromEntityType(projectile.getType());
 		ItemStack shotItem = new ItemStack(shotItemMaterial);
 		ItemStack shootingItem = null;
+
 		if (le.getEquipment() != null && le.getEquipment().getItemInHand() != null) {
 			shootingItem = le.getEquipment().getItemInHand();
 		}
+
 		if (le instanceof Player) {
 			ItemStack[] contents = ((Player) le).getInventory().getContents();
-			for (int i = 0, contentsLength = contents.length; i < contentsLength; i++) {
-				ItemStack is = contents[i];
+			for (ItemStack is : contents) {
 				if (is == null || is.getType() == null) {
 					continue;
 				}
@@ -447,9 +448,12 @@ public final class CoreListener implements Listener {
 				.getRangedDamageFormat());
 
 		double bowDamage = 0.0;
+
 		if (shootingItem != null) {
 			bowDamage += ParseUtil.getDamage(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
 					.getDamageFormat());
+			bowDamage += ParseUtil.getRangedDamage(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
+					.getRangedDamageFormat());
 		}
 
 		double armorDamage = 0.0;
@@ -459,6 +463,7 @@ public final class CoreListener implements Listener {
 			armorDamage += ParseUtil.getRangedDamage(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getRangedDamageFormat());
 		}
+
 		double totalDamage = arrowDamage + bowDamage + armorDamage;
 
 		double criticalRate = 0.0;
