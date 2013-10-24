@@ -143,14 +143,6 @@ public final class CoreListener implements Listener {
 		}
 	}
 
-	public List<String> getItemStackLore(ItemStack itemStack) {
-		List<String> lore = new ArrayList<String>();
-		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
-			lore.addAll(itemStack.getItemMeta().getLore());
-		}
-		return lore;
-	}
-
 	private String getItemName(ItemStack itemStack) {
 		String name = "";
 		if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName()) {
@@ -167,6 +159,14 @@ public final class CoreListener implements Listener {
 			}
 		}
 		return name;
+	}
+
+	public List<String> getItemStackLore(ItemStack itemStack) {
+		List<String> lore = new ArrayList<String>();
+		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
+			lore.addAll(itemStack.getItemMeta().getLore());
+		}
+		return lore;
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
@@ -441,40 +441,26 @@ public final class CoreListener implements Listener {
 			}
 		}
 
-		double arrowDamage = 0.0D;
+		double criticalRate = 0.0;
+		double criticalDamage = 0.0;
+		double arrowDamage = 0.0;
+		double bowDamage = 0.0;
+		double armorDamage = 0.0;
+
 		arrowDamage += ParseUtil.getDamage(getItemStackLore(shotItem), getPlugin().getSettingsManager()
 				.getDamageFormat());
 		arrowDamage += ParseUtil.getRangedDamage(getItemStackLore(shotItem), getPlugin().getSettingsManager()
 				.getRangedDamageFormat());
-
-		double bowDamage = 0.0;
-
-		if (shootingItem != null) {
-			bowDamage += ParseUtil.getDamage(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
-					.getDamageFormat());
-			bowDamage += ParseUtil.getRangedDamage(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
-					.getRangedDamageFormat());
-		}
-
-		double armorDamage = 0.0;
-		for (ItemStack is : le.getEquipment().getArmorContents()) {
-			armorDamage += ParseUtil.getDamage(getItemStackLore(is), getPlugin().getSettingsManager()
-					.getDamageFormat());
-			armorDamage += ParseUtil.getRangedDamage(getItemStackLore(is), getPlugin().getSettingsManager()
-					.getRangedDamageFormat());
-		}
-
-		double totalDamage = arrowDamage + bowDamage + armorDamage;
-
-		double criticalRate = 0.0;
-		double criticalDamage = 0.0;
-
 		criticalRate += ParseUtil.getCriticalRate(getItemStackLore(shotItem), getPlugin().getSettingsManager()
 				.getCriticalRateFormat());
 		criticalDamage += ParseUtil.getCriticalDamage(getItemStackLore(shotItem), getPlugin().getSettingsManager()
 				.getCriticalDamageFormat());
 
 		if (shootingItem != null) {
+			bowDamage += ParseUtil.getDamage(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
+					.getDamageFormat());
+			bowDamage += ParseUtil.getRangedDamage(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
+					.getRangedDamageFormat());
 			criticalRate += ParseUtil.getCriticalRate(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
 					.getCriticalRateFormat());
 			criticalDamage += ParseUtil.getCriticalDamage(getItemStackLore(shootingItem),
@@ -482,11 +468,17 @@ public final class CoreListener implements Listener {
 		}
 
 		for (ItemStack is : le.getEquipment().getArmorContents()) {
+			armorDamage += ParseUtil.getDamage(getItemStackLore(is), getPlugin().getSettingsManager()
+					.getDamageFormat());
+			armorDamage += ParseUtil.getRangedDamage(getItemStackLore(is), getPlugin().getSettingsManager()
+					.getRangedDamageFormat());
 			criticalRate += ParseUtil.getCriticalRate(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getCriticalRateFormat());
 			criticalDamage += ParseUtil.getCriticalDamage(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getCriticalDamageFormat());
 		}
+
+		double totalDamage = arrowDamage + bowDamage + armorDamage;
 
 		event.getEntity().setMetadata("itemstats.damage", new FixedMetadataValue(getPlugin(), totalDamage));
 		event.getEntity().setMetadata("itemstats.criticalrate", new FixedMetadataValue(getPlugin(), criticalRate));
