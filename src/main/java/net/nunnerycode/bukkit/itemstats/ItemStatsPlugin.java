@@ -35,8 +35,12 @@ public final class ItemStatsPlugin extends JavaPlugin {
 
 		configYAML = new CommentedConventYamlConfiguration(new File(getDataFolder(), "config.yml"),
 				YamlConfiguration.loadConfiguration(getResource("config.yml")).getString("version"));
+		configYAML.options().updateOnLoad(true);
+		configYAML.options().backupOnUpdate(true);
 		languageYAML = new CommentedConventYamlConfiguration(new File(getDataFolder(), "language.yml"),
 				YamlConfiguration.loadConfiguration(getResource("language.yml")).getString("version"));
+		languageYAML.options().updateOnLoad(true);
+		languageYAML.options().updateOnLoad(true);
 
 		settingsManager = new SettingsManager(this);
 		settingsManager.load();
