@@ -26,8 +26,8 @@ public final class SettingsManager {
 
 	public void load() {
 		basePlayerHealth = getPlugin().getConfigYAML().getDouble("options.base-player-health", 20.0);
-		baseCriticalRate = getPlugin().getConfigYAML().getDouble("options.base-critical-rate", 5.0);
-		baseCriticalDamage = getPlugin().getConfigYAML().getDouble("options.base-critical-damage", 20.0);
+		baseCriticalRate = getPlugin().getConfigYAML().getDouble("options.base-critical-rate", 0.05);
+		baseCriticalDamage = getPlugin().getConfigYAML().getDouble("options.base-critical-damage", 0.2);
 		secondsBetweenHealthUpdates = getPlugin().getConfigYAML().getInt("options.seconds-between-health-updates",
 				10);
 		healthFormat = getPlugin().getConfigYAML().getString("core-stats.health.format", "%value% Health");
