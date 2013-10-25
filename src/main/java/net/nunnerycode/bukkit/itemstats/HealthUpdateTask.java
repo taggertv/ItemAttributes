@@ -30,10 +30,10 @@ public final class HealthUpdateTask extends BukkitRunnable {
 					ItemStack[] armorContents = player.getEquipment().getArmorContents();
 					double d = 0.0;
 					for (ItemStack is : armorContents) {
-						d += ParseUtil.getHealth(getItemStackLore(is), getPlugin().getSettingsManager()
+						d += ParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
 								.getHealthFormat());
 					}
-					d += ParseUtil.getHealth(getItemStackLore(player.getItemInHand()),
+					d += ParseUtil.getDouble(getItemStackLore(player.getItemInHand()),
 							getPlugin().getSettingsManager().getHealthFormat());
 					double currentHealth = player.getHealth();
 					double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
@@ -45,10 +45,10 @@ public final class HealthUpdateTask extends BukkitRunnable {
 					ItemStack[] armorContents = entity.getEquipment().getArmorContents();
 					double d = 0.0;
 					for (ItemStack is : armorContents) {
-						d += ParseUtil.getHealth(getItemStackLore(is), getPlugin().getSettingsManager()
+						d += ParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
 								.getHealthFormat());
 					}
-					d += ParseUtil.getHealth(getItemStackLore(entity.getEquipment().getItemInHand()),
+					d += ParseUtil.getDouble(getItemStackLore(entity.getEquipment().getItemInHand()),
 							getPlugin().getSettingsManager().getHealthFormat());
 					double currentHealth = entity.getHealth();
 					entity.resetMaxHealth();
