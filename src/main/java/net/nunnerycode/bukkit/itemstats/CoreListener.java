@@ -460,7 +460,7 @@ public final class CoreListener implements Listener {
 				.getCriticalRateFormat());
 		criticalDamage += ParseUtil.getDoublePercentage(getItemStackLore(shotItem), getPlugin().getSettingsManager()
 				.getCriticalDamageFormat());
-		armorPenetration += ParseUtil.getDoublePercentage(getItemStackLore(shotItem),
+		armorPenetration += ParseUtil.getDouble(getItemStackLore(shotItem),
 				getPlugin().getSettingsManager().getArmorPenetrationFormat());
 		stunRate += ParseUtil.getDoublePercentage(getItemStackLore(shotItem), getPlugin().getSettingsManager()
 				.getStunRateFormat());
@@ -476,7 +476,7 @@ public final class CoreListener implements Listener {
 					.getCriticalRateFormat());
 			criticalDamage += ParseUtil.getDoublePercentage(getItemStackLore(shootingItem),
 					getPlugin().getSettingsManager().getCriticalDamageFormat());
-			armorPenetration += ParseUtil.getDoublePercentage(getItemStackLore(shootingItem),
+			armorPenetration += ParseUtil.getDouble(getItemStackLore(shootingItem),
 					getPlugin().getSettingsManager().getArmorPenetrationFormat());
 			stunRate += ParseUtil.getDoublePercentage(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
 					.getStunRateFormat());
@@ -493,7 +493,7 @@ public final class CoreListener implements Listener {
 					.getCriticalRateFormat());
 			criticalDamage += ParseUtil.getDoublePercentage(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getCriticalDamageFormat());
-			armorPenetration += ParseUtil.getDoublePercentage(getItemStackLore(is), getPlugin().getSettingsManager()
+			armorPenetration += ParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getArmorPenetrationFormat());
 			stunRate += ParseUtil.getDoublePercentage(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getStunRateFormat());
@@ -673,8 +673,7 @@ public final class CoreListener implements Listener {
 					getPlugin().getSettingsManager().getArmorFormat());
 		}
 
-		double equipmentDamage = damagerEquipmentDamage - (damagedEquipmentReduction - (damagedEquipmentReduction *
-				Math.max(1D, Math.min(armorPenetration, -1D))));
+		double equipmentDamage = damagerEquipmentDamage - (damagedEquipmentReduction - armorPenetration);
 		damage = originalDamage + equipmentDamage;
 
 		if (RandomUtils.nextDouble() < damagerCriticalChance) {
