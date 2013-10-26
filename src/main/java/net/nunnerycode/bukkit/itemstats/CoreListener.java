@@ -29,6 +29,8 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public final class CoreListener implements Listener {
 
@@ -143,6 +145,14 @@ public final class CoreListener implements Listener {
 		}
 	}
 
+	public List<String> getItemStackLore(ItemStack itemStack) {
+		List<String> lore = new ArrayList<String>();
+		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
+			lore.addAll(itemStack.getItemMeta().getLore());
+		}
+		return lore;
+	}
+
 	private String getItemName(ItemStack itemStack) {
 		String name = "";
 		if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName()) {
@@ -159,14 +169,6 @@ public final class CoreListener implements Listener {
 			}
 		}
 		return name;
-	}
-
-	public List<String> getItemStackLore(ItemStack itemStack) {
-		List<String> lore = new ArrayList<String>();
-		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
-			lore.addAll(itemStack.getItemMeta().getLore());
-		}
-		return lore;
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
@@ -447,6 +449,8 @@ public final class CoreListener implements Listener {
 		double bowDamage = 0.0;
 		double armorDamage = 0.0;
 		double armorPenetration = 0.0;
+		double stunRate = 0.0;
+		int stunLength = 0;
 
 		arrowDamage += ParseUtil.getDouble(getItemStackLore(shotItem), getPlugin().getSettingsManager()
 				.getDamageFormat());
@@ -458,6 +462,10 @@ public final class CoreListener implements Listener {
 				.getCriticalDamageFormat());
 		armorPenetration += ParseUtil.getDoublePercentage(getItemStackLore(shotItem),
 				getPlugin().getSettingsManager().getArmorPenetrationFormat());
+		stunRate += ParseUtil.getDoublePercentage(getItemStackLore(shotItem), getPlugin().getSettingsManager()
+				.getStunRateFormat());
+		stunLength += ParseUtil.getInt(getItemStackLore(shotItem), getPlugin().getSettingsManager()
+				.getStunLengthFormat());
 
 		if (shootingItem != null) {
 			bowDamage += ParseUtil.getDouble(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
@@ -470,6 +478,10 @@ public final class CoreListener implements Listener {
 					getPlugin().getSettingsManager().getCriticalDamageFormat());
 			armorPenetration += ParseUtil.getDoublePercentage(getItemStackLore(shootingItem),
 					getPlugin().getSettingsManager().getArmorPenetrationFormat());
+			stunRate += ParseUtil.getDoublePercentage(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
+					.getStunRateFormat());
+			stunLength += ParseUtil.getInt(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
+					.getStunLengthFormat());
 		}
 
 		for (ItemStack is : le.getEquipment().getArmorContents()) {
@@ -483,6 +495,10 @@ public final class CoreListener implements Listener {
 					.getCriticalDamageFormat());
 			armorPenetration += ParseUtil.getDoublePercentage(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getArmorPenetrationFormat());
+			stunRate += ParseUtil.getDoublePercentage(getItemStackLore(is), getPlugin().getSettingsManager()
+					.getStunRateFormat());
+			stunLength += ParseUtil.getInt(getItemStackLore(is), getPlugin().getSettingsManager()
+					.getStunLengthFormat());
 		}
 
 		double totalDamage = arrowDamage + bowDamage + armorDamage;
@@ -492,6 +508,8 @@ public final class CoreListener implements Listener {
 		event.getEntity().setMetadata("itemstats.criticaldamage", new FixedMetadataValue(getPlugin(), criticalDamage));
 		event.getEntity().setMetadata("itemstats.armorpenetration", new FixedMetadataValue(getPlugin(),
 				armorPenetration));
+		event.getEntity().setMetadata("itemstats.stunrate", new FixedMetadataValue(getPlugin(), stunRate));
+		event.getEntity().setMetadata("itemstats.stunlength", new FixedMetadataValue(getPlugin(), stunLength));
 	}
 
 	private Material getMaterialFromEntityType(EntityType entityType) {
@@ -550,6 +568,8 @@ public final class CoreListener implements Listener {
 		double damagerCriticalChance = getPlugin().getSettingsManager().getBaseCriticalRate();
 		double damagerCriticalDamage = getPlugin().getSettingsManager().getBaseCriticalDamage();
 		double armorPenetration = 0D;
+		double stunRate = getPlugin().getSettingsManager().getBaseStunRate();
+		int stunLength = getPlugin().getSettingsManager().getBaseStunLength();
 
 		if (event.getDamager() instanceof Projectile) {
 			Projectile projectile = (Projectile) event.getDamager();
@@ -591,6 +611,24 @@ public final class CoreListener implements Listener {
 						}
 					}
 				}
+				if (projectile.hasMetadata("itemstats.stunrate")) {
+					List<MetadataValue> metadataValueList = projectile.getMetadata("itemstats.stunrate");
+					for (MetadataValue mv : metadataValueList) {
+						if (mv.getOwningPlugin().equals(getPlugin())) {
+							stunRate += mv.asDouble();
+							break;
+						}
+					}
+				}
+				if (projectile.hasMetadata("itemstats.stunlength")) {
+					List<MetadataValue> metadataValueList = projectile.getMetadata("itemstats.stunlength");
+					for (MetadataValue mv : metadataValueList) {
+						if (mv.getOwningPlugin().equals(getPlugin())) {
+							stunLength += mv.asInt();
+							break;
+						}
+					}
+				}
 			}
 		} else if (event.getDamager() instanceof LivingEntity) {
 			LivingEntity damager = (LivingEntity) event.getDamager();
@@ -604,6 +642,10 @@ public final class CoreListener implements Listener {
 						getPlugin().getSettingsManager().getCriticalRateFormat());
 				damagerCriticalDamage += ParseUtil.getDoublePercentage(getItemStackLore(is),
 						getPlugin().getSettingsManager().getCriticalDamageFormat());
+				stunRate += ParseUtil.getDoublePercentage(getItemStackLore(is),
+						getPlugin().getSettingsManager().getStunRateFormat());
+				stunLength += ParseUtil.getInt(getItemStackLore(is),
+						getPlugin().getSettingsManager().getStunLengthFormat());
 			}
 			damagerEquipmentDamage += ParseUtil.getDouble(getItemStackLore(damager.getEquipment().getItemInHand
 					()), getPlugin().getSettingsManager().getMeleeDamageFormat());
@@ -613,6 +655,10 @@ public final class CoreListener implements Listener {
 					.getItemInHand()), getPlugin().getSettingsManager().getCriticalRateFormat());
 			damagerCriticalDamage += ParseUtil.getDoublePercentage(getItemStackLore(damager.getEquipment().getItemInHand
 					()), getPlugin().getSettingsManager().getCriticalDamageFormat());
+			stunRate += ParseUtil.getDoublePercentage(getItemStackLore(damager.getEquipment().getItemInHand
+					()), getPlugin().getSettingsManager().getStunRateFormat());
+			stunLength += ParseUtil.getInt(getItemStackLore(damager.getEquipment().getItemInHand()),
+					getPlugin().getSettingsManager().getStunLengthFormat());
 		}
 
 		double damagedEquipmentReduction = 0D;
@@ -641,6 +687,18 @@ public final class CoreListener implements Listener {
 					instanceof Player) {
 				getPlugin().getLanguageManager().sendMessage((Player) ((Projectile) event.getDamager()).getShooter(),
 						"critical-hit", new String[][]{{"%percentage%", decimalFormat.format(critPercentage * 100)}});
+			}
+		}
+
+		if (RandomUtils.nextDouble() < stunRate) {
+			if (event.getEntity() instanceof LivingEntity) {
+				if (event.getDamager() instanceof Player) {
+					getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "stun");
+				}
+				((LivingEntity) event.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.SLOW,
+						stunLength * 20, 7));
+				((LivingEntity) event.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,
+						stunLength * 20, 7));
 			}
 		}
 
