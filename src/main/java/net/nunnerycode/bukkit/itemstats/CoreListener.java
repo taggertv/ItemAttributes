@@ -446,6 +446,7 @@ public final class CoreListener implements Listener {
 		double arrowDamage = 0.0;
 		double bowDamage = 0.0;
 		double armorDamage = 0.0;
+		double armorPenetration = 0.0;
 
 		arrowDamage += ParseUtil.getDouble(getItemStackLore(shotItem), getPlugin().getSettingsManager()
 				.getDamageFormat());
@@ -455,6 +456,8 @@ public final class CoreListener implements Listener {
 				.getCriticalRateFormat());
 		criticalDamage += ParseUtil.getDoublePercentage(getItemStackLore(shotItem), getPlugin().getSettingsManager()
 				.getCriticalDamageFormat());
+		armorPenetration += ParseUtil.getDoublePercentage(getItemStackLore(shotItem),
+				getPlugin().getSettingsManager().getArmorPenetrationFormat());
 
 		if (shootingItem != null) {
 			bowDamage += ParseUtil.getDouble(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
@@ -465,6 +468,8 @@ public final class CoreListener implements Listener {
 					.getCriticalRateFormat());
 			criticalDamage += ParseUtil.getDoublePercentage(getItemStackLore(shootingItem),
 					getPlugin().getSettingsManager().getCriticalDamageFormat());
+			armorPenetration += ParseUtil.getDoublePercentage(getItemStackLore(shootingItem),
+					getPlugin().getSettingsManager().getArmorPenetrationFormat());
 		}
 
 		for (ItemStack is : le.getEquipment().getArmorContents()) {
@@ -476,6 +481,8 @@ public final class CoreListener implements Listener {
 					.getCriticalRateFormat());
 			criticalDamage += ParseUtil.getDoublePercentage(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getCriticalDamageFormat());
+			armorPenetration += ParseUtil.getDoublePercentage(getItemStackLore(is), getPlugin().getSettingsManager()
+					.getArmorPenetrationFormat());
 		}
 
 		double totalDamage = arrowDamage + bowDamage + armorDamage;
@@ -483,6 +490,8 @@ public final class CoreListener implements Listener {
 		event.getEntity().setMetadata("itemstats.damage", new FixedMetadataValue(getPlugin(), totalDamage));
 		event.getEntity().setMetadata("itemstats.criticalrate", new FixedMetadataValue(getPlugin(), criticalRate));
 		event.getEntity().setMetadata("itemstats.criticaldamage", new FixedMetadataValue(getPlugin(), criticalDamage));
+		event.getEntity().setMetadata("itemstats.armorpenetration", new FixedMetadataValue(getPlugin(),
+				armorPenetration));
 	}
 
 	private Material getMaterialFromEntityType(EntityType entityType) {
@@ -540,6 +549,7 @@ public final class CoreListener implements Listener {
 		double damagerEquipmentDamage = 0D;
 		double damagerCriticalChance = getPlugin().getSettingsManager().getBaseCriticalRate();
 		double damagerCriticalDamage = getPlugin().getSettingsManager().getBaseCriticalDamage();
+		double armorPenetration = 0D;
 
 		if (event.getDamager() instanceof Projectile) {
 			Projectile projectile = (Projectile) event.getDamager();
@@ -568,6 +578,15 @@ public final class CoreListener implements Listener {
 					for (MetadataValue mv : metadataValueList) {
 						if (mv.getOwningPlugin().equals(getPlugin())) {
 							damagerCriticalDamage += mv.asDouble();
+							break;
+						}
+					}
+				}
+				if (projectile.hasMetadata("itemstats.armorpenetration")) {
+					List<MetadataValue> metadataValueList = projectile.getMetadata("itemstats.armorpenetration");
+					for (MetadataValue mv : metadataValueList) {
+						if (mv.getOwningPlugin().equals(getPlugin())) {
+							armorPenetration += mv.asDouble();
 							break;
 						}
 					}
@@ -608,7 +627,8 @@ public final class CoreListener implements Listener {
 					getPlugin().getSettingsManager().getArmorFormat());
 		}
 
-		double equipmentDamage = damagerEquipmentDamage - damagedEquipmentReduction;
+		double equipmentDamage = damagerEquipmentDamage - (damagedEquipmentReduction - (damagedEquipmentReduction *
+				Math.max(1D, Math.min(armorPenetration, -1D))));
 		damage = originalDamage + equipmentDamage;
 
 		if (RandomUtils.nextDouble() < damagerCriticalChance) {
