@@ -25,7 +25,7 @@ core-stats:
   armor-penetration:
     format: "%value% Armor Penetration"
   stun-chance:
-    format: "%value% Stun Chance"
+    format: "%value% Stun Rate"
   stun-length:
     format: "%value% Stun Length"
   fire-immunity:

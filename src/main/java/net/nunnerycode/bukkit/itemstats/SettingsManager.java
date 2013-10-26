@@ -16,6 +16,8 @@ public final class SettingsManager {
 	private String armorPenetrationFormat;
 	private String criticalRateFormat;
 	private String criticalDamageFormat;
+	private String stunRateFormat;
+	private String stunLengthFormat;
 	private String levelRequirementFormat;
 	private String poisonImmunityFormat;
 	private String fireImmunityFormat;
@@ -48,6 +50,9 @@ public final class SettingsManager {
 				"%value% Critical Damage");
 		levelRequirementFormat = getPlugin().getConfigYAML().getString("core-stats.level-requirement.format",
 				"Level Required: %value%");
+		stunRateFormat = getPlugin().getConfigYAML().getString("core-stats.stun-rate.format", "%value% Stun Rate");
+		stunLengthFormat = getPlugin().getConfigYAML().getString("core-stats.stun-length.format",
+				"%value% Stun Length");
 		poisonImmunityFormat = getPlugin().getConfigYAML().getString("core-stats.poison-immunity.format",
 				"Poison Immunity");
 		fireImmunityFormat = getPlugin().getConfigYAML().getString("core-stats.fire-immunity.format",
@@ -77,10 +82,11 @@ public final class SettingsManager {
 		getPlugin().getConfigYAML().set("core-stats.regeneration.format", regenerationFormat);
 		getPlugin().getConfigYAML().set("core-stats.armor.format", armorFormat);
 		getPlugin().getConfigYAML().set("core-stats.armor-penetration.format", armorPenetrationFormat);
-
 		getPlugin().getConfigYAML().set("core-stats.critical-rate.format", criticalRateFormat);
 		getPlugin().getConfigYAML().set("core-stats.critical-damage.format", criticalDamageFormat);
 		getPlugin().getConfigYAML().set("core-stats.level-requirement.format", levelRequirementFormat);
+		getPlugin().getConfigYAML().set("core-stats.stun-rate.format", stunRateFormat);
+		getPlugin().getConfigYAML().set("core-stats.stun-length.format", stunLengthFormat);
 		getPlugin().getConfigYAML().set("core-stats.poison-immunity.format", poisonImmunityFormat);
 		getPlugin().getConfigYAML().set("core-stats.fire-immunity.format", fireImmunityFormat);
 		getPlugin().getConfigYAML().set("core-stats.wither-immunity.format", witherImmunityFormat);
@@ -149,5 +155,13 @@ public final class SettingsManager {
 
 	public double getBaseCriticalDamage() {
 		return baseCriticalDamage;
+	}
+
+	public String getStunRateFormat() {
+		return stunRateFormat;
+	}
+
+	public String getStunLengthFormat() {
+		return stunLengthFormat;
 	}
 }
