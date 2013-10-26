@@ -694,6 +694,10 @@ public final class CoreListener implements Listener {
 			if (event.getEntity() instanceof LivingEntity) {
 				if (event.getDamager() instanceof Player) {
 					getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "stun");
+				} else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter()
+						instanceof Player) {
+					getPlugin().getLanguageManager().sendMessage((Player) ((Projectile) event.getDamager()).getShooter(),
+							"stun");
 				}
 				((LivingEntity) event.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.SLOW,
 						stunLength * 20, 7));
