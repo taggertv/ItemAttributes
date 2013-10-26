@@ -13,6 +13,7 @@ public final class SettingsManager {
 	private String rangedDamageFormat;
 	private String regenerationFormat;
 	private String armorFormat;
+	private String armorPenetrationFormat;
 	private String criticalRateFormat;
 	private String criticalDamageFormat;
 	private String levelRequirementFormat;
@@ -39,6 +40,8 @@ public final class SettingsManager {
 		regenerationFormat = getPlugin().getConfigYAML().getString("core-stats.regeneration.format",
 				"%value% Regeneration");
 		armorFormat = getPlugin().getConfigYAML().getString("core-stats.armor.format", "%value% Armor");
+		armorPenetrationFormat = getPlugin().getConfigYAML().getString("core-stats.armor-penetration.format",
+				"%value% Armor Penetration");
 		criticalRateFormat = getPlugin().getConfigYAML().getString("core-stats.critical-rate.format",
 				"%value% Critical Rate");
 		criticalDamageFormat = getPlugin().getConfigYAML().getString("core-stats.critical-damage.format",
@@ -53,6 +56,14 @@ public final class SettingsManager {
 				"Wither Immunity");
 	}
 
+	public ItemStatsPlugin getPlugin() {
+		return plugin;
+	}
+
+	public String getArmorPenetrationFormat() {
+		return armorPenetrationFormat;
+	}
+
 	public void save() {
 		getPlugin().getConfigYAML().set("version", getPlugin().getConfigYAML().getVersion());
 		getPlugin().getConfigYAML().set("options.base-player-health", basePlayerHealth);
@@ -65,6 +76,8 @@ public final class SettingsManager {
 		getPlugin().getConfigYAML().set("core-stats.melee-damage.format", meleeDamageFormat);
 		getPlugin().getConfigYAML().set("core-stats.regeneration.format", regenerationFormat);
 		getPlugin().getConfigYAML().set("core-stats.armor.format", armorFormat);
+		getPlugin().getConfigYAML().set("core-stats.armor-penetration.format", armorPenetrationFormat);
+
 		getPlugin().getConfigYAML().set("core-stats.critical-rate.format", criticalRateFormat);
 		getPlugin().getConfigYAML().set("core-stats.critical-damage.format", criticalDamageFormat);
 		getPlugin().getConfigYAML().set("core-stats.level-requirement.format", levelRequirementFormat);
@@ -72,10 +85,6 @@ public final class SettingsManager {
 		getPlugin().getConfigYAML().set("core-stats.fire-immunity.format", fireImmunityFormat);
 		getPlugin().getConfigYAML().set("core-stats.wither-immunity.format", witherImmunityFormat);
 		getPlugin().getConfigYAML().save();
-	}
-
-	public ItemStatsPlugin getPlugin() {
-		return plugin;
 	}
 
 	public String getHealthFormat() {
