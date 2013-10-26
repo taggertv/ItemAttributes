@@ -1,6 +1,7 @@
 package net.nunnerycode.bukkit.itemstats;
 
 import java.util.Collection;
+import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.ChatColor;
 
@@ -22,7 +23,17 @@ public final class ParseUtil {
 			if (!withoutNumbers.equals(withoutVariables)) {
 				continue;
 			}
-			d += NumberUtils.toDouble(withoutLetters, 0.0);
+			if (withoutLetters.contains(" - ")) {
+				String[] split = withoutLetters.split(" - ");
+				if (split.length > 1) {
+					double first = NumberUtils.toDouble(split[0], 0.0);
+					double second = NumberUtils.toDouble(split[1], 0.0);
+					d += RandomUtils.nextDouble() * (Math.max(first, second) - Math.min(first,
+							second) + Math.min(first, second));
+				}
+			} else {
+				d += NumberUtils.toDouble(withoutLetters, 0.0);
+			}
 		}
 		return d;
 	}
@@ -40,7 +51,17 @@ public final class ParseUtil {
 			if (!withoutNumbers.equals(withoutVariables)) {
 				continue;
 			}
-			d += NumberUtils.toDouble(withoutLetters, 0.0) / 100D;
+			if (withoutLetters.contains(" - ")) {
+				String[] split = withoutLetters.split(" - ");
+				if (split.length > 1) {
+					double first = NumberUtils.toDouble(split[0], 0.0);
+					double second = NumberUtils.toDouble(split[1], 0.0);
+					d += (RandomUtils.nextDouble() * (Math.max(first, second) - Math.min(first,
+							second) + Math.min(first, second))) / 100D;
+				}
+			} else {
+				d += NumberUtils.toDouble(withoutLetters, 0.0) / 100D;
+			}
 		}
 		return d;
 	}
@@ -58,7 +79,17 @@ public final class ParseUtil {
 			if (!withoutNumbers.equals(withoutVariables)) {
 				continue;
 			}
-			i += NumberUtils.toInt(withoutLetters, 0);
+			if (withoutLetters.contains(" - ")) {
+				String[] split = withoutLetters.split(" - ");
+				if (split.length > 1) {
+					int first = NumberUtils.toInt(split[0], 0);
+					int second = NumberUtils.toInt(split[1], 0);
+					i += RandomUtils.nextDouble() * (Math.max(first, second) - Math.min(first,
+							second) + Math.min(first, second));
+				}
+			} else {
+				i += NumberUtils.toInt(withoutLetters, 0);
+			}
 		}
 		return i;
 	}
