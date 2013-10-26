@@ -24,10 +24,14 @@ core-stats:
     format: "Level Required: %value%"
   armor-penetration:
     format: "%value% Armor Penetration"
+  stun-chance:
+    format: "%value% Stun Chance"
+  stun-length:
+    format: "%value% Stun Length"
   fire-immunity:
     format: "Fire Immunity"
   poison-immunity:
     format: "Poison Immunity"
   wither-immunity:
     format: "Wither Immunity"
-version: "1.0.6"
+version: "1.0.7"
