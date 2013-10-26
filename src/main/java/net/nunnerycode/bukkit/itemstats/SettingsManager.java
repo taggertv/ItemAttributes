@@ -6,6 +6,8 @@ public final class SettingsManager {
 	private double basePlayerHealth;
 	private double baseCriticalRate;
 	private double baseCriticalDamage;
+	private double baseStunRate;
+	private int baseStunLength;
 	private int secondsBetweenHealthUpdates;
 	private String healthFormat;
 	private String damageFormat;
@@ -31,6 +33,8 @@ public final class SettingsManager {
 		basePlayerHealth = getPlugin().getConfigYAML().getDouble("options.base-player-health", 20.0);
 		baseCriticalRate = getPlugin().getConfigYAML().getDouble("options.base-critical-rate", 0.05);
 		baseCriticalDamage = getPlugin().getConfigYAML().getDouble("options.base-critical-damage", 0.2);
+		baseStunRate = getPlugin().getConfigYAML().getDouble("options.base-stun-rate", 0.05);
+		baseStunLength = getPlugin().getConfigYAML().getInt("options.base-stun-length", 1);
 		secondsBetweenHealthUpdates = getPlugin().getConfigYAML().getInt("options.seconds-between-health-updates",
 				10);
 		healthFormat = getPlugin().getConfigYAML().getString("core-stats.health.format", "%value% Health");
@@ -74,6 +78,8 @@ public final class SettingsManager {
 		getPlugin().getConfigYAML().set("options.base-player-health", basePlayerHealth);
 		getPlugin().getConfigYAML().set("options.base-critical-rate", baseCriticalRate);
 		getPlugin().getConfigYAML().set("options.base-critical-damage", baseCriticalDamage);
+		getPlugin().getConfigYAML().set("options.base-stun-rate", baseStunRate);
+		getPlugin().getConfigYAML().set("options.base-stun-length", baseStunLength);
 		getPlugin().getConfigYAML().set("options.seconds-between-health-updates", secondsBetweenHealthUpdates);
 		getPlugin().getConfigYAML().set("core-stats.health.format", healthFormat);
 		getPlugin().getConfigYAML().set("core-stats.damage.format", damageFormat);
@@ -163,5 +169,13 @@ public final class SettingsManager {
 
 	public String getStunLengthFormat() {
 		return stunLengthFormat;
+	}
+
+	public double getBaseStunRate() {
+		return baseStunRate;
+	}
+
+	public int getBaseStunLength() {
+		return baseStunLength;
 	}
 }

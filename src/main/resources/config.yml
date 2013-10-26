@@ -2,6 +2,8 @@ options:
   base-player-health: 20.0
   base-critical-damage: 0.2
   base-critical-rate: 0.05
+  base-stun-rate: 0.05
+  base-stun-length: 1
   seconds-between-health-updates: 10
 core-stats:
   health:
