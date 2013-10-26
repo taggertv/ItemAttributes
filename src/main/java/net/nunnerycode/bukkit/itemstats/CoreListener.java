@@ -608,7 +608,8 @@ public final class CoreListener implements Listener {
 					getPlugin().getSettingsManager().getArmorFormat());
 		}
 
-		damage = Math.max(originalDamage + Math.max(damagerEquipmentDamage - damagedEquipmentReduction, 0), 0);
+		double equipmentDamage = damagerEquipmentDamage - damagedEquipmentReduction;
+		damage = originalDamage + equipmentDamage;
 
 		if (RandomUtils.nextDouble() < damagerCriticalChance) {
 			double critPercentage = (1.00 + damagerCriticalDamage);
