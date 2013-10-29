@@ -1,4 +1,4 @@
-package net.nunnerycode.bukkit.itemstats;
+package net.nunnerycode.bukkit.itemattributes;
 
 import java.util.Arrays;
 import java.util.List;

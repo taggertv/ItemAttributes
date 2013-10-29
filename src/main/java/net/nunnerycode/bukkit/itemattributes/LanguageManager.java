@@ -1,4 +1,4 @@
-package net.nunnerycode.bukkit.itemstats;
+package net.nunnerycode.bukkit.itemattributes;
 
 import com.conventnunnery.libraries.config.ConventConfiguration;
 import java.util.ArrayList;
@@ -11,10 +11,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public final class LanguageManager {
-	private final ItemStatsPlugin plugin;
+	private final ItemAttributesPlugin plugin;
 	private final Map<String, String> messages;
 
-	public LanguageManager(ItemStatsPlugin plugin) {
+	public LanguageManager(ItemAttributesPlugin plugin) {
 		this.plugin = plugin;
 		messages = new HashMap<String, String>();
 	}
@@ -53,7 +53,7 @@ public final class LanguageManager {
 		}
 	}
 
-	public ItemStatsPlugin getPlugin() {
+	public ItemAttributesPlugin getPlugin() {
 		return plugin;
 	}
 

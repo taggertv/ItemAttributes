@@ -1,8 +1,8 @@
-package net.nunnerycode.bukkit.itemstats;
+package net.nunnerycode.bukkit.itemattributes;
 
 public final class SettingsManager {
 
-	private ItemStatsPlugin plugin;
+	private ItemAttributesPlugin plugin;
 	private double basePlayerHealth;
 	private double baseCriticalRate;
 	private double baseCriticalDamage;
@@ -25,7 +25,7 @@ public final class SettingsManager {
 	private String fireImmunityFormat;
 	private String witherImmunityFormat;
 
-	public SettingsManager(ItemStatsPlugin plugin) {
+	public SettingsManager(ItemAttributesPlugin plugin) {
 		this.plugin = plugin;
 	}
 
@@ -65,7 +65,7 @@ public final class SettingsManager {
 				"Wither Immunity");
 	}
 
-	public ItemStatsPlugin getPlugin() {
+	public ItemAttributesPlugin getPlugin() {
 		return plugin;
 	}
 

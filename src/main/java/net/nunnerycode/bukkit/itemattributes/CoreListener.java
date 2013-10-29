@@ -1,4 +1,4 @@
-package net.nunnerycode.bukkit.itemstats;
+package net.nunnerycode.bukkit.itemattributes;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -34,10 +34,10 @@ import org.bukkit.potion.PotionEffectType;
 
 public final class CoreListener implements Listener {
 
-	private final ItemStatsPlugin plugin;
+	private final ItemAttributesPlugin plugin;
 	private final DecimalFormat decimalFormat;
 
-	public CoreListener(ItemStatsPlugin plugin) {
+	public CoreListener(ItemAttributesPlugin plugin) {
 		this.plugin = plugin;
 		decimalFormat = new DecimalFormat("#.##");
 	}
@@ -49,10 +49,10 @@ public final class CoreListener implements Listener {
 		}
 		double maxHealth = event.getEntity().getMaxHealth();
 		MetadataValue metadataValue = new FixedMetadataValue(getPlugin(), maxHealth);
-		event.getEntity().setMetadata("itemstats.basehealth", metadataValue);
+		event.getEntity().setMetadata("itemattributes.basehealth", metadataValue);
 	}
 
-	public ItemStatsPlugin getPlugin() {
+	public ItemAttributesPlugin getPlugin() {
 		return plugin;
 	}
 
@@ -236,8 +236,8 @@ public final class CoreListener implements Listener {
 		double currentHealth = entity.getHealth();
 		entity.resetMaxHealth();
 		double baseMaxHealth = entity.getMaxHealth();
-		if (entity.hasMetadata("itemstats.basehealth")) {
-			List<MetadataValue> metadataValueList = entity.getMetadata("itemstats.basehealth");
+		if (entity.hasMetadata("itemattributes.basehealth")) {
+			List<MetadataValue> metadataValueList = entity.getMetadata("itemattributes.basehealth");
 			for (MetadataValue mv : metadataValueList) {
 				if (mv.getOwningPlugin().equals(getPlugin())) {
 					baseMaxHealth = mv.asDouble();
@@ -503,13 +503,13 @@ public final class CoreListener implements Listener {
 
 		double totalDamage = arrowDamage + bowDamage + armorDamage;
 
-		event.getEntity().setMetadata("itemstats.damage", new FixedMetadataValue(getPlugin(), totalDamage));
-		event.getEntity().setMetadata("itemstats.criticalrate", new FixedMetadataValue(getPlugin(), criticalRate));
-		event.getEntity().setMetadata("itemstats.criticaldamage", new FixedMetadataValue(getPlugin(), criticalDamage));
-		event.getEntity().setMetadata("itemstats.armorpenetration", new FixedMetadataValue(getPlugin(),
+		event.getEntity().setMetadata("itemattributes.damage", new FixedMetadataValue(getPlugin(), totalDamage));
+		event.getEntity().setMetadata("itemattributes.criticalrate", new FixedMetadataValue(getPlugin(), criticalRate));
+		event.getEntity().setMetadata("itemattributes.criticaldamage", new FixedMetadataValue(getPlugin(), criticalDamage));
+		event.getEntity().setMetadata("itemattributes.armorpenetration", new FixedMetadataValue(getPlugin(),
 				armorPenetration));
-		event.getEntity().setMetadata("itemstats.stunrate", new FixedMetadataValue(getPlugin(), stunRate));
-		event.getEntity().setMetadata("itemstats.stunlength", new FixedMetadataValue(getPlugin(), stunLength));
+		event.getEntity().setMetadata("itemattributes.stunrate", new FixedMetadataValue(getPlugin(), stunRate));
+		event.getEntity().setMetadata("itemattributes.stunlength", new FixedMetadataValue(getPlugin(), stunLength));
 	}
 
 	private Material getMaterialFromEntityType(EntityType entityType) {
@@ -575,8 +575,8 @@ public final class CoreListener implements Listener {
 			Projectile projectile = (Projectile) event.getDamager();
 			LivingEntity shooter = projectile.getShooter();
 			if (shooter != null) {
-				if (projectile.hasMetadata("itemstats.damage")) {
-					List<MetadataValue> metadataValueList = projectile.getMetadata("itemstats.damage");
+				if (projectile.hasMetadata("itemattributes.damage")) {
+					List<MetadataValue> metadataValueList = projectile.getMetadata("itemattributes.damage");
 					for (MetadataValue mv : metadataValueList) {
 						if (mv.getOwningPlugin().equals(getPlugin())) {
 							damagerEquipmentDamage += mv.asDouble();
@@ -584,8 +584,8 @@ public final class CoreListener implements Listener {
 						}
 					}
 				}
-				if (projectile.hasMetadata("itemstats.criticalrate")) {
-					List<MetadataValue> metadataValueList = projectile.getMetadata("itemstats.criticalrate");
+				if (projectile.hasMetadata("itemattributes.criticalrate")) {
+					List<MetadataValue> metadataValueList = projectile.getMetadata("itemattributes.criticalrate");
 					for (MetadataValue mv : metadataValueList) {
 						if (mv.getOwningPlugin().equals(getPlugin())) {
 							damagerCriticalChance += mv.asDouble();
@@ -593,8 +593,8 @@ public final class CoreListener implements Listener {
 						}
 					}
 				}
-				if (projectile.hasMetadata("itemstats.criticaldamage")) {
-					List<MetadataValue> metadataValueList = projectile.getMetadata("itemstats.criticaldamage");
+				if (projectile.hasMetadata("itemattributes.criticaldamage")) {
+					List<MetadataValue> metadataValueList = projectile.getMetadata("itemattributes.criticaldamage");
 					for (MetadataValue mv : metadataValueList) {
 						if (mv.getOwningPlugin().equals(getPlugin())) {
 							damagerCriticalDamage += mv.asDouble();
@@ -602,8 +602,8 @@ public final class CoreListener implements Listener {
 						}
 					}
 				}
-				if (projectile.hasMetadata("itemstats.armorpenetration")) {
-					List<MetadataValue> metadataValueList = projectile.getMetadata("itemstats.armorpenetration");
+				if (projectile.hasMetadata("itemattributes.armorpenetration")) {
+					List<MetadataValue> metadataValueList = projectile.getMetadata("itemattributes.armorpenetration");
 					for (MetadataValue mv : metadataValueList) {
 						if (mv.getOwningPlugin().equals(getPlugin())) {
 							armorPenetration += mv.asDouble();
@@ -611,8 +611,8 @@ public final class CoreListener implements Listener {
 						}
 					}
 				}
-				if (projectile.hasMetadata("itemstats.stunrate")) {
-					List<MetadataValue> metadataValueList = projectile.getMetadata("itemstats.stunrate");
+				if (projectile.hasMetadata("itemattributes.stunrate")) {
+					List<MetadataValue> metadataValueList = projectile.getMetadata("itemattributes.stunrate");
 					for (MetadataValue mv : metadataValueList) {
 						if (mv.getOwningPlugin().equals(getPlugin())) {
 							stunRate += mv.asDouble();
@@ -620,8 +620,8 @@ public final class CoreListener implements Listener {
 						}
 					}
 				}
-				if (projectile.hasMetadata("itemstats.stunlength")) {
-					List<MetadataValue> metadataValueList = projectile.getMetadata("itemstats.stunlength");
+				if (projectile.hasMetadata("itemattributes.stunlength")) {
+					List<MetadataValue> metadataValueList = projectile.getMetadata("itemattributes.stunlength");
 					for (MetadataValue mv : metadataValueList) {
 						if (mv.getOwningPlugin().equals(getPlugin())) {
 							stunLength += mv.asInt();

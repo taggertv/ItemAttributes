@@ -1,4 +1,4 @@
-package net.nunnerycode.bukkit.itemstats;
+package net.nunnerycode.bukkit.itemattributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +13,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public final class HealthUpdateTask extends BukkitRunnable {
 
-	private final ItemStatsPlugin plugin;
+	private final ItemAttributesPlugin plugin;
 
-	public HealthUpdateTask(ItemStatsPlugin plugin) {
+	public HealthUpdateTask(ItemAttributesPlugin plugin) {
 		this.plugin = plugin;
 		this.runTaskTimer(getPlugin(), 20L * getPlugin().getSettingsManager().getSecondsBetweenHealthUpdates(),
 				20L * getPlugin().getSettingsManager().getSecondsBetweenHealthUpdates());
@@ -53,8 +53,8 @@ public final class HealthUpdateTask extends BukkitRunnable {
 					double currentHealth = entity.getHealth();
 					entity.resetMaxHealth();
 					double baseMaxHealth = entity.getMaxHealth();
-					if (entity.hasMetadata("itemstats.basehealth")) {
-						List<MetadataValue> metadataValueList = entity.getMetadata("itemstats.basehealth");
+					if (entity.hasMetadata("itemattributes.basehealth")) {
+						List<MetadataValue> metadataValueList = entity.getMetadata("itemattributes.basehealth");
 						for (MetadataValue mv : metadataValueList) {
 							if (mv.getOwningPlugin().equals(getPlugin())) {
 								baseMaxHealth = mv.asDouble();
@@ -69,7 +69,7 @@ public final class HealthUpdateTask extends BukkitRunnable {
 		}
 	}
 
-	public ItemStatsPlugin getPlugin() {
+	public ItemAttributesPlugin getPlugin() {
 		return plugin;
 	}
 
