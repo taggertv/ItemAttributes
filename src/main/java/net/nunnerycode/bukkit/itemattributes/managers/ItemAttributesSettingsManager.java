@@ -1,5 +1,6 @@
-package net.nunnerycode.bukkit.itemattributes;
+package net.nunnerycode.bukkit.itemattributes.managers;
 
+import net.nunnerycode.bukkit.itemattributes.ItemAttributesPlugin;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.managers.SettingsManager;
 

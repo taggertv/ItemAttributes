@@ -1,8 +1,10 @@
-package net.nunnerycode.bukkit.itemattributes;
+package net.nunnerycode.bukkit.itemattributes.listeners;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import net.nunnerycode.bukkit.itemattributes.utils.ItemAttributesParseUtil;
+import net.nunnerycode.bukkit.itemattributes.ItemAttributesPlugin;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.listeners.CoreListener;
 import org.apache.commons.lang.math.RandomUtils;

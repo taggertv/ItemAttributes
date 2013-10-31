@@ -1,4 +1,4 @@
-package net.nunnerycode.bukkit.itemattributes;
+package net.nunnerycode.bukkit.itemattributes.managers;
 
 import com.conventnunnery.libraries.config.ConventConfiguration;
 import java.util.ArrayList;
@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.nunnerycode.bukkit.itemattributes.ItemAttributesPlugin;
 import net.nunnerycode.bukkit.itemattributes.api.managers.LanguageManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

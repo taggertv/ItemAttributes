@@ -1,7 +1,9 @@
-package net.nunnerycode.bukkit.itemattributes;
+package net.nunnerycode.bukkit.itemattributes.tasks;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.nunnerycode.bukkit.itemattributes.utils.ItemAttributesParseUtil;
+import net.nunnerycode.bukkit.itemattributes.ItemAttributesPlugin;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.tasks.HealthUpdateTask;
 import org.bukkit.Bukkit;

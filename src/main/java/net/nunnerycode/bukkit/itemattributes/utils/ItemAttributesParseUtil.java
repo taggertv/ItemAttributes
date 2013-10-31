@@ -1,4 +1,4 @@
-package net.nunnerycode.bukkit.itemattributes;
+package net.nunnerycode.bukkit.itemattributes.utils;
 
 import java.util.Collection;
 import org.apache.commons.lang.math.RandomUtils;
