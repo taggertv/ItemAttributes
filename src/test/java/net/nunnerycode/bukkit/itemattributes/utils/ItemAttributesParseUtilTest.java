@@ -1,7 +1,8 @@
-package net.nunnerycode.bukkit.itemattributes;
+package net.nunnerycode.bukkit.itemattributes.utils;
 
 import java.util.Arrays;
 import java.util.List;
+import net.nunnerycode.bukkit.itemattributes.utils.ItemAttributesParseUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
