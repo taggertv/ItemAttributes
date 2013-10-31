@@ -6,11 +6,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.nunnerycode.bukkit.itemattributes.api.managers.LanguageManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
-public final class ItemAttributesLanguageManager {
+public final class ItemAttributesLanguageManager implements LanguageManager {
 	private final ItemAttributesPlugin plugin;
 	private final Map<String, String> messages;
 
@@ -19,10 +20,12 @@ public final class ItemAttributesLanguageManager {
 		messages = new HashMap<String, String>();
 	}
 
+	@Override
 	public Map<String, String> getMessages() {
 		return messages;
 	}
 
+	@Override
 	public void sendMessage(CommandSender reciever, String path) {
 		String message = getMessage(path);
 		if (message == null) {
@@ -31,6 +34,7 @@ public final class ItemAttributesLanguageManager {
 		reciever.sendMessage(message);
 	}
 
+	@Override
 	public String getMessage(String path) {
 		String message = messages.get(path);
 		if (message == null) {
@@ -53,10 +57,12 @@ public final class ItemAttributesLanguageManager {
 		}
 	}
 
+	@Override
 	public ItemAttributesPlugin getPlugin() {
 		return plugin;
 	}
 
+	@Override
 	public void sendMessage(CommandSender reciever, String path,
 							String[][] arguments) {
 		String message = getMessage(path, arguments);
@@ -66,6 +72,7 @@ public final class ItemAttributesLanguageManager {
 		reciever.sendMessage(message);
 	}
 
+	@Override
 	public String getMessage(String path, String[][] arguments) {
 		String message = messages.get(path);
 		if (message == null) {
@@ -78,6 +85,7 @@ public final class ItemAttributesLanguageManager {
 		return message;
 	}
 
+	@Override
 	public List<String> getStringList(String path) {
 		List<String> message = Arrays.asList(messages.get(path).split("^"));
 		List<String> strings = new ArrayList<String>();
@@ -87,6 +95,7 @@ public final class ItemAttributesLanguageManager {
 		return strings;
 	}
 
+	@Override
 	public List<String> getStringList(String path, String[][] arguments) {
 		List<String> message = Arrays.asList(messages.get(path).split("^"));
 		List<String> strings = new ArrayList<String>();

@@ -2,6 +2,8 @@ package net.nunnerycode.bukkit.itemattributes;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
+import net.nunnerycode.bukkit.itemattributes.api.tasks.HealthUpdateTask;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -11,14 +13,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public final class ItemAttributesHealthUpdateTask extends BukkitRunnable {
+public final class ItemAttributesHealthUpdateTask extends BukkitRunnable implements HealthUpdateTask {
 
 	private final ItemAttributesPlugin plugin;
 
 	public ItemAttributesHealthUpdateTask(ItemAttributesPlugin plugin) {
 		this.plugin = plugin;
-		this.runTaskTimer(getPlugin(), 20L * getPlugin().getItemAttributesSettingsManager().getSecondsBetweenHealthUpdates(),
-				20L * getPlugin().getItemAttributesSettingsManager().getSecondsBetweenHealthUpdates());
+		this.runTaskTimer(plugin, 20L * getPlugin().getSettingsManager().getSecondsBetweenHealthUpdates(),
+				20L * getPlugin().getSettingsManager().getSecondsBetweenHealthUpdates());
 	}
 
 	@Override
@@ -30,13 +32,13 @@ public final class ItemAttributesHealthUpdateTask extends BukkitRunnable {
 					ItemStack[] armorContents = player.getEquipment().getArmorContents();
 					double d = 0.0;
 					for (ItemStack is : armorContents) {
-						d += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getItemAttributesSettingsManager()
+						d += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
 								.getHealthFormat());
 					}
 					d += ItemAttributesParseUtil.getDouble(getItemStackLore(player.getItemInHand()),
-							getPlugin().getItemAttributesSettingsManager().getHealthFormat());
+							getPlugin().getSettingsManager().getHealthFormat());
 					double currentHealth = player.getHealth();
-					double baseMaxHealth = getPlugin().getItemAttributesSettingsManager().getBasePlayerHealth();
+					double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 					player.setMaxHealth(Math.max(baseMaxHealth + d, 1));
 					player.setHealth(Math.min(Math.max(currentHealth, 0), player.getMaxHealth()));
 					player.setHealthScale(player.getMaxHealth());
@@ -45,11 +47,11 @@ public final class ItemAttributesHealthUpdateTask extends BukkitRunnable {
 					ItemStack[] armorContents = entity.getEquipment().getArmorContents();
 					double d = 0.0;
 					for (ItemStack is : armorContents) {
-						d += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getItemAttributesSettingsManager()
+						d += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
 								.getHealthFormat());
 					}
 					d += ItemAttributesParseUtil.getDouble(getItemStackLore(entity.getEquipment().getItemInHand()),
-							getPlugin().getItemAttributesSettingsManager().getHealthFormat());
+							getPlugin().getSettingsManager().getHealthFormat());
 					double currentHealth = entity.getHealth();
 					entity.resetMaxHealth();
 					double baseMaxHealth = entity.getMaxHealth();
@@ -69,7 +71,8 @@ public final class ItemAttributesHealthUpdateTask extends BukkitRunnable {
 		}
 	}
 
-	public ItemAttributesPlugin getPlugin() {
+	@Override
+	public ItemAttributes getPlugin() {
 		return plugin;
 	}
 

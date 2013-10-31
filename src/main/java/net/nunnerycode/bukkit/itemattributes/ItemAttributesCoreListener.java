@@ -3,6 +3,8 @@ package net.nunnerycode.bukkit.itemattributes;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
+import net.nunnerycode.bukkit.itemattributes.api.listeners.CoreListener;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.ChatColor;
@@ -32,7 +34,7 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public final class ItemAttributesCoreListener implements Listener {
+public final class ItemAttributesCoreListener implements Listener, CoreListener {
 
 	private final ItemAttributesPlugin plugin;
 	private final DecimalFormat decimalFormat;
@@ -48,11 +50,12 @@ public final class ItemAttributesCoreListener implements Listener {
 			return;
 		}
 		double maxHealth = event.getEntity().getMaxHealth();
-		MetadataValue metadataValue = new FixedMetadataValue(getPlugin(), maxHealth);
+		MetadataValue metadataValue = new FixedMetadataValue(plugin, maxHealth);
 		event.getEntity().setMetadata("itemattributes.basehealth", metadataValue);
 	}
 
-	public ItemAttributesPlugin getPlugin() {
+	@Override
+	public ItemAttributes getPlugin() {
 		return plugin;
 	}
 
@@ -75,7 +78,7 @@ public final class ItemAttributesCoreListener implements Listener {
 		ItemStack boots = player.getEquipment().getBoots();
 
 		// item in hand check
-		int level = ItemAttributesParseUtil.getInt(getItemStackLore(itemInHand), getPlugin().getItemAttributesSettingsManager()
+		int level = ItemAttributesParseUtil.getInt(getItemStackLore(itemInHand), getPlugin().getSettingsManager()
 				.getLevelRequirementFormat());
 		if (player.getLevel() < level) {
 			if (player.getInventory().firstEmpty() >= 0) {
@@ -84,12 +87,12 @@ public final class ItemAttributesCoreListener implements Listener {
 				player.getWorld().dropItem(player.getLocation(), itemInHand);
 			}
 			player.getEquipment().setItemInHand(null);
-			getPlugin().getItemAttributesLanguageManager().sendMessage(player, "unable-to-use",
+			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
 					new String[][]{{"%itemname%", getItemName(itemInHand)}, {"%level%", String.valueOf(level)}});
 		}
 
 		// helmet check
-		level = ItemAttributesParseUtil.getInt(getItemStackLore(helmet), getPlugin().getItemAttributesSettingsManager()
+		level = ItemAttributesParseUtil.getInt(getItemStackLore(helmet), getPlugin().getSettingsManager()
 				.getLevelRequirementFormat());
 		if (player.getLevel() < level) {
 			if (player.getInventory().firstEmpty() >= 0) {
@@ -98,12 +101,12 @@ public final class ItemAttributesCoreListener implements Listener {
 				player.getWorld().dropItem(player.getLocation(), helmet);
 			}
 			player.getEquipment().setHelmet(null);
-			getPlugin().getItemAttributesLanguageManager().sendMessage(player, "unable-to-use",
+			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
 					new String[][]{{"%itemname%", getItemName(helmet)}, {"%level%", String.valueOf(level)}});
 		}
 
 		// chestplate check
-		level = ItemAttributesParseUtil.getInt(getItemStackLore(chestplate), getPlugin().getItemAttributesSettingsManager()
+		level = ItemAttributesParseUtil.getInt(getItemStackLore(chestplate), getPlugin().getSettingsManager()
 				.getLevelRequirementFormat());
 		if (player.getLevel() < level) {
 			if (player.getInventory().firstEmpty() >= 0) {
@@ -112,12 +115,12 @@ public final class ItemAttributesCoreListener implements Listener {
 				player.getWorld().dropItem(player.getLocation(), chestplate);
 			}
 			player.getEquipment().setChestplate(null);
-			getPlugin().getItemAttributesLanguageManager().sendMessage(player, "unable-to-use",
+			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
 					new String[][]{{"%itemname%", getItemName(chestplate)}, {"%level%", String.valueOf(level)}});
 		}
 
 		// leggings check
-		level = ItemAttributesParseUtil.getInt(getItemStackLore(leggings), getPlugin().getItemAttributesSettingsManager()
+		level = ItemAttributesParseUtil.getInt(getItemStackLore(leggings), getPlugin().getSettingsManager()
 				.getLevelRequirementFormat());
 		if (player.getLevel() < level) {
 			if (player.getInventory().firstEmpty() >= 0) {
@@ -126,12 +129,12 @@ public final class ItemAttributesCoreListener implements Listener {
 				player.getWorld().dropItem(player.getLocation(), leggings);
 			}
 			player.getEquipment().setLeggings(null);
-			getPlugin().getItemAttributesLanguageManager().sendMessage(player, "unable-to-use",
+			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
 					new String[][]{{"%itemname%", getItemName(leggings)}, {"%level%", String.valueOf(level)}});
 		}
 
 		// boots check
-		level = ItemAttributesParseUtil.getInt(getItemStackLore(boots), getPlugin().getItemAttributesSettingsManager()
+		level = ItemAttributesParseUtil.getInt(getItemStackLore(boots), getPlugin().getSettingsManager()
 				.getLevelRequirementFormat());
 		if (player.getLevel() < level) {
 			if (player.getInventory().firstEmpty() >= 0) {
@@ -140,12 +143,12 @@ public final class ItemAttributesCoreListener implements Listener {
 				player.getWorld().dropItem(player.getLocation(), boots);
 			}
 			player.getEquipment().setBoots(null);
-			getPlugin().getItemAttributesLanguageManager().sendMessage(player, "unable-to-use",
+			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
 					new String[][]{{"%itemname%", getItemName(boots)}, {"%level%", String.valueOf(level)}});
 		}
 	}
 
-	public List<String> getItemStackLore(ItemStack itemStack) {
+	private List<String> getItemStackLore(ItemStack itemStack) {
 		List<String> lore = new ArrayList<String>();
 		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
 			lore.addAll(itemStack.getItemMeta().getLore());
@@ -180,13 +183,13 @@ public final class ItemAttributesCoreListener implements Listener {
 			ItemStack[] armorContents = he.getEquipment().getArmorContents();
 			double d = 0.0;
 			for (ItemStack is : armorContents) {
-				d += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getItemAttributesSettingsManager()
+				d += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
 						.getHealthFormat());
 			}
 			d += ItemAttributesParseUtil.getDouble(getItemStackLore(he.getEquipment().getItemInHand()),
-					getPlugin().getItemAttributesSettingsManager().getHealthFormat());
+					getPlugin().getSettingsManager().getHealthFormat());
 			double currentHealth = he.getHealth();
-			double baseMaxHealth = getPlugin().getItemAttributesSettingsManager().getBasePlayerHealth();
+			double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 			he.setMaxHealth(Math.max(baseMaxHealth + d, 1));
 			he.setHealth(Math.min(Math.max(currentHealth, 0), he.getMaxHealth()));
 			if (he instanceof Player) {
@@ -206,13 +209,13 @@ public final class ItemAttributesCoreListener implements Listener {
 		ItemStack[] armorContents = event.getPlayer().getEquipment().getArmorContents();
 		double d = 0.0;
 		for (ItemStack is : armorContents) {
-			d += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getItemAttributesSettingsManager()
+			d += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getHealthFormat());
 		}
 		d += ItemAttributesParseUtil.getDouble(getItemStackLore(event.getPlayer().getItemInHand()),
-				getPlugin().getItemAttributesSettingsManager().getHealthFormat());
+				getPlugin().getSettingsManager().getHealthFormat());
 		double currentHealth = event.getPlayer().getHealth();
-		double baseMaxHealth = getPlugin().getItemAttributesSettingsManager().getBasePlayerHealth();
+		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 		event.getPlayer().setMaxHealth(Math.max(baseMaxHealth + d, 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
@@ -228,11 +231,11 @@ public final class ItemAttributesCoreListener implements Listener {
 		ItemStack[] armorContents = entity.getEquipment().getArmorContents();
 		double d = 0.0;
 		for (ItemStack is : armorContents) {
-			d += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getItemAttributesSettingsManager()
+			d += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getHealthFormat());
 		}
 		d += ItemAttributesParseUtil.getDouble(getItemStackLore(entity.getEquipment().getItemInHand()),
-				getPlugin().getItemAttributesSettingsManager().getHealthFormat());
+				getPlugin().getSettingsManager().getHealthFormat());
 		double currentHealth = entity.getHealth();
 		entity.resetMaxHealth();
 		double baseMaxHealth = entity.getMaxHealth();
@@ -260,13 +263,13 @@ public final class ItemAttributesCoreListener implements Listener {
 		ItemStack[] armorContents = event.getPlayer().getEquipment().getArmorContents();
 		double d = 0.0;
 		for (ItemStack is : armorContents) {
-			d += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getItemAttributesSettingsManager()
+			d += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getHealthFormat());
 		}
 		d += ItemAttributesParseUtil.getDouble(getItemStackLore(event.getPlayer().getItemInHand()),
-				getPlugin().getItemAttributesSettingsManager().getHealthFormat());
+				getPlugin().getSettingsManager().getHealthFormat());
 		double currentHealth = event.getPlayer().getHealth();
-		double baseMaxHealth = getPlugin().getItemAttributesSettingsManager().getBasePlayerHealth();
+		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 		event.getPlayer().setMaxHealth(Math.max(baseMaxHealth + d, 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
@@ -277,13 +280,13 @@ public final class ItemAttributesCoreListener implements Listener {
 		ItemStack[] armorContents = event.getPlayer().getEquipment().getArmorContents();
 		double d = 0.0;
 		for (ItemStack is : armorContents) {
-			d += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getItemAttributesSettingsManager()
+			d += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getHealthFormat());
 		}
 		d += ItemAttributesParseUtil.getDouble(getItemStackLore(event.getPlayer().getItemInHand()),
-				getPlugin().getItemAttributesSettingsManager().getHealthFormat());
+				getPlugin().getSettingsManager().getHealthFormat());
 		double currentHealth = event.getPlayer().getHealth();
-		double baseMaxHealth = getPlugin().getItemAttributesSettingsManager().getBasePlayerHealth();
+		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 		event.getPlayer().setMaxHealth(Math.max(baseMaxHealth + d, 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
@@ -303,7 +306,7 @@ public final class ItemAttributesCoreListener implements Listener {
 		ItemStack boots = player.getEquipment().getBoots();
 
 		// item in hand check
-		int level = ItemAttributesParseUtil.getInt(getItemStackLore(itemInHand), getPlugin().getItemAttributesSettingsManager()
+		int level = ItemAttributesParseUtil.getInt(getItemStackLore(itemInHand), getPlugin().getSettingsManager()
 				.getLevelRequirementFormat());
 		if (player.getLevel() < level) {
 			if (player.getInventory().firstEmpty() >= 0) {
@@ -312,12 +315,12 @@ public final class ItemAttributesCoreListener implements Listener {
 				player.getWorld().dropItem(player.getLocation(), itemInHand);
 			}
 			player.getInventory().setItem(i, null);
-			getPlugin().getItemAttributesLanguageManager().sendMessage(player, "unable-to-use",
+			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
 					new String[][]{{"%itemname%", getItemName(itemInHand)}, {"%level%", String.valueOf(level)}});
 		}
 
 		// helmet check
-		level = ItemAttributesParseUtil.getInt(getItemStackLore(helmet), getPlugin().getItemAttributesSettingsManager()
+		level = ItemAttributesParseUtil.getInt(getItemStackLore(helmet), getPlugin().getSettingsManager()
 				.getLevelRequirementFormat());
 		if (player.getLevel() < level) {
 			if (player.getInventory().firstEmpty() >= 0) {
@@ -326,12 +329,12 @@ public final class ItemAttributesCoreListener implements Listener {
 				player.getWorld().dropItem(player.getLocation(), helmet);
 			}
 			player.getEquipment().setHelmet(null);
-			getPlugin().getItemAttributesLanguageManager().sendMessage(player, "unable-to-use",
+			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
 					new String[][]{{"%itemname%", getItemName(helmet)}, {"%level%", String.valueOf(level)}});
 		}
 
 		// chestplate check
-		level = ItemAttributesParseUtil.getInt(getItemStackLore(chestplate), getPlugin().getItemAttributesSettingsManager()
+		level = ItemAttributesParseUtil.getInt(getItemStackLore(chestplate), getPlugin().getSettingsManager()
 				.getLevelRequirementFormat());
 		if (player.getLevel() < level) {
 			if (player.getInventory().firstEmpty() >= 0) {
@@ -340,12 +343,12 @@ public final class ItemAttributesCoreListener implements Listener {
 				player.getWorld().dropItem(player.getLocation(), chestplate);
 			}
 			player.getEquipment().setChestplate(null);
-			getPlugin().getItemAttributesLanguageManager().sendMessage(player, "unable-to-use",
+			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
 					new String[][]{{"%itemname%", getItemName(chestplate)}, {"%level%", String.valueOf(level)}});
 		}
 
 		// leggings check
-		level = ItemAttributesParseUtil.getInt(getItemStackLore(leggings), getPlugin().getItemAttributesSettingsManager()
+		level = ItemAttributesParseUtil.getInt(getItemStackLore(leggings), getPlugin().getSettingsManager()
 				.getLevelRequirementFormat());
 		if (player.getLevel() < level) {
 			if (player.getInventory().firstEmpty() >= 0) {
@@ -354,12 +357,12 @@ public final class ItemAttributesCoreListener implements Listener {
 				player.getWorld().dropItem(player.getLocation(), leggings);
 			}
 			player.getEquipment().setLeggings(null);
-			getPlugin().getItemAttributesLanguageManager().sendMessage(player, "unable-to-use",
+			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
 					new String[][]{{"%itemname%", getItemName(leggings)}, {"%level%", String.valueOf(level)}});
 		}
 
 		// boots check
-		level = ItemAttributesParseUtil.getInt(getItemStackLore(boots), getPlugin().getItemAttributesSettingsManager()
+		level = ItemAttributesParseUtil.getInt(getItemStackLore(boots), getPlugin().getSettingsManager()
 				.getLevelRequirementFormat());
 		if (player.getLevel() < level) {
 			if (player.getInventory().firstEmpty() >= 0) {
@@ -368,7 +371,7 @@ public final class ItemAttributesCoreListener implements Listener {
 				player.getWorld().dropItem(player.getLocation(), boots);
 			}
 			player.getEquipment().setBoots(null);
-			getPlugin().getItemAttributesLanguageManager().sendMessage(player, "unable-to-use",
+			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
 					new String[][]{{"%itemname%", getItemName(boots)}, {"%level%", String.valueOf(level)}});
 		}
 	}
@@ -378,13 +381,13 @@ public final class ItemAttributesCoreListener implements Listener {
 		ItemStack[] armorContents = event.getPlayer().getEquipment().getArmorContents();
 		double d = 0.0;
 		for (ItemStack is : armorContents) {
-			d += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getItemAttributesSettingsManager()
+			d += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getHealthFormat());
 		}
 		d += ItemAttributesParseUtil.getDouble(getItemStackLore(event.getPlayer().getInventory().getItem(event.getNewSlot())),
-				getPlugin().getItemAttributesSettingsManager().getHealthFormat());
+				getPlugin().getSettingsManager().getHealthFormat());
 		double currentHealth = event.getPlayer().getHealth();
-		double baseMaxHealth = getPlugin().getItemAttributesSettingsManager().getBasePlayerHealth();
+		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 		event.getPlayer().setMaxHealth(Math.max(baseMaxHealth + d, 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
@@ -406,11 +409,11 @@ public final class ItemAttributesCoreListener implements Listener {
 			LivingEntity le = (LivingEntity) event.getEntity();
 			ItemStack[] armorContents = le.getEquipment().getArmorContents();
 			for (ItemStack is : armorContents) {
-				amount += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getItemAttributesSettingsManager()
+				amount += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
 						.getRegenerationFormat());
 			}
 			amount += ItemAttributesParseUtil.getDouble(getItemStackLore(le.getEquipment().getItemInHand()),
-					getPlugin().getItemAttributesSettingsManager().getRegenerationFormat());
+					getPlugin().getSettingsManager().getRegenerationFormat());
 		}
 		event.setAmount(amount);
 	}
@@ -452,64 +455,64 @@ public final class ItemAttributesCoreListener implements Listener {
 		double stunRate = 0.0;
 		int stunLength = 0;
 
-		arrowDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(shotItem), getPlugin().getItemAttributesSettingsManager()
+		arrowDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(shotItem), getPlugin().getSettingsManager()
 				.getDamageFormat());
-		arrowDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(shotItem), getPlugin().getItemAttributesSettingsManager()
+		arrowDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(shotItem), getPlugin().getSettingsManager()
 				.getRangedDamageFormat());
-		criticalRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shotItem), getPlugin().getItemAttributesSettingsManager()
+		criticalRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shotItem), getPlugin().getSettingsManager()
 				.getCriticalRateFormat());
-		criticalDamage += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shotItem), getPlugin().getItemAttributesSettingsManager()
+		criticalDamage += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shotItem), getPlugin().getSettingsManager()
 				.getCriticalDamageFormat());
 		armorPenetration += ItemAttributesParseUtil.getDouble(getItemStackLore(shotItem),
-				getPlugin().getItemAttributesSettingsManager().getArmorPenetrationFormat());
-		stunRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shotItem), getPlugin().getItemAttributesSettingsManager()
+				getPlugin().getSettingsManager().getArmorPenetrationFormat());
+		stunRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shotItem), getPlugin().getSettingsManager()
 				.getStunRateFormat());
-		stunLength += ItemAttributesParseUtil.getInt(getItemStackLore(shotItem), getPlugin().getItemAttributesSettingsManager()
+		stunLength += ItemAttributesParseUtil.getInt(getItemStackLore(shotItem), getPlugin().getSettingsManager()
 				.getStunLengthFormat());
 
 		if (shootingItem != null) {
-			bowDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(shootingItem), getPlugin().getItemAttributesSettingsManager()
+			bowDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
 					.getDamageFormat());
-			bowDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(shootingItem), getPlugin().getItemAttributesSettingsManager()
+			bowDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
 					.getRangedDamageFormat());
-			criticalRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shootingItem), getPlugin().getItemAttributesSettingsManager()
+			criticalRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
 					.getCriticalRateFormat());
 			criticalDamage += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shootingItem),
-					getPlugin().getItemAttributesSettingsManager().getCriticalDamageFormat());
+					getPlugin().getSettingsManager().getCriticalDamageFormat());
 			armorPenetration += ItemAttributesParseUtil.getDouble(getItemStackLore(shootingItem),
-					getPlugin().getItemAttributesSettingsManager().getArmorPenetrationFormat());
-			stunRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shootingItem), getPlugin().getItemAttributesSettingsManager()
+					getPlugin().getSettingsManager().getArmorPenetrationFormat());
+			stunRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
 					.getStunRateFormat());
-			stunLength += ItemAttributesParseUtil.getInt(getItemStackLore(shootingItem), getPlugin().getItemAttributesSettingsManager()
+			stunLength += ItemAttributesParseUtil.getInt(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
 					.getStunLengthFormat());
 		}
 
 		for (ItemStack is : le.getEquipment().getArmorContents()) {
-			armorDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getItemAttributesSettingsManager()
+			armorDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getDamageFormat());
-			armorDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getItemAttributesSettingsManager()
+			armorDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getRangedDamageFormat());
-			criticalRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(is), getPlugin().getItemAttributesSettingsManager()
+			criticalRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getCriticalRateFormat());
-			criticalDamage += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(is), getPlugin().getItemAttributesSettingsManager()
+			criticalDamage += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getCriticalDamageFormat());
-			armorPenetration += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getItemAttributesSettingsManager()
+			armorPenetration += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getArmorPenetrationFormat());
-			stunRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(is), getPlugin().getItemAttributesSettingsManager()
+			stunRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getStunRateFormat());
-			stunLength += ItemAttributesParseUtil.getInt(getItemStackLore(is), getPlugin().getItemAttributesSettingsManager()
+			stunLength += ItemAttributesParseUtil.getInt(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getStunLengthFormat());
 		}
 
 		double totalDamage = arrowDamage + bowDamage + armorDamage;
 
-		event.getEntity().setMetadata("itemattributes.damage", new FixedMetadataValue(getPlugin(), totalDamage));
-		event.getEntity().setMetadata("itemattributes.criticalrate", new FixedMetadataValue(getPlugin(), criticalRate));
-		event.getEntity().setMetadata("itemattributes.criticaldamage", new FixedMetadataValue(getPlugin(), criticalDamage));
-		event.getEntity().setMetadata("itemattributes.armorpenetration", new FixedMetadataValue(getPlugin(),
+		event.getEntity().setMetadata("itemattributes.damage", new FixedMetadataValue(plugin, totalDamage));
+		event.getEntity().setMetadata("itemattributes.criticalrate", new FixedMetadataValue(plugin, criticalRate));
+		event.getEntity().setMetadata("itemattributes.criticaldamage", new FixedMetadataValue(plugin, criticalDamage));
+		event.getEntity().setMetadata("itemattributes.armorpenetration", new FixedMetadataValue(plugin,
 				armorPenetration));
-		event.getEntity().setMetadata("itemattributes.stunrate", new FixedMetadataValue(getPlugin(), stunRate));
-		event.getEntity().setMetadata("itemattributes.stunlength", new FixedMetadataValue(getPlugin(), stunLength));
+		event.getEntity().setMetadata("itemattributes.stunrate", new FixedMetadataValue(plugin, stunRate));
+		event.getEntity().setMetadata("itemattributes.stunlength", new FixedMetadataValue(plugin, stunLength));
 	}
 
 	private Material getMaterialFromEntityType(EntityType entityType) {
@@ -565,11 +568,11 @@ public final class ItemAttributesCoreListener implements Listener {
 		double damage;
 
 		double damagerEquipmentDamage = 0D;
-		double damagerCriticalChance = getPlugin().getItemAttributesSettingsManager().getBaseCriticalRate();
-		double damagerCriticalDamage = getPlugin().getItemAttributesSettingsManager().getBaseCriticalDamage();
+		double damagerCriticalChance = getPlugin().getSettingsManager().getBaseCriticalRate();
+		double damagerCriticalDamage = getPlugin().getSettingsManager().getBaseCriticalDamage();
 		double armorPenetration = 0D;
-		double stunRate = getPlugin().getItemAttributesSettingsManager().getBaseStunRate();
-		int stunLength = getPlugin().getItemAttributesSettingsManager().getBaseStunLength();
+		double stunRate = getPlugin().getSettingsManager().getBaseStunRate();
+		int stunLength = getPlugin().getSettingsManager().getBaseStunLength();
 
 		if (event.getDamager() instanceof Projectile) {
 			Projectile projectile = (Projectile) event.getDamager();
@@ -635,30 +638,30 @@ public final class ItemAttributesCoreListener implements Listener {
 			ItemStack[] armor = damager.getEquipment().getArmorContents();
 			for (ItemStack is : armor) {
 				damagerEquipmentDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(is),
-						getPlugin().getItemAttributesSettingsManager().getMeleeDamageFormat());
-				damagerEquipmentDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getItemAttributesSettingsManager()
+						getPlugin().getSettingsManager().getMeleeDamageFormat());
+				damagerEquipmentDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
 						.getDamageFormat());
 				damagerCriticalChance += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(is),
-						getPlugin().getItemAttributesSettingsManager().getCriticalRateFormat());
+						getPlugin().getSettingsManager().getCriticalRateFormat());
 				damagerCriticalDamage += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(is),
-						getPlugin().getItemAttributesSettingsManager().getCriticalDamageFormat());
+						getPlugin().getSettingsManager().getCriticalDamageFormat());
 				stunRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(is),
-						getPlugin().getItemAttributesSettingsManager().getStunRateFormat());
+						getPlugin().getSettingsManager().getStunRateFormat());
 				stunLength += ItemAttributesParseUtil.getInt(getItemStackLore(is),
-						getPlugin().getItemAttributesSettingsManager().getStunLengthFormat());
+						getPlugin().getSettingsManager().getStunLengthFormat());
 			}
 			damagerEquipmentDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(damager.getEquipment().getItemInHand
-					()), getPlugin().getItemAttributesSettingsManager().getMeleeDamageFormat());
+					()), getPlugin().getSettingsManager().getMeleeDamageFormat());
 			damagerEquipmentDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(damager.getEquipment().getItemInHand()),
-					getPlugin().getItemAttributesSettingsManager().getDamageFormat());
+					getPlugin().getSettingsManager().getDamageFormat());
 			damagerCriticalChance += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(damager.getEquipment()
-					.getItemInHand()), getPlugin().getItemAttributesSettingsManager().getCriticalRateFormat());
+					.getItemInHand()), getPlugin().getSettingsManager().getCriticalRateFormat());
 			damagerCriticalDamage += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(damager.getEquipment().getItemInHand
-					()), getPlugin().getItemAttributesSettingsManager().getCriticalDamageFormat());
+					()), getPlugin().getSettingsManager().getCriticalDamageFormat());
 			stunRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(damager.getEquipment().getItemInHand
-					()), getPlugin().getItemAttributesSettingsManager().getStunRateFormat());
+					()), getPlugin().getSettingsManager().getStunRateFormat());
 			stunLength += ItemAttributesParseUtil.getInt(getItemStackLore(damager.getEquipment().getItemInHand()),
-					getPlugin().getItemAttributesSettingsManager().getStunLengthFormat());
+					getPlugin().getSettingsManager().getStunLengthFormat());
 		}
 
 		double damagedEquipmentReduction = 0D;
@@ -666,11 +669,11 @@ public final class ItemAttributesCoreListener implements Listener {
 			LivingEntity entity = (LivingEntity) event.getEntity();
 			ItemStack[] armor = entity.getEquipment().getArmorContents();
 			for (ItemStack is : armor) {
-				damagedEquipmentReduction += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getItemAttributesSettingsManager()
+				damagedEquipmentReduction += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
 						.getArmorFormat());
 			}
 			damagedEquipmentReduction += ItemAttributesParseUtil.getDouble(getItemStackLore(entity.getEquipment().getItemInHand()),
-					getPlugin().getItemAttributesSettingsManager().getArmorFormat());
+					getPlugin().getSettingsManager().getArmorFormat());
 		}
 
 		double equipmentDamage = damagerEquipmentDamage - (damagedEquipmentReduction - armorPenetration);
@@ -680,11 +683,11 @@ public final class ItemAttributesCoreListener implements Listener {
 			double critPercentage = (1.00 + damagerCriticalDamage);
 			damage *= critPercentage;
 			if (event.getDamager() instanceof Player) {
-				getPlugin().getItemAttributesLanguageManager().sendMessage((Player) event.getDamager(), "critical-hit",
+				getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "critical-hit",
 						new String[][]{{"%percentage%", decimalFormat.format(critPercentage * 100)}});
 			} else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter()
 					instanceof Player) {
-				getPlugin().getItemAttributesLanguageManager().sendMessage((Player) ((Projectile) event.getDamager()).getShooter(),
+				getPlugin().getLanguageManager().sendMessage((Player) ((Projectile) event.getDamager()).getShooter(),
 						"critical-hit", new String[][]{{"%percentage%", decimalFormat.format(critPercentage * 100)}});
 			}
 		}
@@ -692,10 +695,10 @@ public final class ItemAttributesCoreListener implements Listener {
 		if (RandomUtils.nextDouble() < stunRate) {
 			if (event.getEntity() instanceof LivingEntity) {
 				if (event.getDamager() instanceof Player) {
-					getPlugin().getItemAttributesLanguageManager().sendMessage((Player) event.getDamager(), "stun");
+					getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "stun");
 				} else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter()
 						instanceof Player) {
-					getPlugin().getItemAttributesLanguageManager().sendMessage((Player) ((Projectile) event.getDamager()).getShooter(),
+					getPlugin().getLanguageManager().sendMessage((Player) ((Projectile) event.getDamager()).getShooter(),
 							"stun");
 				}
 				((LivingEntity) event.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.SLOW,
@@ -736,13 +739,13 @@ public final class ItemAttributesCoreListener implements Listener {
 			boolean b = false;
 			for (ItemStack is : ((LivingEntity) event.getEntity()).getEquipment().getArmorContents()) {
 				if (!b) {
-					b = ItemAttributesParseUtil.hasFormatInCollection(getItemStackLore(is), getPlugin().getItemAttributesSettingsManager()
+					b = ItemAttributesParseUtil.hasFormatInCollection(getItemStackLore(is), getPlugin().getSettingsManager()
 							.getFireImmunityFormat());
 				}
 			}
 			if (!b) {
 				b = ItemAttributesParseUtil.hasFormatInCollection(getItemStackLore(((LivingEntity) event.getEntity()).getEquipment()
-						.getItemInHand()), getPlugin().getItemAttributesSettingsManager().getFireImmunityFormat());
+						.getItemInHand()), getPlugin().getSettingsManager().getFireImmunityFormat());
 			}
 			if (b) {
 				event.setDamage(0);
@@ -755,13 +758,13 @@ public final class ItemAttributesCoreListener implements Listener {
 			boolean b = false;
 			for (ItemStack is : ((LivingEntity) event.getEntity()).getEquipment().getArmorContents()) {
 				if (!b) {
-					b = ItemAttributesParseUtil.hasFormatInCollection(getItemStackLore(is), getPlugin().getItemAttributesSettingsManager()
+					b = ItemAttributesParseUtil.hasFormatInCollection(getItemStackLore(is), getPlugin().getSettingsManager()
 							.getPoisonImmunityFormat());
 				}
 			}
 			if (!b) {
 				b = ItemAttributesParseUtil.hasFormatInCollection(getItemStackLore(((LivingEntity) event.getEntity()).getEquipment()
-						.getItemInHand()), getPlugin().getItemAttributesSettingsManager().getPoisonImmunityFormat());
+						.getItemInHand()), getPlugin().getSettingsManager().getPoisonImmunityFormat());
 			}
 			if (b) {
 				event.setDamage(0);
@@ -774,13 +777,13 @@ public final class ItemAttributesCoreListener implements Listener {
 			boolean b = false;
 			for (ItemStack is : ((LivingEntity) event.getEntity()).getEquipment().getArmorContents()) {
 				if (!b) {
-					b = ItemAttributesParseUtil.hasFormatInCollection(getItemStackLore(is), getPlugin().getItemAttributesSettingsManager()
+					b = ItemAttributesParseUtil.hasFormatInCollection(getItemStackLore(is), getPlugin().getSettingsManager()
 							.getWitherImmunityFormat());
 				}
 			}
 			if (!b) {
 				b = ItemAttributesParseUtil.hasFormatInCollection(getItemStackLore(((LivingEntity) event.getEntity()).getEquipment()
-						.getItemInHand()), getPlugin().getItemAttributesSettingsManager().getWitherImmunityFormat());
+						.getItemInHand()), getPlugin().getSettingsManager().getWitherImmunityFormat());
 			}
 			if (b) {
 				event.setDamage(0);

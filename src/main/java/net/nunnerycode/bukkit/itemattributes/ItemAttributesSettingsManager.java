@@ -1,6 +1,9 @@
 package net.nunnerycode.bukkit.itemattributes;
 
-public final class ItemAttributesSettingsManager {
+import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
+import net.nunnerycode.bukkit.itemattributes.api.managers.SettingsManager;
+
+public final class ItemAttributesSettingsManager implements SettingsManager {
 
 	private ItemAttributesPlugin plugin;
 	private double basePlayerHealth;
@@ -65,10 +68,12 @@ public final class ItemAttributesSettingsManager {
 				"Wither Immunity");
 	}
 
-	public ItemAttributesPlugin getPlugin() {
+	@Override
+	public ItemAttributes getPlugin() {
 		return plugin;
 	}
 
+	@Override
 	public String getArmorPenetrationFormat() {
 		return armorPenetrationFormat;
 	}
@@ -99,82 +104,102 @@ public final class ItemAttributesSettingsManager {
 		getPlugin().getConfigYAML().save();
 	}
 
+	@Override
 	public String getHealthFormat() {
 		return healthFormat;
 	}
 
+	@Override
 	public String getDamageFormat() {
 		return damageFormat;
 	}
 
+	@Override
 	public String getRegenerationFormat() {
 		return regenerationFormat;
 	}
 
+	@Override
 	public String getArmorFormat() {
 		return armorFormat;
 	}
 
+	@Override
 	public String getCriticalRateFormat() {
 		return criticalRateFormat;
 	}
 
+	@Override
 	public String getCriticalDamageFormat() {
 		return criticalDamageFormat;
 	}
 
+	@Override
 	public String getLevelRequirementFormat() {
 		return levelRequirementFormat;
 	}
 
+	@Override
 	public double getBasePlayerHealth() {
 		return basePlayerHealth;
 	}
 
+	@Override
 	public String getPoisonImmunityFormat() {
 		return poisonImmunityFormat;
 	}
 
+	@Override
 	public String getFireImmunityFormat() {
 		return fireImmunityFormat;
 	}
 
+	@Override
 	public String getWitherImmunityFormat() {
 		return witherImmunityFormat;
 	}
 
+	@Override
 	public int getSecondsBetweenHealthUpdates() {
 		return secondsBetweenHealthUpdates;
 	}
 
+	@Override
 	public String getMeleeDamageFormat() {
 		return meleeDamageFormat;
 	}
 
+	@Override
 	public String getRangedDamageFormat() {
 		return rangedDamageFormat;
 	}
 
+	@Override
 	public double getBaseCriticalRate() {
 		return baseCriticalRate;
 	}
 
+	@Override
 	public double getBaseCriticalDamage() {
 		return baseCriticalDamage;
 	}
 
+	@Override
 	public String getStunRateFormat() {
 		return stunRateFormat;
 	}
 
+	@Override
 	public String getStunLengthFormat() {
 		return stunLengthFormat;
 	}
 
+	@Override
 	public double getBaseStunRate() {
 		return baseStunRate;
 	}
 
+	@Override
 	public int getBaseStunLength() {
 		return baseStunLength;
 	}

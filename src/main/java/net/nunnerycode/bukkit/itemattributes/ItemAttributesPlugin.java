@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
+import net.nunnerycode.bukkit.itemattributes.api.managers.LanguageManager;
+import net.nunnerycode.bukkit.itemattributes.api.managers.SettingsManager;
+import net.nunnerycode.bukkit.itemattributes.api.tasks.HealthUpdateTask;
 import net.nunnerycode.java.libraries.cannonball.DebugPrinter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -20,7 +23,8 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 	private ItemAttributesCoreListener itemAttributesCoreListener;
 	private ItemAttributesHealthUpdateTask itemAttributesHealthUpdateTask;
 
-	public ItemAttributesCoreListener getItemAttributesCoreListener() {
+	@Override
+	public ItemAttributesCoreListener getCoreListener() {
 		return itemAttributesCoreListener;
 	}
 
@@ -76,27 +80,33 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 		}
 	}
 
+	@Override
 	public DebugPrinter getDebugPrinter() {
 		return debugPrinter;
 	}
 
+	@Override
 	public CommentedConventYamlConfiguration getConfigYAML() {
 		return configYAML;
 	}
 
+	@Override
 	public CommentedConventYamlConfiguration getLanguageYAML() {
 		return languageYAML;
 	}
 
-	public ItemAttributesLanguageManager getItemAttributesLanguageManager() {
+	@Override
+	public LanguageManager getLanguageManager() {
 		return itemAttributesLanguageManager;
 	}
 
-	public ItemAttributesSettingsManager getItemAttributesSettingsManager() {
+	@Override
+	public SettingsManager getSettingsManager() {
 		return itemAttributesSettingsManager;
 	}
 
-	public ItemAttributesHealthUpdateTask getItemAttributesHealthUpdateTask() {
+	@Override
+	public HealthUpdateTask getHealthUpdateTask() {
 		return itemAttributesHealthUpdateTask;
 	}
 }
