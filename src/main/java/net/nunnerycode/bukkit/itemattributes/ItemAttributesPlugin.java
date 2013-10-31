@@ -4,28 +4,29 @@ import com.conventnunnery.libraries.config.CommentedConventYamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
+import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.java.libraries.cannonball.DebugPrinter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class ItemAttributesPlugin extends JavaPlugin {
+public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttributes {
 
 	private DebugPrinter debugPrinter;
 	private CommentedConventYamlConfiguration configYAML;
 	private CommentedConventYamlConfiguration languageYAML;
-	private LanguageManager languageManager;
-	private SettingsManager settingsManager;
-	private CoreListener coreListener;
-	private HealthUpdateTask healthUpdateTask;
+	private ItemAttributesLanguageManager itemAttributesLanguageManager;
+	private ItemAttributesSettingsManager itemAttributesSettingsManager;
+	private ItemAttributesCoreListener itemAttributesCoreListener;
+	private ItemAttributesHealthUpdateTask itemAttributesHealthUpdateTask;
 
-	public CoreListener getCoreListener() {
-		return coreListener;
+	public ItemAttributesCoreListener getItemAttributesCoreListener() {
+		return itemAttributesCoreListener;
 	}
 
 	@Override
 	public void onDisable() {
-		settingsManager.save();
+		itemAttributesSettingsManager.save();
 		debugPrinter.debug(Level.INFO, "v" + getDescription().getVersion() + " disabled");
 	}
 
@@ -42,16 +43,16 @@ public final class ItemAttributesPlugin extends JavaPlugin {
 		languageYAML.options().updateOnLoad(true);
 		languageYAML.options().updateOnLoad(true);
 
-		settingsManager = new SettingsManager(this);
-		settingsManager.load();
+		itemAttributesSettingsManager = new ItemAttributesSettingsManager(this);
+		itemAttributesSettingsManager.load();
 
-		languageManager = new LanguageManager(this);
-		languageManager.load();
+		itemAttributesLanguageManager = new ItemAttributesLanguageManager(this);
+		itemAttributesLanguageManager.load();
 
-		coreListener = new CoreListener(this);
-		healthUpdateTask = new HealthUpdateTask(this);
+		itemAttributesCoreListener = new ItemAttributesCoreListener(this);
+		itemAttributesHealthUpdateTask = new ItemAttributesHealthUpdateTask(this);
 
-		Bukkit.getServer().getPluginManager().registerEvents(coreListener, this);
+		Bukkit.getServer().getPluginManager().registerEvents(itemAttributesCoreListener, this);
 
 		debugPrinter = new DebugPrinter(getDataFolder().getPath() + "/log/", "debug.log");
 		debugPrinter.debug(Level.INFO, "v" + getDescription().getVersion() + " enabled");
@@ -87,15 +88,15 @@ public final class ItemAttributesPlugin extends JavaPlugin {
 		return languageYAML;
 	}
 
-	public LanguageManager getLanguageManager() {
-		return languageManager;
+	public ItemAttributesLanguageManager getItemAttributesLanguageManager() {
+		return itemAttributesLanguageManager;
 	}
 
-	public SettingsManager getSettingsManager() {
-		return settingsManager;
+	public ItemAttributesSettingsManager getItemAttributesSettingsManager() {
+		return itemAttributesSettingsManager;
 	}
 
-	public HealthUpdateTask getHealthUpdateTask() {
-		return healthUpdateTask;
+	public ItemAttributesHealthUpdateTask getItemAttributesHealthUpdateTask() {
+		return itemAttributesHealthUpdateTask;
 	}
 }

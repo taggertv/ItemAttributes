@@ -1,6 +1,6 @@
 package net.nunnerycode.bukkit.itemattributes;
 
-public final class SettingsManager {
+public final class ItemAttributesSettingsManager {
 
 	private ItemAttributesPlugin plugin;
 	private double basePlayerHealth;
@@ -25,7 +25,7 @@ public final class SettingsManager {
 	private String fireImmunityFormat;
 	private String witherImmunityFormat;
 
-	public SettingsManager(ItemAttributesPlugin plugin) {
+	public ItemAttributesSettingsManager(ItemAttributesPlugin plugin) {
 		this.plugin = plugin;
 	}
 

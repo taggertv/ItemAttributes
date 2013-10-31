@@ -5,9 +5,9 @@ import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.ChatColor;
 
-public final class ParseUtil {
+public final class ItemAttributesParseUtil {
 
-	private ParseUtil() {
+	private ItemAttributesParseUtil() {
 	}
 
 	public static double getDouble(Collection<String> collection, String format) {

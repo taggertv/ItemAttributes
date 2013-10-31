@@ -10,11 +10,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
-public final class LanguageManager {
+public final class ItemAttributesLanguageManager {
 	private final ItemAttributesPlugin plugin;
 	private final Map<String, String> messages;
 
-	public LanguageManager(ItemAttributesPlugin plugin) {
+	public ItemAttributesLanguageManager(ItemAttributesPlugin plugin) {
 		this.plugin = plugin;
 		messages = new HashMap<String, String>();
 	}
