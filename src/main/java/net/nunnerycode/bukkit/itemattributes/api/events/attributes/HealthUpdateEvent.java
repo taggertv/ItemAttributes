@@ -8,4 +8,6 @@ public interface HealthUpdateEvent extends LivingEntityAttributeEvent {
 
 	double getNewHealth();
 
+	void setNewHealth(double newHealth);
+
 }
