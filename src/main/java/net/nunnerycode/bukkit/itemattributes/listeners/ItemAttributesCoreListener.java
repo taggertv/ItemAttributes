@@ -3,12 +3,14 @@ package net.nunnerycode.bukkit.itemattributes.listeners;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import net.nunnerycode.bukkit.itemattributes.utils.ItemAttributesParseUtil;
 import net.nunnerycode.bukkit.itemattributes.ItemAttributesPlugin;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.listeners.CoreListener;
+import net.nunnerycode.bukkit.itemattributes.events.ItemAttributesHealthUpdateEvent;
+import net.nunnerycode.bukkit.itemattributes.utils.ItemAttributesParseUtil;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.text.WordUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -190,9 +192,20 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			}
 			d += ItemAttributesParseUtil.getDouble(getItemStackLore(he.getEquipment().getItemInHand()),
 					getPlugin().getSettingsManager().getHealthFormat());
+
 			double currentHealth = he.getHealth();
 			double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
-			he.setMaxHealth(Math.max(baseMaxHealth + d, 1));
+			double newMaxHealth = Math.max(baseMaxHealth + d, 1);
+
+			ItemAttributesHealthUpdateEvent healthUpdateEvent = new ItemAttributesHealthUpdateEvent(he,
+					he.getMaxHealth(), baseMaxHealth, newMaxHealth);
+			Bukkit.getPluginManager().callEvent(healthUpdateEvent);
+
+			if (healthUpdateEvent.isCancelled()) {
+				continue;
+			}
+
+			he.setMaxHealth(healthUpdateEvent.getNewHealth());
 			he.setHealth(Math.min(Math.max(currentHealth, 0), he.getMaxHealth()));
 			if (he instanceof Player) {
 				((Player) he).setHealthScale(he.getMaxHealth());
@@ -218,6 +231,16 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				getPlugin().getSettingsManager().getHealthFormat());
 		double currentHealth = event.getPlayer().getHealth();
 		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
+		double newMaxHealth = Math.max(baseMaxHealth + d, 1);
+
+		ItemAttributesHealthUpdateEvent healthUpdateEvent = new ItemAttributesHealthUpdateEvent(event.getPlayer(),
+				event.getPlayer().getMaxHealth(), baseMaxHealth, newMaxHealth);
+		Bukkit.getPluginManager().callEvent(healthUpdateEvent);
+
+		if (healthUpdateEvent.isCancelled()) {
+			return;
+		}
+
 		event.getPlayer().setMaxHealth(Math.max(baseMaxHealth + d, 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
@@ -250,6 +273,16 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				}
 			}
 		}
+		double newMaxHealth = Math.max(baseMaxHealth + d, 1);
+
+		ItemAttributesHealthUpdateEvent healthUpdateEvent = new ItemAttributesHealthUpdateEvent(entity,
+				entity.getMaxHealth(), baseMaxHealth, newMaxHealth);
+		Bukkit.getPluginManager().callEvent(healthUpdateEvent);
+
+		if (healthUpdateEvent.isCancelled()) {
+			return;
+		}
+
 		entity.setMaxHealth(Math.max(baseMaxHealth + d, 1));
 		entity.setHealth(Math.min(Math.max(currentHealth, 0), entity.getMaxHealth()));
 	}
@@ -272,6 +305,17 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				getPlugin().getSettingsManager().getHealthFormat());
 		double currentHealth = event.getPlayer().getHealth();
 		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
+
+		double newMaxHealth = Math.max(baseMaxHealth + d, 1);
+
+		ItemAttributesHealthUpdateEvent healthUpdateEvent = new ItemAttributesHealthUpdateEvent(event.getPlayer(),
+				event.getPlayer().getMaxHealth(), baseMaxHealth, newMaxHealth);
+		Bukkit.getPluginManager().callEvent(healthUpdateEvent);
+
+		if (healthUpdateEvent.isCancelled()) {
+			return;
+		}
+
 		event.getPlayer().setMaxHealth(Math.max(baseMaxHealth + d, 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
@@ -289,6 +333,17 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				getPlugin().getSettingsManager().getHealthFormat());
 		double currentHealth = event.getPlayer().getHealth();
 		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
+
+		double newMaxHealth = Math.max(baseMaxHealth + d, 1);
+
+		ItemAttributesHealthUpdateEvent healthUpdateEvent = new ItemAttributesHealthUpdateEvent(event.getPlayer(),
+				event.getPlayer().getMaxHealth(), baseMaxHealth, newMaxHealth);
+		Bukkit.getPluginManager().callEvent(healthUpdateEvent);
+
+		if (healthUpdateEvent.isCancelled()) {
+			return;
+		}
+
 		event.getPlayer().setMaxHealth(Math.max(baseMaxHealth + d, 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
@@ -390,6 +445,17 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				getPlugin().getSettingsManager().getHealthFormat());
 		double currentHealth = event.getPlayer().getHealth();
 		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
+
+		double newMaxHealth = Math.max(baseMaxHealth + d, 1);
+
+		ItemAttributesHealthUpdateEvent healthUpdateEvent = new ItemAttributesHealthUpdateEvent(event.getPlayer(),
+				event.getPlayer().getMaxHealth(), baseMaxHealth, newMaxHealth);
+		Bukkit.getPluginManager().callEvent(healthUpdateEvent);
+
+		if (healthUpdateEvent.isCancelled()) {
+			return;
+		}
+
 		event.getPlayer().setMaxHealth(Math.max(baseMaxHealth + d, 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
