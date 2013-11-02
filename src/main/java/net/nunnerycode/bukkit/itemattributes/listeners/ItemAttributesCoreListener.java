@@ -833,6 +833,10 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			}
 		}
 
+		if (dodged && event.getEntity() instanceof Player) {
+			getPlugin().getLanguageManager().sendMessage(((Player) event.getEntity()), "dodge");
+		}
+
 		event.setDamage(damage);
 	}
 
