@@ -6,7 +6,9 @@ import java.util.List;
 import net.nunnerycode.bukkit.itemattributes.ItemAttributesPlugin;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.listeners.CoreListener;
+import net.nunnerycode.bukkit.itemattributes.events.ItemAttributesCriticalStrikeEvent;
 import net.nunnerycode.bukkit.itemattributes.events.ItemAttributesHealthUpdateEvent;
+import net.nunnerycode.bukkit.itemattributes.events.ItemAttributesStunStrikeEvent;
 import net.nunnerycode.bukkit.itemattributes.utils.ItemAttributesParseUtil;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.text.WordUtils;
@@ -56,11 +58,6 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		double maxHealth = event.getEntity().getMaxHealth();
 		MetadataValue metadataValue = new FixedMetadataValue(plugin, maxHealth);
 		event.getEntity().setMetadata("itemattributes.basehealth", metadataValue);
-	}
-
-	@Override
-	public ItemAttributes getPlugin() {
-		return plugin;
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -152,14 +149,6 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 	}
 
-	private List<String> getItemStackLore(ItemStack itemStack) {
-		List<String> lore = new ArrayList<String>();
-		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
-			lore.addAll(itemStack.getItemMeta().getLore());
-		}
-		return lore;
-	}
-
 	private String getItemName(ItemStack itemStack) {
 		String name = "";
 		if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName()) {
@@ -176,6 +165,19 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			}
 		}
 		return name;
+	}
+
+	private List<String> getItemStackLore(ItemStack itemStack) {
+		List<String> lore = new ArrayList<String>();
+		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
+			lore.addAll(itemStack.getItemMeta().getLore());
+		}
+		return lore;
+	}
+
+	@Override
+	public ItemAttributes getPlugin() {
+		return plugin;
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
@@ -748,31 +750,70 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		damage = originalDamage + equipmentDamage;
 
 		if (RandomUtils.nextDouble() < damagerCriticalChance) {
-			double critPercentage = (1.00 + damagerCriticalDamage);
-			damage *= critPercentage;
-			if (event.getDamager() instanceof Player) {
-				getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "critical-hit",
-						new String[][]{{"%percentage%", decimalFormat.format(critPercentage * 100)}});
-			} else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter()
-					instanceof Player) {
-				getPlugin().getLanguageManager().sendMessage((Player) ((Projectile) event.getDamager()).getShooter(),
-						"critical-hit", new String[][]{{"%percentage%", decimalFormat.format(critPercentage * 100)}});
+
+			ItemAttributesCriticalStrikeEvent criticalStrikeEvent = null;
+
+			if (event.getDamager() instanceof LivingEntity && event.getEntity() instanceof LivingEntity) {
+				criticalStrikeEvent = new ItemAttributesCriticalStrikeEvent((LivingEntity) event.getDamager(),
+						(LivingEntity) event.getEntity(), damagerCriticalChance, damagerCriticalDamage);
+				Bukkit.getPluginManager().callEvent(criticalStrikeEvent);
+			}
+
+			if (criticalStrikeEvent == null) {
+				double critPercentage = (1.00 + damagerCriticalDamage);
+				damage *= critPercentage;
+				if (event.getDamager() instanceof Player) {
+					getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "critical-hit",
+							new String[][]{{"%percentage%", decimalFormat.format(critPercentage * 100)}});
+				} else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter()
+						instanceof Player) {
+					getPlugin().getLanguageManager().sendMessage((Player) ((Projectile) event.getDamager()).getShooter(),
+							"critical-hit", new String[][]{{"%percentage%", decimalFormat.format(critPercentage * 100)}});
+				}
+			} else if (criticalStrikeEvent != null && !criticalStrikeEvent.isCancelled()) {
+				double critPercentage = (1.00 + criticalStrikeEvent.getCriticalDamage());
+				damage *= critPercentage;
+				if (event.getDamager() instanceof Player) {
+					getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "critical-hit",
+							new String[][]{{"%percentage%", decimalFormat.format(critPercentage * 100)}});
+				} else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter()
+						instanceof Player) {
+					getPlugin().getLanguageManager().sendMessage((Player) ((Projectile) event.getDamager()).getShooter(),
+							"critical-hit", new String[][]{{"%percentage%", decimalFormat.format(critPercentage * 100)}});
+				}
 			}
 		}
 
 		if (RandomUtils.nextDouble() < stunRate) {
 			if (event.getEntity() instanceof LivingEntity) {
+				LivingEntity defender = (LivingEntity) event.getEntity();
+				LivingEntity attacker = null;
 				if (event.getDamager() instanceof Player) {
 					getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "stun");
+					attacker = (LivingEntity) event.getDamager();
 				} else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter()
 						instanceof Player) {
 					getPlugin().getLanguageManager().sendMessage((Player) ((Projectile) event.getDamager()).getShooter(),
 							"stun");
+					attacker = ((Projectile) event.getDamager()).getShooter();
 				}
-				((LivingEntity) event.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.SLOW,
-						stunLength * 20, 7));
-				((LivingEntity) event.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,
-						stunLength * 20, 7));
+				if (attacker == null) {
+					defender.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,
+							stunLength * 20, 7));
+					defender.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,
+							stunLength * 20, 7));
+				} else {
+					ItemAttributesStunStrikeEvent stunStrikeEvent = new ItemAttributesStunStrikeEvent(attacker,
+							defender, stunRate, stunLength);
+					Bukkit.getPluginManager().callEvent(stunStrikeEvent);
+
+					if (!stunStrikeEvent.isCancelled()) {
+						defender.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,
+								stunLength * 20, 7));
+						defender.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,
+								stunLength * 20, 7));
+					}
+				}
 			}
 		}
 
