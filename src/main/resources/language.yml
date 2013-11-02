@@ -2,4 +2,5 @@ messages:
   unable-to-use: "&CYou are unable to use %itemname% until you are level %level%."
   critical-hit: "&AYou scored a critical hit and dealt %percentage%% of your normal damage!"
   stun: "&AYou have stunned your opponent!"
-version: "1.0.2"
+  dodge: "&AYou dodged an attack!"
+version: "1.0.3"
