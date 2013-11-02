@@ -46,4 +46,8 @@ public interface SettingsManager {
 	double getBaseStunRate();
 
 	int getBaseStunLength();
+
+	String getDodgeRateFormat();
+
+	double getBaseDodgeRate();
 }

@@ -209,10 +209,12 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		return baseStunLength;
 	}
 
+	@Override
 	public String getDodgeRateFormat() {
 		return dodgeRateFormat;
 	}
 
+	@Override
 	public double getBaseDodgeRate() {
 		return baseDodgeRate;
 	}
