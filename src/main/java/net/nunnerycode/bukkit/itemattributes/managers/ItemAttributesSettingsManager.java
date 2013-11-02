@@ -11,6 +11,7 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	private double baseCriticalRate;
 	private double baseCriticalDamage;
 	private double baseStunRate;
+	private double baseDodgeRate;
 	private int baseStunLength;
 	private int secondsBetweenHealthUpdates;
 	private String healthFormat;
@@ -24,6 +25,7 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	private String criticalDamageFormat;
 	private String stunRateFormat;
 	private String stunLengthFormat;
+	private String dodgeRateFormat;
 	private String levelRequirementFormat;
 	private String poisonImmunityFormat;
 	private String fireImmunityFormat;
@@ -39,6 +41,7 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		baseCriticalDamage = getPlugin().getConfigYAML().getDouble("options.base-critical-damage", 0.2);
 		baseStunRate = getPlugin().getConfigYAML().getDouble("options.base-stun-rate", 0.05);
 		baseStunLength = getPlugin().getConfigYAML().getInt("options.base-stun-length", 1);
+		baseDodgeRate = getPlugin().getConfigYAML().getDouble("options.base-dodge-rate", 0.0);
 		secondsBetweenHealthUpdates = getPlugin().getConfigYAML().getInt("options.seconds-between-health-updates",
 				10);
 		healthFormat = getPlugin().getConfigYAML().getString("core-stats.health.format", "%value% Health");
@@ -61,6 +64,7 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		stunRateFormat = getPlugin().getConfigYAML().getString("core-stats.stun-rate.format", "%value% Stun Rate");
 		stunLengthFormat = getPlugin().getConfigYAML().getString("core-stats.stun-length.format",
 				"%value% Stun Length");
+		dodgeRateFormat = getPlugin().getConfigYAML().getString("core-stats.dodge-rate.format", "%value% Dodge Rate");
 		poisonImmunityFormat = getPlugin().getConfigYAML().getString("core-stats.poison-immunity.format",
 				"Poison Immunity");
 		fireImmunityFormat = getPlugin().getConfigYAML().getString("core-stats.fire-immunity.format",
@@ -203,5 +207,13 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	@Override
 	public int getBaseStunLength() {
 		return baseStunLength;
+	}
+
+	public String getDodgeRateFormat() {
+		return dodgeRateFormat;
+	}
+
+	public double getBaseDodgeRate() {
+		return baseDodgeRate;
 	}
 }
