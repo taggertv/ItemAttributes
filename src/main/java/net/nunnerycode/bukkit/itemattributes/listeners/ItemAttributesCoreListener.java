@@ -643,6 +643,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		double armorPenetration = 0D;
 		double stunRate = getPlugin().getSettingsManager().getBaseStunRate();
 		int stunLength = getPlugin().getSettingsManager().getBaseStunLength();
+		double dodgeRate = getPlugin().getSettingsManager().getBaseDodgeRate();
 
 		if (event.getDamager() instanceof Projectile) {
 			Projectile projectile = (Projectile) event.getDamager();
@@ -702,6 +703,15 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 						}
 					}
 				}
+				if (projectile.hasMetadata("itemattributes.dodgerate")) {
+					List<MetadataValue> metadataValueList = projectile.getMetadata("itemattributes.dodgerate");
+					for (MetadataValue mv : metadataValueList) {
+						if (mv.getOwningPlugin().equals(getPlugin())) {
+							dodgeRate += mv.asDouble();
+							break;
+						}
+					}
+				}
 			}
 		} else if (event.getDamager() instanceof LivingEntity) {
 			LivingEntity damager = (LivingEntity) event.getDamager();
@@ -719,6 +729,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 						getPlugin().getSettingsManager().getStunRateFormat());
 				stunLength += ItemAttributesParseUtil.getInt(getItemStackLore(is),
 						getPlugin().getSettingsManager().getStunLengthFormat());
+				dodgeRate += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
+						.getDodgeRateFormat());
 			}
 			damagerEquipmentDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(damager.getEquipment().getItemInHand
 					()), getPlugin().getSettingsManager().getMeleeDamageFormat());
@@ -732,6 +744,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 					()), getPlugin().getSettingsManager().getStunRateFormat());
 			stunLength += ItemAttributesParseUtil.getInt(getItemStackLore(damager.getEquipment().getItemInHand()),
 					getPlugin().getSettingsManager().getStunLengthFormat());
+			dodgeRate += ItemAttributesParseUtil.getDouble(getItemStackLore(damager.getEquipment().getItemInHand()),
+					getPlugin().getSettingsManager().getDodgeRateFormat());
 		}
 
 		double damagedEquipmentReduction = 0D;
@@ -746,10 +760,12 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 					getPlugin().getSettingsManager().getArmorFormat());
 		}
 
-		double equipmentDamage = damagerEquipmentDamage - (damagedEquipmentReduction - armorPenetration);
-		damage = originalDamage + equipmentDamage;
+		boolean dodged = RandomUtils.nextDouble() < dodgeRate;
 
-		if (RandomUtils.nextDouble() < damagerCriticalChance) {
+		double equipmentDamage = damagerEquipmentDamage - (damagedEquipmentReduction - armorPenetration);
+		damage = (!dodged) ? originalDamage + equipmentDamage : 0;
+
+		if (RandomUtils.nextDouble() < damagerCriticalChance && !dodged) {
 
 			ItemAttributesCriticalStrikeEvent criticalStrikeEvent = null;
 
@@ -784,7 +800,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			}
 		}
 
-		if (RandomUtils.nextDouble() < stunRate) {
+		if (RandomUtils.nextDouble() < stunRate && !dodged) {
 			if (event.getEntity() instanceof LivingEntity) {
 				LivingEntity defender = (LivingEntity) event.getEntity();
 				LivingEntity attacker = null;
