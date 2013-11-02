@@ -4,6 +4,7 @@ options:
   base-critical-rate: 0.05
   base-stun-rate: 0.05
   base-stun-length: 1
+  base-dodge-rate: 0.0
   seconds-between-health-updates: 10
 core-stats:
   health:
@@ -26,14 +27,16 @@ core-stats:
     format: "Level Required: %value%"
   armor-penetration:
     format: "%value% Armor Penetration"
-  stun-chance:
+  stun-rate:
     format: "%value% Stun Rate"
   stun-length:
     format: "%value% Stun Length"
+  dodge-rate:
+    format: "%value% Dodge Rate"
   fire-immunity:
     format: "Fire Immunity"
   poison-immunity:
     format: "Poison Immunity"
   wither-immunity:
     format: "Wither Immunity"
-version: "1.0.7"
+version: "1.0.8"
