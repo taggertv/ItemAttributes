@@ -656,7 +656,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 		event.setCancelled(b);
 
-		if (!b) {
+		if (b) {
 			event.setDamage(0D);
 		}
 	}
