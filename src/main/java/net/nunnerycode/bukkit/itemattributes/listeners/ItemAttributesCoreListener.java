@@ -763,8 +763,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 						getPlugin().getSettingsManager().getStunRateFormat());
 				stunLength += ItemAttributesParseUtil.getInt(getItemStackLore(is),
 						getPlugin().getSettingsManager().getStunLengthFormat());
-				dodgeRate += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
-						.getDodgeRateFormat());
+				dodgeRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(is),
+						getPlugin().getSettingsManager().getDodgeRateFormat());
 			}
 			damagerEquipmentDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(damager.getEquipment().getItemInHand
 					()), getPlugin().getSettingsManager().getMeleeDamageFormat());

@@ -103,6 +103,7 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		getPlugin().getConfigYAML().set("core-stats.level-requirement.format", levelRequirementFormat);
 		getPlugin().getConfigYAML().set("core-stats.stun-rate.format", stunRateFormat);
 		getPlugin().getConfigYAML().set("core-stats.stun-length.format", stunLengthFormat);
+		getPlugin().getConfigYAML().set("core-stats.dodge-rate.format", dodgeRateFormat);
 		getPlugin().getConfigYAML().set("core-stats.poison-immunity.format", poisonImmunityFormat);
 		getPlugin().getConfigYAML().set("core-stats.fire-immunity.format", fireImmunityFormat);
 		getPlugin().getConfigYAML().set("core-stats.wither-immunity.format", witherImmunityFormat);
