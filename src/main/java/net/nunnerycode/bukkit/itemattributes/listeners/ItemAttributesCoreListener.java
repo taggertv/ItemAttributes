@@ -210,17 +210,16 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 			double currentHealth = he.getHealth();
 			double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
-			double newMaxHealth = Math.max(baseMaxHealth + d, 1);
 
 			ItemAttributesHealthUpdateEvent healthUpdateEvent = new ItemAttributesHealthUpdateEvent(he,
-					he.getMaxHealth(), baseMaxHealth, newMaxHealth);
+					he.getMaxHealth(), baseMaxHealth, d);
 			Bukkit.getPluginManager().callEvent(healthUpdateEvent);
 
 			if (healthUpdateEvent.isCancelled()) {
 				continue;
 			}
 
-			he.setMaxHealth(healthUpdateEvent.getBaseHealth() + healthUpdateEvent.getChangeInHealth());
+			he.setMaxHealth(Math.max(healthUpdateEvent.getBaseHealth() + healthUpdateEvent.getChangeInHealth(), 1));
 			he.setHealth(Math.min(Math.max(currentHealth, 0), he.getMaxHealth()));
 			if (he instanceof Player) {
 				((Player) he).setHealthScale(he.getMaxHealth());
@@ -246,17 +245,17 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				getPlugin().getSettingsManager().getHealthFormat());
 		double currentHealth = event.getPlayer().getHealth();
 		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
-		double newMaxHealth = Math.max(baseMaxHealth + d, 1);
 
 		ItemAttributesHealthUpdateEvent healthUpdateEvent = new ItemAttributesHealthUpdateEvent(event.getPlayer(),
-				event.getPlayer().getMaxHealth(), baseMaxHealth, newMaxHealth);
+				event.getPlayer().getMaxHealth(), baseMaxHealth, d);
 		Bukkit.getPluginManager().callEvent(healthUpdateEvent);
 
 		if (healthUpdateEvent.isCancelled()) {
 			return;
 		}
 
-		event.getPlayer().setMaxHealth(Math.max(baseMaxHealth + d, 1));
+		event.getPlayer().setMaxHealth(Math.max(healthUpdateEvent.getBaseHealth() + healthUpdateEvent
+				.getChangeInHealth(), 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
 	}
@@ -288,10 +287,9 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				}
 			}
 		}
-		double newMaxHealth = Math.max(baseMaxHealth + d, 1);
 
 		ItemAttributesHealthUpdateEvent healthUpdateEvent = new ItemAttributesHealthUpdateEvent(entity,
-				entity.getMaxHealth(), baseMaxHealth, newMaxHealth);
+				entity.getMaxHealth(), baseMaxHealth, d);
 		Bukkit.getPluginManager().callEvent(healthUpdateEvent);
 
 		if (healthUpdateEvent.isCancelled()) {
@@ -321,17 +319,16 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		double currentHealth = event.getPlayer().getHealth();
 		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 
-		double newMaxHealth = Math.max(baseMaxHealth + d, 1);
-
 		ItemAttributesHealthUpdateEvent healthUpdateEvent = new ItemAttributesHealthUpdateEvent(event.getPlayer(),
-				event.getPlayer().getMaxHealth(), baseMaxHealth, newMaxHealth);
+				event.getPlayer().getMaxHealth(), baseMaxHealth, d);
 		Bukkit.getPluginManager().callEvent(healthUpdateEvent);
 
 		if (healthUpdateEvent.isCancelled()) {
 			return;
 		}
 
-		event.getPlayer().setMaxHealth(Math.max(baseMaxHealth + d, 1));
+		event.getPlayer().setMaxHealth(Math.max(healthUpdateEvent.getBaseHealth() + healthUpdateEvent
+				.getChangeInHealth(), 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
 	}
@@ -349,17 +346,16 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		double currentHealth = event.getPlayer().getHealth();
 		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 
-		double newMaxHealth = Math.max(baseMaxHealth + d, 1);
-
 		ItemAttributesHealthUpdateEvent healthUpdateEvent = new ItemAttributesHealthUpdateEvent(event.getPlayer(),
-				event.getPlayer().getMaxHealth(), baseMaxHealth, newMaxHealth);
+				event.getPlayer().getMaxHealth(), baseMaxHealth, d);
 		Bukkit.getPluginManager().callEvent(healthUpdateEvent);
 
 		if (healthUpdateEvent.isCancelled()) {
 			return;
 		}
 
-		event.getPlayer().setMaxHealth(Math.max(baseMaxHealth + d, 1));
+		event.getPlayer().setMaxHealth(Math.max(healthUpdateEvent.getBaseHealth() + healthUpdateEvent
+				.getChangeInHealth(), 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
 	}
@@ -474,17 +470,16 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		double currentHealth = event.getPlayer().getHealth();
 		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 
-		double newMaxHealth = Math.max(baseMaxHealth + d, 1);
-
 		ItemAttributesHealthUpdateEvent healthUpdateEvent = new ItemAttributesHealthUpdateEvent(event.getPlayer(),
-				event.getPlayer().getMaxHealth(), baseMaxHealth, newMaxHealth);
+				event.getPlayer().getMaxHealth(), baseMaxHealth, d);
 		Bukkit.getPluginManager().callEvent(healthUpdateEvent);
 
 		if (healthUpdateEvent.isCancelled()) {
 			return;
 		}
 
-		event.getPlayer().setMaxHealth(Math.max(baseMaxHealth + d, 1));
+		event.getPlayer().setMaxHealth(Math.max(healthUpdateEvent.getBaseHealth() + healthUpdateEvent
+				.getChangeInHealth(), 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
 	}
@@ -555,30 +550,30 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				.getDamageFormat());
 		arrowDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(shotItem), getPlugin().getSettingsManager()
 				.getRangedDamageFormat());
-		criticalRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shotItem), getPlugin().getSettingsManager()
-				.getCriticalRateFormat());
-		criticalDamage += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shotItem), getPlugin().getSettingsManager()
-				.getCriticalDamageFormat());
+		criticalRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shotItem),
+				getPlugin().getSettingsManager().getCriticalRateFormat());
+		criticalDamage += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shotItem),
+				getPlugin().getSettingsManager().getCriticalDamageFormat());
 		armorPenetration += ItemAttributesParseUtil.getDouble(getItemStackLore(shotItem),
 				getPlugin().getSettingsManager().getArmorPenetrationFormat());
-		stunRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shotItem), getPlugin().getSettingsManager()
-				.getStunRateFormat());
+		stunRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shotItem),
+				getPlugin().getSettingsManager().getStunRateFormat());
 		stunLength += ItemAttributesParseUtil.getInt(getItemStackLore(shotItem), getPlugin().getSettingsManager()
 				.getStunLengthFormat());
 
 		if (shootingItem != null) {
-			bowDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
-					.getDamageFormat());
-			bowDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
-					.getRangedDamageFormat());
-			criticalRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
-					.getCriticalRateFormat());
+			bowDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(shootingItem),
+					getPlugin().getSettingsManager().getDamageFormat());
+			bowDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(shootingItem),
+					getPlugin().getSettingsManager().getRangedDamageFormat());
+			criticalRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shootingItem),
+					getPlugin().getSettingsManager().getCriticalRateFormat());
 			criticalDamage += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shootingItem),
 					getPlugin().getSettingsManager().getCriticalDamageFormat());
 			armorPenetration += ItemAttributesParseUtil.getDouble(getItemStackLore(shootingItem),
 					getPlugin().getSettingsManager().getArmorPenetrationFormat());
-			stunRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
-					.getStunRateFormat());
+			stunRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shootingItem),
+					getPlugin().getSettingsManager().getStunRateFormat());
 			stunLength += ItemAttributesParseUtil.getInt(getItemStackLore(shootingItem), getPlugin().getSettingsManager()
 					.getStunLengthFormat());
 		}
@@ -588,10 +583,10 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 					.getDamageFormat());
 			armorDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getRangedDamageFormat());
-			criticalRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(is), getPlugin().getSettingsManager()
-					.getCriticalRateFormat());
-			criticalDamage += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(is), getPlugin().getSettingsManager()
-					.getCriticalDamageFormat());
+			criticalRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(is),
+					getPlugin().getSettingsManager().getCriticalRateFormat());
+			criticalDamage += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(is),
+					getPlugin().getSettingsManager().getCriticalDamageFormat());
 			armorPenetration += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
 					.getArmorPenetrationFormat());
 			stunRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(is), getPlugin().getSettingsManager()
