@@ -787,10 +787,19 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 		boolean dodged = RandomUtils.nextDouble() < dodgeRate;
 
-		double equipmentDamage = damagerEquipmentDamage - (damagedEquipmentReduction - armorPenetration);
-		damage = (!dodged) ? originalDamage + equipmentDamage : 0;
+		if (dodged) {
+			if (event.getEntity() instanceof Player) {
+				getPlugin().getLanguageManager().sendMessage(((Player) event.getEntity()), "dodge");
+			}
+			event.setDamage(0);
+			event.setCancelled(true);
+			return;
+		}
 
-		if (RandomUtils.nextDouble() < damagerCriticalChance && !dodged) {
+		double equipmentDamage = damagerEquipmentDamage - (damagedEquipmentReduction - armorPenetration);
+		damage = originalDamage + equipmentDamage;
+
+		if (RandomUtils.nextDouble() < damagerCriticalChance) {
 
 			ItemAttributesCriticalStrikeEvent criticalStrikeEvent = null;
 
@@ -825,7 +834,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			}
 		}
 
-		if (RandomUtils.nextDouble() < stunRate && !dodged) {
+		if (RandomUtils.nextDouble() < stunRate) {
 			if (event.getEntity() instanceof LivingEntity) {
 				LivingEntity defender = (LivingEntity) event.getEntity();
 				LivingEntity attacker = null;
@@ -856,10 +865,6 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 					}
 				}
 			}
-		}
-
-		if (dodged && event.getEntity() instanceof Player) {
-			getPlugin().getLanguageManager().sendMessage(((Player) event.getEntity()), "dodge");
 		}
 
 		event.setDamage(damage);
