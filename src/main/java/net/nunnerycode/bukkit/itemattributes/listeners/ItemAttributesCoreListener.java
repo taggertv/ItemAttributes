@@ -357,10 +357,12 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		handleLevelRequirementCheckSlot(player, event.getNewSlot());
 	}
 
-	private void handleLevelRequirementCheckSlot(Player player, int i) {
+	private boolean handleLevelRequirementCheckSlot(Player player, int i) {
 		if (player.hasPermission("itemattributes.admin.ignorelevels")) {
-			return;
+			return false;
 		}
+
+		boolean b = false;
 
 		ItemStack itemInHand = player.getInventory().getItem(i);
 		ItemStack helmet = player.getEquipment().getHelmet();
@@ -380,6 +382,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			player.getInventory().setItem(i, null);
 			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
 					new String[][]{{"%itemname%", getItemName(itemInHand)}, {"%level%", String.valueOf(level)}});
+			b = true;
 		}
 
 		// helmet check
@@ -394,6 +397,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			player.getEquipment().setHelmet(null);
 			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
 					new String[][]{{"%itemname%", getItemName(helmet)}, {"%level%", String.valueOf(level)}});
+			b = true;
 		}
 
 		// chestplate check
@@ -408,6 +412,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			player.getEquipment().setChestplate(null);
 			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
 					new String[][]{{"%itemname%", getItemName(chestplate)}, {"%level%", String.valueOf(level)}});
+			b = true;
 		}
 
 		// leggings check
@@ -422,6 +427,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			player.getEquipment().setLeggings(null);
 			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
 					new String[][]{{"%itemname%", getItemName(leggings)}, {"%level%", String.valueOf(level)}});
+			b = true;
 		}
 
 		// boots check
@@ -436,7 +442,10 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			player.getEquipment().setBoots(null);
 			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
 					new String[][]{{"%itemname%", getItemName(boots)}, {"%level%", String.valueOf(level)}});
+			b = true;
 		}
+
+		return b;
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
