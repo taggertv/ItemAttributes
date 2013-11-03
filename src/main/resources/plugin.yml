@@ -2,3 +2,8 @@ name: ${project.build.name}
 version: ${project.build.version}
 authors: [ToppleTheNun, pur3pow3r]
 main: net.nunnerycode.bukkit.itemattributes.ItemAttributesPlugin
+
+permissions:
+    itemattributes.admin.ignorelevels:
+        description: Allows player to have the plugin ignore their level on check.
+        default: op
