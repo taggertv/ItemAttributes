@@ -358,6 +358,10 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 	}
 
 	private void handleLevelRequirementCheckSlot(Player player, int i) {
+		if (player.hasPermission("itemattributes.admin.ignorelevels")) {
+			return;
+		}
+
 		ItemStack itemInHand = player.getInventory().getItem(i);
 		ItemStack helmet = player.getEquipment().getHelmet();
 		ItemStack chestplate = player.getEquipment().getChestplate();
