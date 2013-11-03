@@ -162,6 +162,19 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		return b;
 	}
 
+	@Override
+	public ItemAttributes getPlugin() {
+		return plugin;
+	}
+
+	private List<String> getItemStackLore(ItemStack itemStack) {
+		List<String> lore = new ArrayList<String>();
+		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
+			lore.addAll(itemStack.getItemMeta().getLore());
+		}
+		return lore;
+	}
+
 	private String getItemName(ItemStack itemStack) {
 		String name = "";
 		if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName()) {
@@ -178,19 +191,6 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			}
 		}
 		return name;
-	}
-
-	private List<String> getItemStackLore(ItemStack itemStack) {
-		List<String> lore = new ArrayList<String>();
-		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
-			lore.addAll(itemStack.getItemMeta().getLore());
-		}
-		return lore;
-	}
-
-	@Override
-	public ItemAttributes getPlugin() {
-		return plugin;
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
@@ -737,15 +737,6 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 						}
 					}
 				}
-				if (projectile.hasMetadata("itemattributes.dodgerate")) {
-					List<MetadataValue> metadataValueList = projectile.getMetadata("itemattributes.dodgerate");
-					for (MetadataValue mv : metadataValueList) {
-						if (mv.getOwningPlugin().equals(getPlugin())) {
-							dodgeRate += mv.asDouble();
-							break;
-						}
-					}
-				}
 			}
 		} else if (event.getDamager() instanceof LivingEntity) {
 			LivingEntity damager = (LivingEntity) event.getDamager();
@@ -763,8 +754,6 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 						getPlugin().getSettingsManager().getStunRateFormat());
 				stunLength += ItemAttributesParseUtil.getInt(getItemStackLore(is),
 						getPlugin().getSettingsManager().getStunLengthFormat());
-				dodgeRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(is),
-						getPlugin().getSettingsManager().getDodgeRateFormat());
 			}
 			damagerEquipmentDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(damager.getEquipment().getItemInHand
 					()), getPlugin().getSettingsManager().getMeleeDamageFormat());
@@ -778,8 +767,15 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 					()), getPlugin().getSettingsManager().getStunRateFormat());
 			stunLength += ItemAttributesParseUtil.getInt(getItemStackLore(damager.getEquipment().getItemInHand()),
 					getPlugin().getSettingsManager().getStunLengthFormat());
-			dodgeRate += ItemAttributesParseUtil.getDouble(getItemStackLore(damager.getEquipment().getItemInHand()),
-					getPlugin().getSettingsManager().getDodgeRateFormat());
+		}
+
+		if (event.getEntity() instanceof LivingEntity) {
+			for (ItemStack is : ((LivingEntity) event.getEntity()).getEquipment().getArmorContents()) {
+				dodgeRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(is),
+						getPlugin().getSettingsManager().getDodgeRateFormat());
+			}
+			dodgeRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(((LivingEntity) event.getEntity
+					()).getEquipment().getItemInHand()), getPlugin().getSettingsManager().getDodgeRateFormat());
 		}
 
 		double damagedEquipmentReduction = 0D;
@@ -787,11 +783,11 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			LivingEntity entity = (LivingEntity) event.getEntity();
 			ItemStack[] armor = entity.getEquipment().getArmorContents();
 			for (ItemStack is : armor) {
-				damagedEquipmentReduction += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
-						.getArmorFormat());
+				damagedEquipmentReduction += ItemAttributesParseUtil.getDouble(getItemStackLore(is),
+						getPlugin().getSettingsManager().getArmorFormat());
 			}
-			damagedEquipmentReduction += ItemAttributesParseUtil.getDouble(getItemStackLore(entity.getEquipment().getItemInHand()),
-					getPlugin().getSettingsManager().getArmorFormat());
+			damagedEquipmentReduction += ItemAttributesParseUtil.getDouble(getItemStackLore(entity.getEquipment()
+					.getItemInHand()), getPlugin().getSettingsManager().getArmorFormat());
 		}
 
 		boolean dodged = RandomUtils.nextDouble() < dodgeRate;
