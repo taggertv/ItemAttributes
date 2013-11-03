@@ -12,16 +12,16 @@ public class ItemAttributesHealthUpdateEvent extends ItemAttributesEvent impleme
 	private LivingEntity livingEntity;
 	private double previousHealth;
 	private double baseHealth;
-	private double newHealth;
+	private double changeInHealth;
 	private boolean cancelled;
 
 	public ItemAttributesHealthUpdateEvent(LivingEntity livingEntity, double previousHealth, double baseHealth,
-										   double newHealth) {
+										   double changeInHealth) {
 
 		this.livingEntity = livingEntity;
 		this.previousHealth = previousHealth;
 		this.baseHealth = baseHealth;
-		this.newHealth = newHealth;
+		this.changeInHealth = changeInHealth;
 	}
 
 	@Override
@@ -45,13 +45,13 @@ public class ItemAttributesHealthUpdateEvent extends ItemAttributesEvent impleme
 	}
 
 	@Override
-	public double getNewHealth() {
-		return this.newHealth;
+	public double getChangeInHealth() {
+		return this.changeInHealth;
 	}
 
 	@Override
-	public void setNewHealth(double newHealth) {
-		this.newHealth = newHealth;
+	public void setChangeInHealth(double changeInHealth) {
+		this.changeInHealth = changeInHealth;
 	}
 
 	@Override

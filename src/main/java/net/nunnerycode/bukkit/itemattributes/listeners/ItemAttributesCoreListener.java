@@ -220,7 +220,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				continue;
 			}
 
-			he.setMaxHealth(healthUpdateEvent.getNewHealth());
+			he.setMaxHealth(healthUpdateEvent.getBaseHealth() + healthUpdateEvent.getChangeInHealth());
 			he.setHealth(Math.min(Math.max(currentHealth, 0), he.getMaxHealth()));
 			if (he instanceof Player) {
 				((Player) he).setHealthScale(he.getMaxHealth());
