@@ -30,7 +30,6 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	private String poisonImmunityFormat;
 	private String fireImmunityFormat;
 	private String witherImmunityFormat;
-	private double maximumArmorPenetration;
 	private double maximumCriticalRate;
 	private double maximumCriticalDamage;
 	private double maximumStunRate;
@@ -60,8 +59,6 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		armorFormat = getPlugin().getConfigYAML().getString("core-stats.armor.format", "%value% Armor");
 		armorPenetrationFormat = getPlugin().getConfigYAML().getString("core-stats.armor-penetration.format",
 				"%value% Armor Penetration");
-		maximumArmorPenetration = getPlugin().getConfigYAML().getDouble("core-stats.armor-penetration.max-value",
-				100D);
 		criticalRateFormat = getPlugin().getConfigYAML().getString("core-stats.critical-rate.format",
 				"%value% Critical Rate");
 		maximumCriticalRate = getPlugin().getConfigYAML().getDouble("core-stats.critical-rate.max-value", 100D);
@@ -109,7 +106,6 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		getPlugin().getConfigYAML().set("core-stats.regeneration.format", regenerationFormat);
 		getPlugin().getConfigYAML().set("core-stats.armor.format", armorFormat);
 		getPlugin().getConfigYAML().set("core-stats.armor-penetration.format", armorPenetrationFormat);
-		getPlugin().getConfigYAML().set("core-stats.armor-penetration.max-value", maximumArmorPenetration);
 		getPlugin().getConfigYAML().set("core-stats.critical-rate.format", criticalRateFormat);
 		getPlugin().getConfigYAML().set("core-stats.critical-rate.max-value", maximumCriticalRate);
 		getPlugin().getConfigYAML().set("core-stats.critical-damage.format", criticalDamageFormat);
@@ -234,11 +230,6 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	@Override
 	public double getBaseDodgeRate() {
 		return baseDodgeRate;
-	}
-
-	@Override
-	public double getMaximumArmorPenetration() {
-		return maximumArmorPenetration;
 	}
 
 	@Override

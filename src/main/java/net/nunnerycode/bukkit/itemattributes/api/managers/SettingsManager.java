@@ -51,8 +51,6 @@ public interface SettingsManager {
 
 	double getBaseDodgeRate();
 
-	double getMaximumArmorPenetration();
-
 	double getMaximumCriticalRate();
 
 	double getMaximumCriticalDamage();
