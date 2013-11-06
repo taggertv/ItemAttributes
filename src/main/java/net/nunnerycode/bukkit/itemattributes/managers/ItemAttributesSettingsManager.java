@@ -61,18 +61,18 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 				"%value% Armor Penetration");
 		criticalRateFormat = getPlugin().getConfigYAML().getString("core-stats.critical-rate.format",
 				"%value% Critical Rate");
-		maximumCriticalRate = getPlugin().getConfigYAML().getDouble("core-stats.critical-rate.max-value", 100D);
+		maximumCriticalRate = getPlugin().getConfigYAML().getDouble("core-stats.critical-rate.max-value");
 		criticalDamageFormat = getPlugin().getConfigYAML().getString("core-stats.critical-damage.format",
 				"%value% Critical Damage");
-		maximumCriticalDamage = getPlugin().getConfigYAML().getDouble("core-stats.critical-damage.max-value", 100D);
+		maximumCriticalDamage = getPlugin().getConfigYAML().getDouble("core-stats.critical-damage.max-value");
 		levelRequirementFormat = getPlugin().getConfigYAML().getString("core-stats.level-requirement.format",
 				"Level Required: %value%");
 		stunRateFormat = getPlugin().getConfigYAML().getString("core-stats.stun-rate.format", "%value% Stun Rate");
-		maximumStunRate = getPlugin().getConfigYAML().getDouble("core-stats.stun-rate.max-value", 100D);
+		maximumStunRate = getPlugin().getConfigYAML().getDouble("core-stats.stun-rate.max-value");
 		stunLengthFormat = getPlugin().getConfigYAML().getString("core-stats.stun-length.format",
 				"%value% Stun Length");
 		dodgeRateFormat = getPlugin().getConfigYAML().getString("core-stats.dodge-rate.format", "%value% Dodge Rate");
-		maximumDodgeRate = getPlugin().getConfigYAML().getDouble("core-stats.dodge-rate.max-value", 100D);
+		maximumDodgeRate = getPlugin().getConfigYAML().getDouble("core-stats.dodge-rate.max-value");
 		poisonImmunityFormat = getPlugin().getConfigYAML().getString("core-stats.poison-immunity.format",
 				"Poison Immunity");
 		fireImmunityFormat = getPlugin().getConfigYAML().getString("core-stats.fire-immunity.format",
