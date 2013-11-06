@@ -236,22 +236,27 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		return baseDodgeRate;
 	}
 
+	@Override
 	public double getMaximumArmorPenetration() {
 		return maximumArmorPenetration;
 	}
 
+	@Override
 	public double getMaximumCriticalRate() {
 		return maximumCriticalRate;
 	}
 
+	@Override
 	public double getMaximumCriticalDamage() {
 		return maximumCriticalDamage;
 	}
 
+	@Override
 	public double getMaximumStunRate() {
 		return maximumStunRate;
 	}
 
+	@Override
 	public double getMaximumDodgeRate() {
 		return maximumDodgeRate;
 	}

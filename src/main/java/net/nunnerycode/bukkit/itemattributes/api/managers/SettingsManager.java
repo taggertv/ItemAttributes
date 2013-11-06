@@ -50,4 +50,14 @@ public interface SettingsManager {
 	String getDodgeRateFormat();
 
 	double getBaseDodgeRate();
+
+	double getMaximumArmorPenetration();
+
+	double getMaximumCriticalRate();
+
+	double getMaximumCriticalDamage();
+
+	double getMaximumStunRate();
+
+	double getMaximumDodgeRate();
 }
