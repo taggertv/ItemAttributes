@@ -21,22 +21,27 @@ core-stats:
     format: "%value% Armor"
   critical-rate:
     format: "%value% Critical Rate"
+    max-value: 100.0
   critical-damage:
     format: "%value% Critical Damage"
+    max-value: 100.0
   level-requirement:
     format: "Level Required: %value%"
   armor-penetration:
     format: "%value% Armor Penetration"
+    max-value: 100.0
   stun-rate:
     format: "%value% Stun Rate"
+    max-value: 100.0
   stun-length:
     format: "%value% Stun Length"
   dodge-rate:
     format: "%value% Dodge Rate"
+    max-value: 100.0
   fire-immunity:
     format: "Fire Immunity"
   poison-immunity:
     format: "Poison Immunity"
   wither-immunity:
     format: "Wither Immunity"
-version: "1.0.8"
+version: "1.0.9"
