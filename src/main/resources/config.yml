@@ -29,7 +29,6 @@ core-stats:
     format: "Level Required: %value%"
   armor-penetration:
     format: "%value% Armor Penetration"
-    max-value: 100.0
   stun-rate:
     format: "%value% Stun Rate"
     max-value: 100.0
