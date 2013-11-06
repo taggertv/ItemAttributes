@@ -60,7 +60,7 @@ public final class ItemAttributesParseUtil {
 							second) + Math.min(first, second))) / 100D;
 				}
 			} else {
-				d += NumberUtils.toDouble(withoutLetters, 0.0) / base;
+				d += NumberUtils.toDouble(withoutLetters, 0.0) / ((base != 0D) ? base : 100D);
 			}
 		}
 		return d;
