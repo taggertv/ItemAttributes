@@ -551,13 +551,15 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		arrowDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(shotItem), getPlugin().getSettingsManager()
 				.getRangedDamageFormat());
 		criticalRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shotItem),
-				getPlugin().getSettingsManager().getCriticalRateFormat());
+				getPlugin().getSettingsManager().getCriticalRateFormat(), getPlugin().getSettingsManager()
+				.getMaximumCriticalRate());
 		criticalDamage += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shotItem),
-				getPlugin().getSettingsManager().getCriticalDamageFormat());
+				getPlugin().getSettingsManager().getCriticalDamageFormat(), getPlugin().getSettingsManager()
+				.getMaximumCriticalDamage());
 		armorPenetration += ItemAttributesParseUtil.getDouble(getItemStackLore(shotItem),
 				getPlugin().getSettingsManager().getArmorPenetrationFormat());
 		stunRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(shotItem),
-				getPlugin().getSettingsManager().getStunRateFormat());
+				getPlugin().getSettingsManager().getStunRateFormat(), getPlugin().getSettingsManager().getMaximumStunRate());
 		stunLength += ItemAttributesParseUtil.getInt(getItemStackLore(shotItem), getPlugin().getSettingsManager()
 				.getStunLengthFormat());
 
@@ -742,11 +744,14 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				damagerEquipmentDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
 						.getDamageFormat());
 				damagerCriticalChance += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(is),
-						getPlugin().getSettingsManager().getCriticalRateFormat());
+						getPlugin().getSettingsManager().getCriticalRateFormat(), getPlugin().getSettingsManager()
+						.getMaximumCriticalRate());
 				damagerCriticalDamage += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(is),
-						getPlugin().getSettingsManager().getCriticalDamageFormat());
+						getPlugin().getSettingsManager().getCriticalDamageFormat(), getPlugin().getSettingsManager()
+						.getMaximumCriticalDamage());
 				stunRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(is),
-						getPlugin().getSettingsManager().getStunRateFormat());
+						getPlugin().getSettingsManager().getStunRateFormat(), getPlugin().getSettingsManager()
+						.getMaximumStunRate());
 				stunLength += ItemAttributesParseUtil.getInt(getItemStackLore(is),
 						getPlugin().getSettingsManager().getStunLengthFormat());
 			}
@@ -755,11 +760,14 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			damagerEquipmentDamage += ItemAttributesParseUtil.getDouble(getItemStackLore(damager.getEquipment().getItemInHand()),
 					getPlugin().getSettingsManager().getDamageFormat());
 			damagerCriticalChance += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(damager.getEquipment()
-					.getItemInHand()), getPlugin().getSettingsManager().getCriticalRateFormat());
+					.getItemInHand()), getPlugin().getSettingsManager().getCriticalRateFormat(),
+					getPlugin().getSettingsManager().getMaximumCriticalRate());
 			damagerCriticalDamage += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(damager.getEquipment().getItemInHand
-					()), getPlugin().getSettingsManager().getCriticalDamageFormat());
+					()), getPlugin().getSettingsManager().getCriticalDamageFormat(), getPlugin().getSettingsManager()
+					.getMaximumCriticalDamage());
 			stunRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(damager.getEquipment().getItemInHand
-					()), getPlugin().getSettingsManager().getStunRateFormat());
+					()), getPlugin().getSettingsManager().getStunRateFormat(), getPlugin().getSettingsManager()
+					.getMaximumStunRate());
 			stunLength += ItemAttributesParseUtil.getInt(getItemStackLore(damager.getEquipment().getItemInHand()),
 					getPlugin().getSettingsManager().getStunLengthFormat());
 		}
@@ -767,10 +775,12 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		if (event.getEntity() instanceof LivingEntity) {
 			for (ItemStack is : ((LivingEntity) event.getEntity()).getEquipment().getArmorContents()) {
 				dodgeRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(is),
-						getPlugin().getSettingsManager().getDodgeRateFormat());
+						getPlugin().getSettingsManager().getDodgeRateFormat(), getPlugin().getSettingsManager()
+						.getMaximumDodgeRate());
 			}
 			dodgeRate += ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(((LivingEntity) event.getEntity
-					()).getEquipment().getItemInHand()), getPlugin().getSettingsManager().getDodgeRateFormat());
+					()).getEquipment().getItemInHand()), getPlugin().getSettingsManager().getDodgeRateFormat(),
+					getPlugin().getSettingsManager().getMaximumDodgeRate());
 		}
 
 		double damagedEquipmentReduction = 0D;
