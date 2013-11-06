@@ -38,7 +38,7 @@ public final class ItemAttributesParseUtil {
 		return d;
 	}
 
-	public static double getDoublePercentage(Collection<String> collection, String format) {
+	public static double getDoublePercentage(Collection<String> collection, String format, double base) {
 		double d = 0.0;
 		if (collection == null || collection.isEmpty()) {
 			return d;
@@ -60,10 +60,15 @@ public final class ItemAttributesParseUtil {
 							second) + Math.min(first, second))) / 100D;
 				}
 			} else {
-				d += NumberUtils.toDouble(withoutLetters, 0.0) / 100D;
+				d += NumberUtils.toDouble(withoutLetters, 0.0) / base;
 			}
 		}
 		return d;
+	}
+
+
+	public static double getDoublePercentage(Collection<String> collection, String format) {
+		return getDoublePercentage(collection, format, 100D);
 	}
 
 	public static int getInt(Collection<String> collection, String format) {
