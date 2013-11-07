@@ -1,3 +1,8 @@
+# max-value is used when calculating percentage stats.
+# The way it works is like the following:
+#   If you have an item with +100 Critical Rate
+#   and Critical Rate has a maximum value of
+#   300, that item has a 33% chance to crit.
 options:
   base-player-health: 20.0
   base-critical-damage: 0.2
