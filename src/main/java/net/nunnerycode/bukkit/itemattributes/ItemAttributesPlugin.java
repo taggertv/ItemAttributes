@@ -51,6 +51,8 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 		languageYAML.options().updateOnLoad(true);
 		languageYAML.options().updateOnLoad(true);
 
+		debugPrinter = new DebugPrinter(getDataFolder().getPath() + "/log/", "debug.log");
+
 		itemAttributesSettingsManager = new ItemAttributesSettingsManager(this);
 		itemAttributesSettingsManager.load();
 
@@ -62,7 +64,6 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 
 		Bukkit.getServer().getPluginManager().registerEvents(itemAttributesCoreListener, this);
 
-		debugPrinter = new DebugPrinter(getDataFolder().getPath() + "/log/", "debug.log");
 		debugPrinter.debug(Level.INFO, "v" + getDescription().getVersion() + " enabled");
 	}
 
