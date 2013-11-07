@@ -38,6 +38,10 @@ public final class ItemAttributesParseUtil {
 		return d;
 	}
 
+	public static double getDoublePercentage(Collection<String> collection, String format) {
+		return getDoublePercentage(collection, format, 100D);
+	}
+
 	public static double getDoublePercentage(Collection<String> collection, String format, double base) {
 		double d = 0.0;
 		if (collection == null || collection.isEmpty()) {
@@ -51,24 +55,33 @@ public final class ItemAttributesParseUtil {
 			if (!withoutNumbers.equals(withoutVariables)) {
 				continue;
 			}
-			if (withoutLetters.contains(" - ")) {
-				String[] split = withoutLetters.split(" - ");
-				if (split.length > 1) {
-					double first = NumberUtils.toDouble(split[0], 0.0);
-					double second = NumberUtils.toDouble(split[1], 0.0);
-					d += (RandomUtils.nextDouble() * (Math.max(first, second) - Math.min(first,
-							second) + Math.min(first, second))) / 100D;
+			if (!s.contains("%")) {
+				if (withoutLetters.contains(" - ")) {
+					String[] split = withoutLetters.split(" - ");
+					if (split.length > 1) {
+						double first = NumberUtils.toDouble(split[0], 0.0);
+						double second = NumberUtils.toDouble(split[1], 0.0);
+						d += (RandomUtils.nextDouble() * (Math.max(first, second) - Math.min(first,
+								second) + Math.min(first, second))) / ((base != 0D) ? base : 100D);
+					}
+				} else {
+					d += NumberUtils.toDouble(withoutLetters, 0.0) / ((base != 0D) ? base : 100D);
 				}
 			} else {
-				d += NumberUtils.toDouble(withoutLetters, 0.0) / ((base != 0D) ? base : 100D);
+				if (withoutLetters.contains(" - ")) {
+					String[] split = withoutLetters.split(" - ");
+					if (split.length > 1) {
+						double first = NumberUtils.toDouble(split[0], 0.0);
+						double second = NumberUtils.toDouble(split[1], 0.0);
+						d += (RandomUtils.nextDouble() * (Math.max(first, second) - Math.min(first,
+								second) + Math.min(first, second))) / 100D;
+					}
+				} else {
+					d += NumberUtils.toDouble(withoutLetters, 0.0) / 100D;
+				}
 			}
 		}
 		return d;
-	}
-
-
-	public static double getDoublePercentage(Collection<String> collection, String format) {
-		return getDoublePercentage(collection, format, 100D);
 	}
 
 	public static int getInt(Collection<String> collection, String format) {
