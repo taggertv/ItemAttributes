@@ -40,6 +40,7 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	}
 
 	public void load() {
+		getPlugin().getConfigYAML().load();
 		basePlayerHealth = getPlugin().getConfigYAML().getDouble("options.base-player-health", 20.0);
 		baseCriticalRate = getPlugin().getConfigYAML().getDouble("options.base-critical-rate", 0.05);
 		baseCriticalDamage = getPlugin().getConfigYAML().getDouble("options.base-critical-damage", 0.2);
@@ -61,18 +62,18 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 				"%value% Armor Penetration");
 		criticalRateFormat = getPlugin().getConfigYAML().getString("core-stats.critical-rate.format",
 				"%value% Critical Rate");
-		maximumCriticalRate = getPlugin().getConfigYAML().getDouble("core-stats.critical-rate.max-value");
+		maximumCriticalRate = getPlugin().getConfigYAML().getDouble("core-stats.critical-rate.max-value", 100D);
 		criticalDamageFormat = getPlugin().getConfigYAML().getString("core-stats.critical-damage.format",
 				"%value% Critical Damage");
-		maximumCriticalDamage = getPlugin().getConfigYAML().getDouble("core-stats.critical-damage.max-value");
+		maximumCriticalDamage = getPlugin().getConfigYAML().getDouble("core-stats.critical-damage.max-value", 100D);
 		levelRequirementFormat = getPlugin().getConfigYAML().getString("core-stats.level-requirement.format",
 				"Level Required: %value%");
 		stunRateFormat = getPlugin().getConfigYAML().getString("core-stats.stun-rate.format", "%value% Stun Rate");
-		maximumStunRate = getPlugin().getConfigYAML().getDouble("core-stats.stun-rate.max-value");
+		maximumStunRate = getPlugin().getConfigYAML().getDouble("core-stats.stun-rate.max-value", 100D);
 		stunLengthFormat = getPlugin().getConfigYAML().getString("core-stats.stun-length.format",
 				"%value% Stun Length");
 		dodgeRateFormat = getPlugin().getConfigYAML().getString("core-stats.dodge-rate.format", "%value% Dodge Rate");
-		maximumDodgeRate = getPlugin().getConfigYAML().getDouble("core-stats.dodge-rate.max-value");
+		maximumDodgeRate = getPlugin().getConfigYAML().getDouble("core-stats.dodge-rate.max-value", 100D);
 		poisonImmunityFormat = getPlugin().getConfigYAML().getString("core-stats.poison-immunity.format",
 				"Poison Immunity");
 		fireImmunityFormat = getPlugin().getConfigYAML().getString("core-stats.fire-immunity.format",
@@ -89,37 +90,6 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	@Override
 	public String getArmorPenetrationFormat() {
 		return armorPenetrationFormat;
-	}
-
-	public void save() {
-		getPlugin().getConfigYAML().set("version", getPlugin().getConfigYAML().getVersion());
-		getPlugin().getConfigYAML().set("options.base-player-health", basePlayerHealth);
-		getPlugin().getConfigYAML().set("options.base-critical-rate", baseCriticalRate);
-		getPlugin().getConfigYAML().set("options.base-critical-damage", baseCriticalDamage);
-		getPlugin().getConfigYAML().set("options.base-stun-rate", baseStunRate);
-		getPlugin().getConfigYAML().set("options.base-stun-length", baseStunLength);
-		getPlugin().getConfigYAML().set("options.seconds-between-health-updates", secondsBetweenHealthUpdates);
-		getPlugin().getConfigYAML().set("core-stats.health.format", healthFormat);
-		getPlugin().getConfigYAML().set("core-stats.damage.format", damageFormat);
-		getPlugin().getConfigYAML().set("core-stats.ranged-damage.format", rangedDamageFormat);
-		getPlugin().getConfigYAML().set("core-stats.melee-damage.format", meleeDamageFormat);
-		getPlugin().getConfigYAML().set("core-stats.regeneration.format", regenerationFormat);
-		getPlugin().getConfigYAML().set("core-stats.armor.format", armorFormat);
-		getPlugin().getConfigYAML().set("core-stats.armor-penetration.format", armorPenetrationFormat);
-		getPlugin().getConfigYAML().set("core-stats.critical-rate.format", criticalRateFormat);
-		getPlugin().getConfigYAML().set("core-stats.critical-rate.max-value", maximumCriticalRate);
-		getPlugin().getConfigYAML().set("core-stats.critical-damage.format", criticalDamageFormat);
-		getPlugin().getConfigYAML().set("core-stats.critical-damage.max-value", maximumCriticalRate);
-		getPlugin().getConfigYAML().set("core-stats.level-requirement.format", levelRequirementFormat);
-		getPlugin().getConfigYAML().set("core-stats.stun-rate.format", stunRateFormat);
-		getPlugin().getConfigYAML().set("core-stats.stun-rate.max-value", maximumStunRate);
-		getPlugin().getConfigYAML().set("core-stats.stun-length.format", stunLengthFormat);
-		getPlugin().getConfigYAML().set("core-stats.dodge-rate.format", dodgeRateFormat);
-		getPlugin().getConfigYAML().set("core-stats.dodge-rate.max-value", maximumDodgeRate);
-		getPlugin().getConfigYAML().set("core-stats.poison-immunity.format", poisonImmunityFormat);
-		getPlugin().getConfigYAML().set("core-stats.fire-immunity.format", fireImmunityFormat);
-		getPlugin().getConfigYAML().set("core-stats.wither-immunity.format", witherImmunityFormat);
-		getPlugin().getConfigYAML().save();
 	}
 
 	@Override
@@ -250,5 +220,38 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	@Override
 	public double getMaximumDodgeRate() {
 		return maximumDodgeRate;
+	}
+
+	public void save() {
+		if (!getPlugin().getConfigYAML().isSet("version")) {
+			getPlugin().getConfigYAML().set("version", getPlugin().getConfigYAML().getVersion());
+			getPlugin().getConfigYAML().set("options.base-player-health", basePlayerHealth);
+			getPlugin().getConfigYAML().set("options.base-critical-rate", baseCriticalRate);
+			getPlugin().getConfigYAML().set("options.base-critical-damage", baseCriticalDamage);
+			getPlugin().getConfigYAML().set("options.base-stun-rate", baseStunRate);
+			getPlugin().getConfigYAML().set("options.base-stun-length", baseStunLength);
+			getPlugin().getConfigYAML().set("options.seconds-between-health-updates", secondsBetweenHealthUpdates);
+			getPlugin().getConfigYAML().set("core-stats.health.format", healthFormat);
+			getPlugin().getConfigYAML().set("core-stats.damage.format", damageFormat);
+			getPlugin().getConfigYAML().set("core-stats.ranged-damage.format", rangedDamageFormat);
+			getPlugin().getConfigYAML().set("core-stats.melee-damage.format", meleeDamageFormat);
+			getPlugin().getConfigYAML().set("core-stats.regeneration.format", regenerationFormat);
+			getPlugin().getConfigYAML().set("core-stats.armor.format", armorFormat);
+			getPlugin().getConfigYAML().set("core-stats.armor-penetration.format", armorPenetrationFormat);
+			getPlugin().getConfigYAML().set("core-stats.critical-rate.format", criticalRateFormat);
+			getPlugin().getConfigYAML().set("core-stats.critical-rate.max-value", maximumCriticalRate);
+			getPlugin().getConfigYAML().set("core-stats.critical-damage.format", criticalDamageFormat);
+			getPlugin().getConfigYAML().set("core-stats.critical-damage.max-value", maximumCriticalRate);
+			getPlugin().getConfigYAML().set("core-stats.level-requirement.format", levelRequirementFormat);
+			getPlugin().getConfigYAML().set("core-stats.stun-rate.format", stunRateFormat);
+			getPlugin().getConfigYAML().set("core-stats.stun-rate.max-value", maximumStunRate);
+			getPlugin().getConfigYAML().set("core-stats.stun-length.format", stunLengthFormat);
+			getPlugin().getConfigYAML().set("core-stats.dodge-rate.format", dodgeRateFormat);
+			getPlugin().getConfigYAML().set("core-stats.dodge-rate.max-value", maximumDodgeRate);
+			getPlugin().getConfigYAML().set("core-stats.poison-immunity.format", poisonImmunityFormat);
+			getPlugin().getConfigYAML().set("core-stats.fire-immunity.format", fireImmunityFormat);
+			getPlugin().getConfigYAML().set("core-stats.wither-immunity.format", witherImmunityFormat);
+		}
+		getPlugin().getConfigYAML().save();
 	}
 }
