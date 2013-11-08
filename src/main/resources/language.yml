@@ -1,6 +1,11 @@
 messages:
-  unable-to-use: "&CYou are unable to use %itemname% until you are level %level%."
-  critical-hit: "&AYou scored a critical hit and dealt %percentage%% of your normal damage!"
-  stun: "&AYou have stunned your opponent!"
-  dodge: "&AYou dodged an attack!"
-version: "1.0.3"
+  events:
+    unable-to-use: "&CYou are unable to use %itemname% until you are level %level%."
+    critical-hit: "&AYou scored a critical hit and dealt %percentage%% of your normal damage!"
+    stun: "&AYou have stunned your opponent!"
+    dodge: "&AYou dodged an attack!"
+  commands:
+    cannot-use: "&CYou cannot use that command."
+    view-stats: "&7%statname% &8- &F%value%"
+    view-stats-percentage: "&7%statname% &8- &F%value%%"
+version: "1.0.4"
