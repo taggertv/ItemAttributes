@@ -50,6 +50,8 @@ public class ItemAttributesCommands implements ItemAttributesCommand {
 		}
 		Player player = Bukkit.getPlayer(playerName);
 
+		getPlugin().getLanguageManager().sendMessage(sender, "commands.view-stats-help");
+
 		// health stat
 		sendStatMessage(sender, player, getPlugin().getSettingsManager().getHealthFormat(),
 				getPlugin().getSettingsManager().getBasePlayerHealth());
@@ -74,14 +76,14 @@ public class ItemAttributesCommands implements ItemAttributesCommand {
 		// armor penetration stat
 		sendStatMessage(sender, player, getPlugin().getSettingsManager().getArmorPenetrationFormat(), 0);
 		// stun rate stat
-		sendPercentageStatMessage(sender, player, getPlugin().getSettingsManager().getDamageFormat(),
+		sendPercentageStatMessage(sender, player, getPlugin().getSettingsManager().getStunRateFormat(),
 				getPlugin().getSettingsManager().getBaseStunRate(), getPlugin().getSettingsManager()
 				.getMaximumStunRate());
 		// stun length stat
-		sendStatMessage(sender, player, getPlugin().getSettingsManager().getDamageFormat(),
+		sendStatMessage(sender, player, getPlugin().getSettingsManager().getStunLengthFormat(),
 				getPlugin().getSettingsManager().getBaseStunLength());
 		// dodge rate stat
-		sendPercentageStatMessage(sender, player, getPlugin().getSettingsManager().getDamageFormat(),
+		sendPercentageStatMessage(sender, player, getPlugin().getSettingsManager().getDodgeRateFormat(),
 				getPlugin().getSettingsManager().getBaseDodgeRate(), getPlugin().getSettingsManager()
 				.getMaximumDodgeRate());
 	}
