@@ -1,6 +1,7 @@
 package net.nunnerycode.bukkit.itemattributes.api;
 
 import com.conventnunnery.libraries.config.CommentedConventYamlConfiguration;
+import net.nunnerycode.bukkit.itemattributes.api.commands.ItemAttributesCommand;
 import net.nunnerycode.bukkit.itemattributes.api.listeners.CoreListener;
 import net.nunnerycode.bukkit.itemattributes.api.managers.LanguageManager;
 import net.nunnerycode.bukkit.itemattributes.api.managers.SettingsManager;
@@ -21,4 +22,6 @@ public interface ItemAttributes {
 	SettingsManager getSettingsManager();
 
 	HealthUpdateTask getHealthUpdateTask();
+
+	ItemAttributesCommand getItemAttributesCommand();
 }
