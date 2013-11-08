@@ -5,9 +5,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
+import net.nunnerycode.bukkit.itemattributes.api.commands.ItemAttributesCommand;
 import net.nunnerycode.bukkit.itemattributes.api.managers.LanguageManager;
 import net.nunnerycode.bukkit.itemattributes.api.managers.SettingsManager;
 import net.nunnerycode.bukkit.itemattributes.api.tasks.HealthUpdateTask;
+import net.nunnerycode.bukkit.itemattributes.commands.ItemAttributesCommands;
 import net.nunnerycode.bukkit.itemattributes.listeners.ItemAttributesCoreListener;
 import net.nunnerycode.bukkit.itemattributes.managers.ItemAttributesLanguageManager;
 import net.nunnerycode.bukkit.itemattributes.managers.ItemAttributesSettingsManager;
@@ -26,6 +28,7 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 	private ItemAttributesSettingsManager itemAttributesSettingsManager;
 	private ItemAttributesCoreListener itemAttributesCoreListener;
 	private ItemAttributesHealthUpdateTask itemAttributesHealthUpdateTask;
+	private ItemAttributesCommands itemAttributesCommands;
 
 	@Override
 	public ItemAttributesCoreListener getCoreListener() {
@@ -63,6 +66,8 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 		itemAttributesHealthUpdateTask = new ItemAttributesHealthUpdateTask(this);
 
 		Bukkit.getServer().getPluginManager().registerEvents(itemAttributesCoreListener, this);
+
+		itemAttributesCommands = new ItemAttributesCommands(this);
 
 		debugPrinter.debug(Level.INFO, "v" + getDescription().getVersion() + " enabled");
 	}
@@ -113,5 +118,10 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 	@Override
 	public HealthUpdateTask getHealthUpdateTask() {
 		return itemAttributesHealthUpdateTask;
+	}
+
+	@Override
+	public ItemAttributesCommand getItemAttributesCommand() {
+		return itemAttributesCommands;
 	}
 }
