@@ -6,6 +6,6 @@ messages:
     dodge: "&AYou dodged an attack!"
   commands:
     cannot-use: "&CYou cannot use that command."
-    view-stats: "&7%statname% &8- &F%value%"
-    view-stats-percentage: "&7%statname% &8- &F%value%%"
+    view-stats: "&7%statname% &8- &F%totalvalue% | &9(%helmet%) &A(%chestplate%) &B(%leggings%) &C(%boots%) &D(%item%)"
+    view-stats-percentage: "&7%statname% &8- &F%totalvalue%% | &9(%helmet%%) &A(%chestplate%%) &B(%leggings%%) &C(%boots%%) &D(%item%%)"
 version: "1.0.4"
