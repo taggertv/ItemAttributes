@@ -119,10 +119,11 @@ public class ItemAttributesCommands implements ItemAttributesCommand {
 				.getItemInHand()), getPlugin().getSettingsManager().getHealthFormat(), maxValue);
 		double statTotal = baseStat + statHelmet + statChestplate + statLeggings + statBoots + statItem;
 		String formatString = format.replaceAll("%(?s)(.*?)%", "").trim();
-		getPlugin().getLanguageManager().sendMessage(sender, "commands.view-stats", new String[][]{{"%statname%",
-				formatString}, {"%totalvalue%", DF.format(statTotal * 100)}, {"%helmet%", DF.format(statHelmet * 100)},
-				{"%chestplate%", DF.format(statChestplate * 100)}, {"%leggings%", DF.format(statLeggings * 100)},
-				{"%boots%", DF.format(statBoots * 100)}, {"%item%", DF.format(statItem * 100)}});
+		getPlugin().getLanguageManager().sendMessage(sender, "commands.view-stats-percentage",
+				new String[][]{{"%statname%", formatString}, {"%totalvalue%", DF.format(statTotal * 100)},
+						{"%helmet%", DF.format(statHelmet * 100)}, {"%chestplate%", DF.format(statChestplate * 100)},
+						{"%leggings%", DF.format(statLeggings * 100)}, {"%boots%", DF.format(statBoots * 100)},
+						{"%item%", DF.format(statItem * 100)}});
 	}
 
 	private List<String> getItemStackLore(ItemStack itemStack) {
