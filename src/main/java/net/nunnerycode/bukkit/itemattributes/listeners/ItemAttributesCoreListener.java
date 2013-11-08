@@ -94,7 +94,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				player.getWorld().dropItem(player.getLocation(), itemInHand);
 			}
 			player.getEquipment().setItemInHand(null);
-			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
+			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use",
 					new String[][]{{"%itemname%", getItemName(itemInHand)}, {"%level%", String.valueOf(level)}});
 			b = true;
 		}
@@ -109,7 +109,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				player.getWorld().dropItem(player.getLocation(), helmet);
 			}
 			player.getEquipment().setHelmet(null);
-			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
+			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use",
 					new String[][]{{"%itemname%", getItemName(helmet)}, {"%level%", String.valueOf(level)}});
 			b = true;
 		}
@@ -124,7 +124,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				player.getWorld().dropItem(player.getLocation(), chestplate);
 			}
 			player.getEquipment().setChestplate(null);
-			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
+			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use",
 					new String[][]{{"%itemname%", getItemName(chestplate)}, {"%level%", String.valueOf(level)}});
 			b = true;
 		}
@@ -139,7 +139,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				player.getWorld().dropItem(player.getLocation(), leggings);
 			}
 			player.getEquipment().setLeggings(null);
-			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
+			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use",
 					new String[][]{{"%itemname%", getItemName(leggings)}, {"%level%", String.valueOf(level)}});
 			b = true;
 		}
@@ -154,25 +154,12 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				player.getWorld().dropItem(player.getLocation(), boots);
 			}
 			player.getEquipment().setBoots(null);
-			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
+			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use",
 					new String[][]{{"%itemname%", getItemName(boots)}, {"%level%", String.valueOf(level)}});
 			b = true;
 		}
 
 		return b;
-	}
-
-	@Override
-	public ItemAttributes getPlugin() {
-		return plugin;
-	}
-
-	private List<String> getItemStackLore(ItemStack itemStack) {
-		List<String> lore = new ArrayList<String>();
-		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
-			lore.addAll(itemStack.getItemMeta().getLore());
-		}
-		return lore;
 	}
 
 	private String getItemName(ItemStack itemStack) {
@@ -191,6 +178,19 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			}
 		}
 		return name;
+	}
+
+	private List<String> getItemStackLore(ItemStack itemStack) {
+		List<String> lore = new ArrayList<String>();
+		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
+			lore.addAll(itemStack.getItemMeta().getLore());
+		}
+		return lore;
+	}
+
+	@Override
+	public ItemAttributes getPlugin() {
+		return plugin;
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
@@ -389,7 +389,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				player.getWorld().dropItem(player.getLocation(), itemInHand);
 			}
 			player.getInventory().setItem(i, null);
-			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
+			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use",
 					new String[][]{{"%itemname%", getItemName(itemInHand)}, {"%level%", String.valueOf(level)}});
 			b = true;
 		}
@@ -404,7 +404,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				player.getWorld().dropItem(player.getLocation(), helmet);
 			}
 			player.getEquipment().setHelmet(null);
-			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
+			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use",
 					new String[][]{{"%itemname%", getItemName(helmet)}, {"%level%", String.valueOf(level)}});
 			b = true;
 		}
@@ -419,7 +419,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				player.getWorld().dropItem(player.getLocation(), chestplate);
 			}
 			player.getEquipment().setChestplate(null);
-			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
+			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use",
 					new String[][]{{"%itemname%", getItemName(chestplate)}, {"%level%", String.valueOf(level)}});
 			b = true;
 		}
@@ -434,7 +434,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				player.getWorld().dropItem(player.getLocation(), leggings);
 			}
 			player.getEquipment().setLeggings(null);
-			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
+			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use",
 					new String[][]{{"%itemname%", getItemName(leggings)}, {"%level%", String.valueOf(level)}});
 			b = true;
 		}
@@ -449,7 +449,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				player.getWorld().dropItem(player.getLocation(), boots);
 			}
 			player.getEquipment().setBoots(null);
-			getPlugin().getLanguageManager().sendMessage(player, "unable-to-use",
+			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use",
 					new String[][]{{"%itemname%", getItemName(boots)}, {"%level%", String.valueOf(level)}});
 			b = true;
 		}
@@ -799,7 +799,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 		if (dodged) {
 			if (event.getEntity() instanceof Player) {
-				getPlugin().getLanguageManager().sendMessage(((Player) event.getEntity()), "dodge");
+				getPlugin().getLanguageManager().sendMessage(((Player) event.getEntity()), "events.dodge");
 			}
 			event.setDamage(0);
 			event.setCancelled(true);
@@ -823,23 +823,25 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				double critPercentage = (1.00 + damagerCriticalDamage);
 				damage *= critPercentage;
 				if (event.getDamager() instanceof Player) {
-					getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "critical-hit",
+					getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "events.critical-hit",
 							new String[][]{{"%percentage%", decimalFormat.format(critPercentage * 100)}});
 				} else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter()
 						instanceof Player) {
 					getPlugin().getLanguageManager().sendMessage((Player) ((Projectile) event.getDamager()).getShooter(),
-							"critical-hit", new String[][]{{"%percentage%", decimalFormat.format(critPercentage * 100)}});
+							"events.critical-hit", new String[][]{{"%percentage%", decimalFormat.format(critPercentage
+							* 100)}});
 				}
 			} else if (criticalStrikeEvent != null && !criticalStrikeEvent.isCancelled()) {
 				double critPercentage = (1.00 + criticalStrikeEvent.getCriticalDamage());
 				damage *= critPercentage;
 				if (event.getDamager() instanceof Player) {
-					getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "critical-hit",
+					getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "events.critical-hit",
 							new String[][]{{"%percentage%", decimalFormat.format(critPercentage * 100)}});
 				} else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter()
 						instanceof Player) {
 					getPlugin().getLanguageManager().sendMessage((Player) ((Projectile) event.getDamager()).getShooter(),
-							"critical-hit", new String[][]{{"%percentage%", decimalFormat.format(critPercentage * 100)}});
+							"events.critical-hit", new String[][]{{"%percentage%", decimalFormat.format(critPercentage
+							* 100)}});
 				}
 			}
 		}
@@ -849,12 +851,12 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				LivingEntity defender = (LivingEntity) event.getEntity();
 				LivingEntity attacker = null;
 				if (event.getDamager() instanceof Player) {
-					getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "stun");
+					getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "events.stun");
 					attacker = (LivingEntity) event.getDamager();
 				} else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter()
 						instanceof Player) {
 					getPlugin().getLanguageManager().sendMessage((Player) ((Projectile) event.getDamager()).getShooter(),
-							"stun");
+							"events.stun");
 					attacker = ((Projectile) event.getDamager()).getShooter();
 				}
 				if (attacker == null) {
@@ -932,8 +934,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				}
 			}
 			if (!b) {
-				b = ItemAttributesParseUtil.hasFormatInCollection(getItemStackLore(((LivingEntity) event.getEntity()).getEquipment()
-						.getItemInHand()), getPlugin().getSettingsManager().getPoisonImmunityFormat());
+				b = ItemAttributesParseUtil.hasFormatInCollection(getItemStackLore(((LivingEntity) event.getEntity()).getEquipment().getItemInHand()), getPlugin().getSettingsManager().getPoisonImmunityFormat());
 			}
 			if (b) {
 				event.setDamage(0);
