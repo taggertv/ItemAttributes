@@ -4,6 +4,13 @@ authors: [ToppleTheNun, pur3pow3r]
 main: net.nunnerycode.bukkit.itemattributes.ItemAttributesPlugin
 
 permissions:
+    itemattributes.command.view:
+        description: Allows player to use the "/itemattributes view" command.
+        default: op
     itemattributes.admin.ignorelevels:
         description: Allows player to have the plugin ignore their level on check.
         default: op
+
+commands:
+    itemattributes:
+        description: Shows player their ItemAttributes stats.
