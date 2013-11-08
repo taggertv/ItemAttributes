@@ -27,8 +27,8 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 	private ItemAttributesLanguageManager itemAttributesLanguageManager;
 	private ItemAttributesSettingsManager itemAttributesSettingsManager;
 	private ItemAttributesCoreListener itemAttributesCoreListener;
-	private ItemAttributesHealthUpdateTask itemAttributesHealthUpdateTask;
-	private ItemAttributesCommands itemAttributesCommands;
+	private HealthUpdateTask itemAttributesHealthUpdateTask;
+	private ItemAttributesCommand itemAttributesCommands;
 
 	@Override
 	public ItemAttributesCoreListener getCoreListener() {
