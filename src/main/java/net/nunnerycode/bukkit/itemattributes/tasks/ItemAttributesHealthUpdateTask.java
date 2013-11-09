@@ -51,8 +51,8 @@ public final class ItemAttributesHealthUpdateTask extends BukkitRunnable impleme
 						return;
 					}
 
-					player.setHealth(Math.max(healthUpdateEvent.getBaseHealth() + healthUpdateEvent
-							.getChangeInHealth() - 1, 1));
+					player.setHealth(Math.min(Math.max((healthUpdateEvent.getBaseHealth() + healthUpdateEvent
+							.getChangeInHealth()) / 2, 1), player.getMaxHealth()));
 					player.setMaxHealth(Math.max(healthUpdateEvent.getBaseHealth() + healthUpdateEvent
 							.getChangeInHealth(), 1));
 					player.setHealth(Math.min(Math.max(currentHealth, 0), player.getMaxHealth()));
@@ -88,8 +88,8 @@ public final class ItemAttributesHealthUpdateTask extends BukkitRunnable impleme
 						return;
 					}
 
-					entity.setHealth(Math.max(healthUpdateEvent.getBaseHealth() + healthUpdateEvent
-							.getChangeInHealth() - 1, 1));
+					entity.setHealth(Math.min(Math.max((healthUpdateEvent.getBaseHealth() + healthUpdateEvent
+							.getChangeInHealth()) / 2, 1), entity.getMaxHealth()));
 					entity.setMaxHealth(Math.max(healthUpdateEvent.getBaseHealth() + healthUpdateEvent
 							.getChangeInHealth(), 1));
 					entity.setHealth(Math.min(Math.max(currentHealth, 0), entity.getMaxHealth()));
