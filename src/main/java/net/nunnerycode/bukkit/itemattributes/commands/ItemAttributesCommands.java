@@ -90,15 +90,15 @@ public class ItemAttributesCommands implements ItemAttributesCommand {
 
 	private void sendStatMessage(CommandSender sender, Player player, String format, double baseStat) {
 		double statHelmet = ItemAttributesParseUtil.getDouble(getItemStackLore(player.getEquipment().getHelmet()),
-				getPlugin().getSettingsManager().getHealthFormat());
+				format);
 		double statChestplate = ItemAttributesParseUtil.getDouble(getItemStackLore(player.getEquipment().getChestplate()),
-				getPlugin().getSettingsManager().getHealthFormat());
+				format);
 		double statLeggings = ItemAttributesParseUtil.getDouble(getItemStackLore(player.getEquipment().getLeggings
-				()), getPlugin().getSettingsManager().getHealthFormat());
+				()), format);
 		double statBoots = ItemAttributesParseUtil.getDouble(getItemStackLore(player.getEquipment().getBoots()),
-				getPlugin().getSettingsManager().getHealthFormat());
+				format);
 		double statItem = ItemAttributesParseUtil.getDouble(getItemStackLore(player.getEquipment().getItemInHand()),
-				getPlugin().getSettingsManager().getHealthFormat());
+				format);
 		double statTotal = baseStat + statHelmet + statChestplate + statLeggings + statBoots + statItem;
 		String formatString = format.replaceAll("%(?s)(.*?)%", "").trim();
 		getPlugin().getLanguageManager().sendMessage(sender, "commands.view-stats", new String[][]{{"%statname%",
@@ -110,15 +110,15 @@ public class ItemAttributesCommands implements ItemAttributesCommand {
 	private void sendPercentageStatMessage(CommandSender sender, Player player, String format, double baseStat,
 										   double maxValue) {
 		double statHelmet = ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(player.getEquipment()
-				.getHelmet()), getPlugin().getSettingsManager().getHealthFormat(), maxValue);
+				.getHelmet()), format, maxValue);
 		double statChestplate = ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(player.getEquipment()
-				.getChestplate()), getPlugin().getSettingsManager().getHealthFormat(), maxValue);
+				.getChestplate()), format, maxValue);
 		double statLeggings = ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(player.getEquipment()
-				.getLeggings()), getPlugin().getSettingsManager().getHealthFormat(), maxValue);
+				.getLeggings()), format, maxValue);
 		double statBoots = ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(player.getEquipment()
-				.getBoots()), getPlugin().getSettingsManager().getHealthFormat(), maxValue);
+				.getBoots()), format, maxValue);
 		double statItem = ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(player.getEquipment()
-				.getItemInHand()), getPlugin().getSettingsManager().getHealthFormat(), maxValue);
+				.getItemInHand()), format, maxValue);
 		double statTotal = baseStat + statHelmet + statChestplate + statLeggings + statBoots + statItem;
 		String formatString = format.replaceAll("%(?s)(.*?)%", "").trim();
 		getPlugin().getLanguageManager().sendMessage(sender, "commands.view-stats-percentage",
