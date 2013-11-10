@@ -6,7 +6,7 @@
 
     <groupId>net.nunnerycode.bukkit</groupId>
     <artifactId>ItemAttributes</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>ItemAttributes</name>
     <description>A plugin that reads lines of lore and applies effects based on them.</description>
     <packaging>jar</packaging>
