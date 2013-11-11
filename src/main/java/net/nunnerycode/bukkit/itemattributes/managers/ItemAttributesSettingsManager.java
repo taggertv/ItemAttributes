@@ -34,6 +34,7 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	private double maximumCriticalDamage;
 	private double maximumStunRate;
 	private double maximumDodgeRate;
+	private boolean healthModificationEnabled;
 
 	public ItemAttributesSettingsManager(ItemAttributesPlugin plugin) {
 		this.plugin = plugin;
@@ -41,6 +42,8 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 
 	public void load() {
 		getPlugin().getConfigYAML().load();
+		healthModificationEnabled = getPlugin().getConfigYAML().getBoolean("options.health-modification-enabled",
+				true);
 		basePlayerHealth = getPlugin().getConfigYAML().getDouble("options.base-player-health", 20.0);
 		baseCriticalRate = getPlugin().getConfigYAML().getDouble("options.base-critical-rate", 0.05);
 		baseCriticalDamage = getPlugin().getConfigYAML().getDouble("options.base-critical-damage", 0.2);
@@ -222,9 +225,15 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		return maximumDodgeRate;
 	}
 
+	@Override
+	public boolean isHealthModificationEnabled() {
+		return healthModificationEnabled;
+	}
+
 	public void save() {
 		if (!getPlugin().getConfigYAML().isSet("version")) {
 			getPlugin().getConfigYAML().set("version", getPlugin().getConfigYAML().getVersion());
+			getPlugin().getConfigYAML().set("options.health-modification-enabled", healthModificationEnabled);
 			getPlugin().getConfigYAML().set("options.base-player-health", basePlayerHealth);
 			getPlugin().getConfigYAML().set("options.base-critical-rate", baseCriticalRate);
 			getPlugin().getConfigYAML().set("options.base-critical-damage", baseCriticalDamage);
