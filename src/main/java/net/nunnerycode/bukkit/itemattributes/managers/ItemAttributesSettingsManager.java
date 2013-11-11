@@ -15,21 +15,37 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	private int baseStunLength;
 	private int secondsBetweenHealthUpdates;
 	private String healthFormat;
+	private boolean healthEnabled;
 	private String damageFormat;
+	private boolean damageEnabled;
 	private String meleeDamageFormat;
+	private boolean meleeDamageEnabled;
 	private String rangedDamageFormat;
+	private boolean rangedDamageEnabled;
 	private String regenerationFormat;
+	private boolean regenerationEnabled;
 	private String armorFormat;
+	private boolean armorEnabled;
 	private String armorPenetrationFormat;
+	private boolean armorPenetrationEnabled;
 	private String criticalRateFormat;
+	private boolean criticalRateEnabled;
 	private String criticalDamageFormat;
+	private boolean criticalDamageEnabled;
 	private String stunRateFormat;
+	private boolean stunRateEnabled;
 	private String stunLengthFormat;
+	private boolean stunLengthEnabled;
 	private String dodgeRateFormat;
+	private boolean dodgeRateEnabled;
 	private String levelRequirementFormat;
+	private boolean levelRequirementEnabled;
 	private String poisonImmunityFormat;
+	private boolean poisonImmunityEnabled;
 	private String fireImmunityFormat;
+	private boolean fireImmunityEnabled;
 	private String witherImmunityFormat;
+	private boolean witherImmunityEnabled;
 	private double maximumCriticalRate;
 	private double maximumCriticalDamage;
 	private double maximumStunRate;
@@ -96,8 +112,18 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	}
 
 	@Override
+	public boolean isArmorPenetrationEnabled() {
+		return armorPenetrationEnabled;
+	}
+
+	@Override
 	public String getHealthFormat() {
 		return healthFormat;
+	}
+
+	@Override
+	public boolean isHealthEnabled() {
+		return healthEnabled;
 	}
 
 	@Override
@@ -106,8 +132,18 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	}
 
 	@Override
+	public boolean isDamageEnabled() {
+		return damageEnabled;
+	}
+
+	@Override
 	public String getRegenerationFormat() {
 		return regenerationFormat;
+	}
+
+	@Override
+	public boolean isRegenerationEnabled() {
+		return regenerationEnabled;
 	}
 
 	@Override
@@ -116,8 +152,18 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	}
 
 	@Override
+	public boolean isArmorEnabled() {
+		return armorEnabled;
+	}
+
+	@Override
 	public String getCriticalRateFormat() {
 		return criticalRateFormat;
+	}
+
+	@Override
+	public boolean isCriticalRateEnabled() {
+		return criticalRateEnabled;
 	}
 
 	@Override
@@ -126,8 +172,18 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	}
 
 	@Override
+	public boolean isCriticalDamageEnabled() {
+		return criticalDamageEnabled;
+	}
+
+	@Override
 	public String getLevelRequirementFormat() {
 		return levelRequirementFormat;
+	}
+
+	@Override
+	public boolean isLevelRequirementEnabled() {
+		return levelRequirementEnabled;
 	}
 
 	@Override
@@ -141,13 +197,28 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	}
 
 	@Override
+	public boolean isPoisonImmunityEnabled() {
+		return poisonImmunityEnabled;
+	}
+
+	@Override
 	public String getFireImmunityFormat() {
 		return fireImmunityFormat;
 	}
 
 	@Override
+	public boolean isFireImmunityEnabled() {
+		return fireImmunityEnabled;
+	}
+
+	@Override
 	public String getWitherImmunityFormat() {
 		return witherImmunityFormat;
+	}
+
+	@Override
+	public boolean isWitherImmunityEnabled() {
+		return witherImmunityEnabled;
 	}
 
 	@Override
@@ -161,8 +232,18 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	}
 
 	@Override
+	public boolean isMeleeDamageEnabled() {
+		return meleeDamageEnabled;
+	}
+
+	@Override
 	public String getRangedDamageFormat() {
 		return rangedDamageFormat;
+	}
+
+	@Override
+	public boolean isRangedDamageEnabled() {
+		return rangedDamageEnabled;
 	}
 
 	@Override
@@ -181,8 +262,18 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	}
 
 	@Override
+	public boolean isStunRateEnabled() {
+		return stunRateEnabled;
+	}
+
+	@Override
 	public String getStunLengthFormat() {
 		return stunLengthFormat;
+	}
+
+	@Override
+	public boolean isStunLengthEnabled() {
+		return stunLengthEnabled;
 	}
 
 	@Override
@@ -198,6 +289,11 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	@Override
 	public String getDodgeRateFormat() {
 		return dodgeRateFormat;
+	}
+
+	@Override
+	public boolean isDodgeRateEnabled() {
+		return dodgeRateEnabled;
 	}
 
 	@Override
@@ -223,11 +319,6 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	@Override
 	public double getMaximumDodgeRate() {
 		return maximumDodgeRate;
-	}
-
-	@Override
-	public boolean isHealthModificationEnabled() {
-		return healthModificationEnabled;
 	}
 
 	public void save() {
