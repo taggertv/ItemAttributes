@@ -53,8 +53,10 @@ public class ItemAttributesCommands implements ItemAttributesCommand {
 		getPlugin().getLanguageManager().sendMessage(sender, "commands.view-stats-help");
 
 		// health stat
-		sendStatMessage(sender, player, getPlugin().getSettingsManager().getHealthFormat(),
-				getPlugin().getSettingsManager().getBasePlayerHealth());
+		if (getPlugin().getSettingsManager().isHealthModificationEnabled()) {
+			sendStatMessage(sender, player, getPlugin().getSettingsManager().getHealthFormat(),
+					getPlugin().getSettingsManager().getBasePlayerHealth());
+		}
 		// damage stat
 		sendStatMessage(sender, player, getPlugin().getSettingsManager().getDamageFormat(), 0D);
 		// melee damage stat
@@ -62,7 +64,9 @@ public class ItemAttributesCommands implements ItemAttributesCommand {
 		// ranged damage stat
 		sendStatMessage(sender, player, getPlugin().getSettingsManager().getRangedDamageFormat(), 0D);
 		// regeneration stat
-		sendStatMessage(sender, player, getPlugin().getSettingsManager().getRegenerationFormat(), 0D);
+		if (getPlugin().getSettingsManager().isHealthModificationEnabled()) {
+			sendStatMessage(sender, player, getPlugin().getSettingsManager().getRegenerationFormat(), 0D);
+		}
 		// armor stat
 		sendStatMessage(sender, player, getPlugin().getSettingsManager().getArmorFormat(), 0D);
 		// critical rate stat
@@ -107,6 +111,14 @@ public class ItemAttributesCommands implements ItemAttributesCommand {
 				DF.format(statBoots)}, {"%item%", DF.format(statItem)}});
 	}
 
+	private List<String> getItemStackLore(ItemStack itemStack) {
+		List<String> lore = new ArrayList<String>();
+		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
+			lore.addAll(itemStack.getItemMeta().getLore());
+		}
+		return lore;
+	}
+
 	private void sendPercentageStatMessage(CommandSender sender, Player player, String format, double baseStat,
 										   double maxValue) {
 		double statHelmet = ItemAttributesParseUtil.getDoublePercentage(getItemStackLore(player.getEquipment()
@@ -126,13 +138,5 @@ public class ItemAttributesCommands implements ItemAttributesCommand {
 						{"%helmet%", DF.format(statHelmet * 100)}, {"%chestplate%", DF.format(statChestplate * 100)},
 						{"%leggings%", DF.format(statLeggings * 100)}, {"%boots%", DF.format(statBoots * 100)},
 						{"%item%", DF.format(statItem * 100)}});
-	}
-
-	private List<String> getItemStackLore(ItemStack itemStack) {
-		List<String> lore = new ArrayList<String>();
-		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
-			lore.addAll(itemStack.getItemMeta().getLore());
-		}
-		return lore;
 	}
 }
