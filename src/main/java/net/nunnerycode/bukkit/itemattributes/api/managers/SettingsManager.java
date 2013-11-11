@@ -58,4 +58,6 @@ public interface SettingsManager {
 	double getMaximumStunRate();
 
 	double getMaximumDodgeRate();
+
+	boolean isHealthModificationEnabled();
 }
