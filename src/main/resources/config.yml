@@ -4,6 +4,7 @@
 #   and Critical Rate has a maximum value of
 #   300, that item has a 33% chance to crit.
 options:
+  health-modification-enabled: true
   base-player-health: 20.0
   base-critical-damage: 0.2
   base-critical-rate: 0.05
