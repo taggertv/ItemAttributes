@@ -195,6 +195,9 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onInventoryCloseEventLow(InventoryCloseEvent event) {
+		if (!getPlugin().getSettingsManager().isHealthModificationEnabled()) {
+			return;
+		}
 		for (HumanEntity he : event.getViewers()) {
 			if (he.isDead()) {
 				continue;
@@ -235,6 +238,9 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerJoinEventLow(PlayerJoinEvent event) {
+		if (!getPlugin().getSettingsManager().isHealthModificationEnabled()) {
+			return;
+		}
 		ItemStack[] armorContents = event.getPlayer().getEquipment().getArmorContents();
 		double d = 0.0;
 		for (ItemStack is : armorContents) {
@@ -263,7 +269,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityTargetEventLowest(EntityTargetEvent event) {
 		if (event.isCancelled() || !(event.getEntity() instanceof
-				LivingEntity) || event.getEntity() instanceof Player) {
+				LivingEntity) || event.getEntity() instanceof Player || !getPlugin().getSettingsManager()
+				.isHealthModificationEnabled()) {
 			return;
 		}
 		LivingEntity entity = (LivingEntity) event.getEntity();
@@ -308,6 +315,9 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerRespawnEventLow(PlayerRespawnEvent event) {
+		if (!getPlugin().getSettingsManager().isHealthModificationEnabled()) {
+			return;
+		}
 		ItemStack[] armorContents = event.getPlayer().getEquipment().getArmorContents();
 		double d = 0.0;
 		for (ItemStack is : armorContents) {
@@ -335,6 +345,9 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onItemBreakEventLowest(PlayerItemBreakEvent event) {
+		if (!getPlugin().getSettingsManager().isHealthModificationEnabled()) {
+			return;
+		}
 		ItemStack[] armorContents = event.getPlayer().getEquipment().getArmorContents();
 		double d = 0.0;
 		for (ItemStack is : armorContents) {
@@ -459,6 +472,9 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onItemHeldEventLow(PlayerItemHeldEvent event) {
+		if (!getPlugin().getSettingsManager().isHealthModificationEnabled()) {
+			return;
+		}
 		ItemStack[] armorContents = event.getPlayer().getEquipment().getArmorContents();
 		double d = 0.0;
 		for (ItemStack is : armorContents) {
