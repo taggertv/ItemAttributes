@@ -1,6 +1,7 @@
 package net.nunnerycode.bukkit.itemattributes.utils;
 
 import java.util.Collection;
+import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.ChatColor;
@@ -8,6 +9,13 @@ import org.bukkit.ChatColor;
 public final class ItemAttributesParseUtil {
 
 	private ItemAttributesParseUtil() {
+	}
+
+	public static double getValue(Collection<String> collection, Attribute attribute) {
+		if (attribute.isPercentage()) {
+			return getDoublePercentage(collection, attribute.getFormat(), attribute.getMaxValue());
+		}
+		return getDouble(collection, attribute.getFormat());
 	}
 
 	public static double getDouble(Collection<String> collection, String format) {
