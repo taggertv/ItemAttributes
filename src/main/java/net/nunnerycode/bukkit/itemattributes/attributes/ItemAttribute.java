@@ -12,12 +12,14 @@ public class ItemAttribute implements Attribute {
 	private String format;
 	private Sound sound;
 
-	public ItemAttribute(String name, boolean enabled, double maxValue, boolean percentage, String format) {
+	public ItemAttribute(String name, boolean enabled, double maxValue, boolean percentage, String format,
+						 Sound sound) {
 		this.name = name;
 		this.enabled = enabled;
 		this.maxValue = maxValue;
 		this.percentage = percentage;
 		this.format = format;
+		this.sound = sound;
 	}
 
 	@Override
