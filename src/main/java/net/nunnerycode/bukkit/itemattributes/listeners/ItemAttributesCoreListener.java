@@ -158,6 +158,10 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			b = true;
 		}
 
+		if (b) {
+			playAttributeSounds(player.getEyeLocation(), levelRequirementAttribute);
+		}
+
 		return b;
 	}
 
@@ -460,6 +464,10 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use",
 					new String[][]{{"%itemname%", getItemName(boots)}, {"%level%", String.valueOf(level)}});
 			b = true;
+		}
+
+		if (b) {
+			playAttributeSounds(player.getEyeLocation(), levelRequirementAttribute);
 		}
 
 		return b;
