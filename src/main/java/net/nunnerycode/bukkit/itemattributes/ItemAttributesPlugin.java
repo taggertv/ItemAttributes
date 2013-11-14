@@ -87,7 +87,7 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 		languageYAML = new CommentedConventYamlConfiguration(new File(getDataFolder(), "language.yml"),
 				YamlConfiguration.loadConfiguration(getResource("language.yml")).getString("version"));
 		languageYAML.options().updateOnLoad(true);
-		languageYAML.options().updateOnLoad(true);
+		languageYAML.options().backupOnUpdate(true);
 
 		debugPrinter = new DebugPrinter(getDataFolder().getPath() + "/log/", "debug.log");
 
@@ -112,6 +112,9 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 
 	private void unpackConfigurationFiles(String[] configurationFiles, boolean overwrite) {
 		for (String s : configurationFiles) {
+			if (getResource(s) == null) {
+				continue;
+			}
 			YamlConfiguration yc = YamlConfiguration.loadConfiguration(getResource(s));
 			try {
 				File f = new File(getDataFolder(), s);
