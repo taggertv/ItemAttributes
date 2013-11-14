@@ -58,6 +58,7 @@ public final class ItemAttributesHealthUpdateTask extends BukkitRunnable impleme
 							.getChangeInHealth(), 1));
 					player.setHealth(Math.min(Math.max(currentHealth, 0), player.getMaxHealth()));
 					player.setHealthScale(player.getMaxHealth());
+					playAttributeSounds(player.getEyeLocation(), healthAttribute);
 				} else if (e instanceof LivingEntity) {
 					LivingEntity entity = (LivingEntity) e;
 					ItemStack[] armorContents = entity.getEquipment().getArmorContents();
@@ -93,6 +94,7 @@ public final class ItemAttributesHealthUpdateTask extends BukkitRunnable impleme
 					entity.setMaxHealth(Math.max(healthUpdateEvent.getBaseHealth() + healthUpdateEvent
 							.getChangeInHealth(), 1));
 					entity.setHealth(Math.min(Math.max(currentHealth, 0), entity.getMaxHealth()));
+					playAttributeSounds(entity.getEyeLocation(), healthAttribute);
 				}
 			}
 		}
