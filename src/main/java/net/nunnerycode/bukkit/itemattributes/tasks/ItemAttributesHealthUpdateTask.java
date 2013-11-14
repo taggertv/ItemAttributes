@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.nunnerycode.bukkit.itemattributes.ItemAttributesPlugin;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
+import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.tasks.HealthUpdateTask;
 import net.nunnerycode.bukkit.itemattributes.events.ItemAttributesHealthUpdateEvent;
 import net.nunnerycode.bukkit.itemattributes.utils.ItemAttributesParseUtil;
@@ -28,6 +29,7 @@ public final class ItemAttributesHealthUpdateTask extends BukkitRunnable impleme
 
 	@Override
 	public void run() {
+		Attribute healthAttribute = getPlugin().getSettingsManager().getAttribute("HEALTH");
 		for (World w : Bukkit.getWorlds()) {
 			for (Entity e : w.getEntities()) {
 				if (e instanceof Player) {
@@ -35,11 +37,9 @@ public final class ItemAttributesHealthUpdateTask extends BukkitRunnable impleme
 					ItemStack[] armorContents = player.getEquipment().getArmorContents();
 					double d = 0.0;
 					for (ItemStack is : armorContents) {
-						d += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
-								.getHealthFormat());
+						d += ItemAttributesParseUtil.getValue(getItemStackLore(is), healthAttribute);
 					}
-					d += ItemAttributesParseUtil.getDouble(getItemStackLore(player.getItemInHand()),
-							getPlugin().getSettingsManager().getHealthFormat());
+					d += ItemAttributesParseUtil.getValue(getItemStackLore(player.getItemInHand()), healthAttribute);
 					double currentHealth = player.getHealth();
 					double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 
@@ -62,11 +62,10 @@ public final class ItemAttributesHealthUpdateTask extends BukkitRunnable impleme
 					ItemStack[] armorContents = entity.getEquipment().getArmorContents();
 					double d = 0.0;
 					for (ItemStack is : armorContents) {
-						d += ItemAttributesParseUtil.getDouble(getItemStackLore(is), getPlugin().getSettingsManager()
-								.getHealthFormat());
+						d += ItemAttributesParseUtil.getValue(getItemStackLore(is), healthAttribute);
 					}
-					d += ItemAttributesParseUtil.getDouble(getItemStackLore(entity.getEquipment().getItemInHand()),
-							getPlugin().getSettingsManager().getHealthFormat());
+					d += ItemAttributesParseUtil.getValue(getItemStackLore(entity.getEquipment().getItemInHand()),
+							healthAttribute);
 					double currentHealth = entity.getHealth();
 					entity.resetMaxHealth();
 					double baseMaxHealth = entity.getMaxHealth();
