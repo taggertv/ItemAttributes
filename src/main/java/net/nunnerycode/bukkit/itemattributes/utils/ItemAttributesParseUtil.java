@@ -12,6 +12,9 @@ public final class ItemAttributesParseUtil {
 	}
 
 	public static double getValue(Collection<String> collection, Attribute attribute) {
+		if (!attribute.isEnabled()) {
+			return 0.0;
+		}
 		if (attribute.isPercentage()) {
 			return getDoublePercentage(collection, attribute.getFormat(), attribute.getMaxValue());
 		}
