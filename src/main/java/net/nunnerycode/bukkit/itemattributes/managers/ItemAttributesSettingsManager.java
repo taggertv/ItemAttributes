@@ -7,6 +7,8 @@ import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.managers.SettingsManager;
 import net.nunnerycode.bukkit.itemattributes.attributes.ItemAttribute;
+import org.bukkit.Sound;
+import org.bukkit.configuration.ConfigurationSection;
 
 public final class ItemAttributesSettingsManager implements SettingsManager {
 
@@ -69,6 +71,26 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 				"Wither Immunity", null));
 		attributeMap.put("POISON IMMUNITY", new ItemAttribute("Poison Immunity", true, -1D, false,
 				"Poison Immunity", null));
+
+		if (getPlugin().getConfigYAML().isConfigurationSection("core-stats")) {
+			ConfigurationSection section = getPlugin().getConfigYAML().getConfigurationSection("core-stats");
+			for (Map.Entry<String, Attribute> entry : attributeMap.entrySet()) {
+				entry.getValue().setEnabled(section.getBoolean(entry.getKey().toLowerCase().replace(" ",
+						"-") + ".enabled", entry.getValue().isEnabled()));
+				entry.getValue().setFormat(section.getString(entry.getKey().toLowerCase().replace(" ",
+						"-") + ".format", entry.getValue().getFormat()));
+				entry.getValue().setMaxValue(section.getDouble(entry.getKey().toLowerCase().replace(" ",
+						"-") + ".max-value", entry.getValue().getMaxValue()));
+				entry.getValue().setPercentage(section.getBoolean(entry.getKey().toLowerCase().replace(" ",
+						"-") + ".percentage", entry.getValue().isPercentage()));
+				try {
+					entry.getValue().setSound(Sound.valueOf(section.getString(entry.getKey().toLowerCase().replace(" ",
+							"-") + ".sound", entry.getValue().getSound().name())));
+				} catch (Exception e) {
+					// do nothing
+				}
+			}
+		}
 	}
 
 	@Override
