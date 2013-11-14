@@ -53,7 +53,7 @@ public class ItemAttributesCommands implements ItemAttributesCommand {
 		getPlugin().getLanguageManager().sendMessage(sender, "commands.view-stats-help");
 
 		// health stat
-		if (getPlugin().getSettingsManager().isHealthModificationEnabled()) {
+		if (getPlugin().getSettingsManager().isHealthEnabled()) {
 			sendStatMessage(sender, player, getPlugin().getSettingsManager().getHealthFormat(),
 					getPlugin().getSettingsManager().getBasePlayerHealth());
 		}
@@ -64,7 +64,7 @@ public class ItemAttributesCommands implements ItemAttributesCommand {
 		// ranged damage stat
 		sendStatMessage(sender, player, getPlugin().getSettingsManager().getRangedDamageFormat(), 0D);
 		// regeneration stat
-		if (getPlugin().getSettingsManager().isHealthModificationEnabled()) {
+		if (getPlugin().getSettingsManager().isHealthEnabled()) {
 			sendStatMessage(sender, player, getPlugin().getSettingsManager().getRegenerationFormat(), 0D);
 		}
 		// armor stat
