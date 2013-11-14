@@ -1,6 +1,7 @@
 package net.nunnerycode.bukkit.itemattributes.attributes;
 
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
+import org.bukkit.Sound;
 
 public class ItemAttribute implements Attribute {
 
@@ -9,6 +10,7 @@ public class ItemAttribute implements Attribute {
 	private double maxValue;
 	private boolean percentage;
 	private String format;
+	private Sound sound;
 
 	public ItemAttribute(String name, boolean enabled, double maxValue, boolean percentage, String format) {
 		this.name = name;
@@ -61,5 +63,13 @@ public class ItemAttribute implements Attribute {
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	public Sound getSound() {
+		return sound;
+	}
+
+	public void setSound(Sound s) {
+		this.sound = sound;
 	}
 }

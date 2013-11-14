@@ -1,5 +1,7 @@
 package net.nunnerycode.bukkit.itemattributes.api.attributes;
 
+import org.bukkit.Sound;
+
 public interface Attribute {
 
 	boolean isEnabled();
@@ -19,5 +21,9 @@ public interface Attribute {
 	void setFormat(String s);
 
 	String getName();
+
+	Sound getSound();
+
+	void setSound(Sound s);
 
 }
