@@ -9,6 +9,7 @@ import net.nunnerycode.bukkit.itemattributes.api.tasks.HealthUpdateTask;
 import net.nunnerycode.bukkit.itemattributes.events.ItemAttributesHealthUpdateEvent;
 import net.nunnerycode.bukkit.itemattributes.utils.ItemAttributesParseUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -109,4 +110,11 @@ public final class ItemAttributesHealthUpdateTask extends BukkitRunnable impleme
 		}
 		return lore;
 	}
+
+	private void playAttributeSounds(Location location, Attribute... attributes) {
+		for (Attribute attribute : attributes) {
+			location.getWorld().playSound(location, attribute.getSound(), 1F, 1F);
+		}
+	}
+
 }

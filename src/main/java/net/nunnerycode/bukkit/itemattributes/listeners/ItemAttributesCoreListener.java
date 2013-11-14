@@ -15,6 +15,7 @@ import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
@@ -965,6 +966,12 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				event.setDamage(0);
 				event.setCancelled(true);
 			}
+		}
+	}
+
+	private void playAttributeSounds(Location location, Attribute... attributes) {
+		for (Attribute attribute : attributes) {
+			location.getWorld().playSound(location, attribute.getSound(), 1F, 1F);
 		}
 	}
 
