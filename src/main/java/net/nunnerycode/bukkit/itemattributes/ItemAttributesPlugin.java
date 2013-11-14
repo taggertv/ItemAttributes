@@ -99,7 +99,7 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 
 		itemAttributesCoreListener = new ItemAttributesCoreListener(this);
 
-		if (itemAttributesSettingsManager.isHealthEnabled()) {
+		if (itemAttributesSettingsManager.getAttribute("HEALTH").isEnabled()) {
 			itemAttributesHealthUpdateTask = new ItemAttributesHealthUpdateTask(this);
 		}
 
