@@ -6,6 +6,7 @@ import net.nunnerycode.bukkit.itemattributes.ItemAttributesPlugin;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.managers.SettingsManager;
+import net.nunnerycode.bukkit.itemattributes.attributes.ItemAttribute;
 
 public final class ItemAttributesSettingsManager implements SettingsManager {
 
@@ -41,6 +42,30 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		baseDodgeRate = getPlugin().getConfigYAML().getDouble("options.base-dodge-rate", 0.0);
 		secondsBetweenHealthUpdates = getPlugin().getConfigYAML().getInt("options.seconds-between-health-updates",
 				10);
+
+		attributeMap.put("HEALTH", new ItemAttribute("Health", true, 100D, false, "%value% Health"));
+		attributeMap.put("ARMOR", new ItemAttribute("Armor", true, 100D, false, "%value% Armor"));
+		attributeMap.put("MELEE DAMAGE", new ItemAttribute("Melee Damage", true, 100D, false, "%value% Melee Damage"));
+		attributeMap.put("RANGED DAMAGE", new ItemAttribute("Ranged Damage", true, 100D, false,
+				"%value% Ranged Damage"));
+		attributeMap.put("REGENERATION", new ItemAttribute("Regeneration", true, 100D, false, "%value% Regeneration"));
+		attributeMap.put("CRITICAL RATE", new ItemAttribute("Critical Rate", true, 100D, true,
+				"%value% Critical Rate"));
+		attributeMap.put("CRITICAL DAMAGE", new ItemAttribute("Critical Damage", true, 100D, true,
+				"%value% Critical Damage"));
+		attributeMap.put("LEVEL REQUIREMENT", new ItemAttribute("Level Requirement", true, 100D, false,
+				"Level Requirement: %value%"));
+		attributeMap.put("ARMOR PENETRATION", new ItemAttribute("Armor Penetration", true, 100D, false,
+				"%value% Armor Penetration"));
+		attributeMap.put("STUN RATE", new ItemAttribute("Stun Rate", true, 100D, true, "%value% Stun Rate"));
+		attributeMap.put("STUN LENGTH", new ItemAttribute("Stun Length", true, 100D, false, "%value% Stun Length"));
+		attributeMap.put("DODGE RATE", new ItemAttribute("Dodge Rate", true, 100D, true, "%value% Dodge Rate"));
+		attributeMap.put("FIRE IMMUNITY", new ItemAttribute("Fire Immunity", true, -1D, false,
+				"Fire Immunity"));
+		attributeMap.put("WITHER IMMUNITY", new ItemAttribute("Wither Immunity", true, -1D, false,
+				"Wither Immunity"));
+		attributeMap.put("POISON IMMUNITY", new ItemAttribute("Poison Immunity", true, -1D, false,
+				"Poison Immunity"));
 	}
 
 	@Override
