@@ -27,13 +27,6 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		attributeMap = new HashMap<String, Attribute>();
 	}
 
-	public Attribute getAttribute(String name) {
-		if (attributeMap.containsKey(name.toUpperCase())) {
-			return attributeMap.get(name.toUpperCase());
-		}
-		return null;
-	}
-
 	public void load() {
 		getPlugin().getConfigYAML().load();
 		basePlayerHealth = getPlugin().getConfigYAML().getDouble("options.base-player-health", 20.0);
@@ -133,6 +126,13 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		return baseDodgeRate;
 	}
 
+	public Attribute getAttribute(String name) {
+		if (attributeMap.containsKey(name.toUpperCase())) {
+			return attributeMap.get(name.toUpperCase());
+		}
+		return null;
+	}
+
 	public void save() {
 		if (!getPlugin().getConfigYAML().isSet("version")) {
 			getPlugin().getConfigYAML().set("version", getPlugin().getConfigYAML().getVersion());
@@ -142,6 +142,22 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 			getPlugin().getConfigYAML().set("options.base-stun-rate", baseStunRate);
 			getPlugin().getConfigYAML().set("options.base-stun-length", baseStunLength);
 			getPlugin().getConfigYAML().set("options.seconds-between-health-updates", secondsBetweenHealthUpdates);
+			for (Map.Entry<String, Attribute> entry : attributeMap.entrySet()) {
+				getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
+						"-") + ".enabled", entry.getValue().isEnabled());
+				getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
+						"-") + ".format", entry.getValue().getFormat());
+				getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
+						"-") + ".percentage", entry.getValue().isPercentage());
+				getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
+						"-") + ".max-value", entry.getValue().getMaxValue());
+				try {
+					getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
+							"-") + ".sound", entry.getValue().getSound().name());
+				} catch (Exception e) {
+					// do nothing
+				}
+			}
 		}
 		getPlugin().getConfigYAML().save();
 	}
