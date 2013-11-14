@@ -161,19 +161,6 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		return b;
 	}
 
-	@Override
-	public ItemAttributes getPlugin() {
-		return plugin;
-	}
-
-	private List<String> getItemStackLore(ItemStack itemStack) {
-		List<String> lore = new ArrayList<String>();
-		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
-			lore.addAll(itemStack.getItemMeta().getLore());
-		}
-		return lore;
-	}
-
 	private String getItemName(ItemStack itemStack) {
 		String name = "";
 		if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName()) {
@@ -190,6 +177,19 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			}
 		}
 		return name;
+	}
+
+	private List<String> getItemStackLore(ItemStack itemStack) {
+		List<String> lore = new ArrayList<String>();
+		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
+			lore.addAll(itemStack.getItemMeta().getLore());
+		}
+		return lore;
+	}
+
+	@Override
+	public ItemAttributes getPlugin() {
+		return plugin;
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
@@ -926,11 +926,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			if (b) {
 				event.setDamage(0);
 				event.setCancelled(true);
-				return;
 			}
-		}
-
-		if (damageCause == EntityDamageEvent.DamageCause.POISON) {
+		} else if (damageCause == EntityDamageEvent.DamageCause.POISON) {
 			boolean b = false;
 			for (ItemStack is : ((LivingEntity) event.getEntity()).getEquipment().getArmorContents()) {
 				if (!b) {
@@ -946,11 +943,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			if (b) {
 				event.setDamage(0);
 				event.setCancelled(true);
-				return;
 			}
-		}
-
-		if (damageCause == EntityDamageEvent.DamageCause.WITHER) {
+		} else if (damageCause == EntityDamageEvent.DamageCause.WITHER) {
 			boolean b = false;
 			for (ItemStack is : ((LivingEntity) event.getEntity()).getEquipment().getArmorContents()) {
 				if (!b) {
@@ -967,6 +961,10 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				event.setCancelled(true);
 			}
 		}
+
+		playAttributeSounds(((LivingEntity) event.getEntity()).getEyeLocation(), getPlugin().getSettingsManager()
+				.getAttribute("FIRE IMMUNITY"), getPlugin().getSettingsManager().getAttribute("POISON IMMUNITY"),
+				getPlugin().getSettingsManager().getAttribute("WITHER IMMUNITY"));
 	}
 
 	private void playAttributeSounds(Location location, Attribute... attributes) {
