@@ -12,6 +12,9 @@ public final class ItemAttributesParseUtil {
 	}
 
 	public static double getValue(Collection<String> collection, Attribute attribute) {
+		if (collection == null || attribute == null) {
+			return 0.0;
+		}
 		if (!attribute.isEnabled()) {
 			return 0.0;
 		}
