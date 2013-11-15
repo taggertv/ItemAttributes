@@ -584,7 +584,6 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		Attribute criticalDamageAttribute = getPlugin().getSettingsManager().getAttribute("CRITICAL DAMAGE");
 		Attribute stunRateAttribute = getPlugin().getSettingsManager().getAttribute("STUN RATE");
 		Attribute stunLengthAttribute = getPlugin().getSettingsManager().getAttribute("STUN LENGTH");
-		Attribute dodgeRateAttribute = getPlugin().getSettingsManager().getAttribute("DODGE RATE");
 		Attribute armorPenetrationAttribute = getPlugin().getSettingsManager().getAttribute("ARMOR PENETRATION");
 
 		arrowDamage += ItemAttributesParseUtil.getValue(getItemStackLore(shotItem), damageAttribute);
