@@ -23,4 +23,6 @@ public interface SettingsManager {
 
 	Attribute getAttribute(String name);
 
+	boolean isItemOnlyDamageSystem();
+
 }

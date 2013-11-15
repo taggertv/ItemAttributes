@@ -21,6 +21,7 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	private int baseStunLength;
 	private int secondsBetweenHealthUpdates;
 	private Map<String, Attribute> attributeMap;
+	private boolean itemOnlyDamageSystem;
 
 	public ItemAttributesSettingsManager(ItemAttributesPlugin plugin) {
 		this.plugin = plugin;
@@ -37,7 +38,7 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		baseDodgeRate = getPlugin().getConfigYAML().getDouble("options.base-dodge-rate", 0.0);
 		secondsBetweenHealthUpdates = getPlugin().getConfigYAML().getInt("options.seconds-between-health-updates",
 				10);
-
+		itemOnlyDamageSystem = getPlugin().getConfigYAML().getBoolean("options.item-only-damage-system", false);
 		attributeMap.put("HEALTH", new ItemAttribute("Health", true, 100D, false, "%value% Health", null));
 		attributeMap.put("ARMOR", new ItemAttribute("Armor", true, 100D, false, "%value% Armor", null));
 		attributeMap.put("MELEE DAMAGE", new ItemAttribute("Melee Damage", true, 100D, false, "%value% Melee Damage",
@@ -133,6 +134,11 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		return null;
 	}
 
+	@Override
+	public boolean isItemOnlyDamageSystem() {
+		return itemOnlyDamageSystem;
+	}
+
 	public void save() {
 		if (!getPlugin().getConfigYAML().isSet("version")) {
 			getPlugin().getConfigYAML().set("version", getPlugin().getConfigYAML().getVersion());
@@ -142,6 +148,7 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 			getPlugin().getConfigYAML().set("options.base-stun-rate", baseStunRate);
 			getPlugin().getConfigYAML().set("options.base-stun-length", baseStunLength);
 			getPlugin().getConfigYAML().set("options.seconds-between-health-updates", secondsBetweenHealthUpdates);
+			getPlugin().getConfigYAML().set("options.item-only-damage-system", itemOnlyDamageSystem);
 			for (Map.Entry<String, Attribute> entry : attributeMap.entrySet()) {
 				getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
 						"-") + ".enabled", entry.getValue().isEnabled());
