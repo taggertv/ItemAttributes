@@ -40,7 +40,10 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		baseDodgeRate = getPlugin().getConfigYAML().getDouble("options.base-dodge-rate", 0.0);
 		secondsBetweenHealthUpdates = getPlugin().getConfigYAML().getInt("options.seconds-between-health-updates",
 				10);
-		itemOnlyDamageSystemEnabled = getPlugin().getConfigYAML().getBoolean("options.item-only-damage-system", false);
+		itemOnlyDamageSystemEnabled = getPlugin().getConfigYAML().getBoolean("options.item-only-damage-system" +
+				".enabled", false);
+		itemOnlyDamageSystemBaseDamage = getPlugin().getConfigYAML().getDouble("options.item-only-damage-system" +
+				".base-damage", 1.0D);
 		attributeMap.put("HEALTH", new ItemAttribute("Health", true, 100D, false, "%value% Health", null));
 		attributeMap.put("ARMOR", new ItemAttribute("Armor", true, 100D, false, "%value% Armor", null));
 		attributeMap.put("MELEE DAMAGE", new ItemAttribute("Melee Damage", true, 100D, false, "%value% Melee Damage",
@@ -150,7 +153,8 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 			getPlugin().getConfigYAML().set("options.base-stun-rate", baseStunRate);
 			getPlugin().getConfigYAML().set("options.base-stun-length", baseStunLength);
 			getPlugin().getConfigYAML().set("options.seconds-between-health-updates", secondsBetweenHealthUpdates);
-			getPlugin().getConfigYAML().set("options.item-only-damage-system", itemOnlyDamageSystemEnabled);
+			getPlugin().getConfigYAML().set("options.item-only-damage-system.enabled", itemOnlyDamageSystemEnabled);
+			getPlugin().getConfigYAML().set("options.item-only-damage-system.base-damage", itemOnlyDamageSystemBaseDamage);
 			for (Map.Entry<String, Attribute> entry : attributeMap.entrySet()) {
 				getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
 						"-") + ".enabled", entry.getValue().isEnabled());
