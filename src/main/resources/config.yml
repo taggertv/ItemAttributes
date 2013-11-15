@@ -1,67 +1,84 @@
-# max-value is used when calculating percentage stats.
-# The way it works is like the following:
-#   If you have an item with +100 Critical Rate
-#   and Critical Rate has a maximum value of
-#   300, that item has a 33% chance to crit.
+version: 1.0.12
 options:
   base-player-health: 20.0
-  base-critical-damage: 0.2
   base-critical-rate: 0.05
+  base-critical-damage: 0.2
   base-stun-rate: 0.05
   base-stun-length: 1
-  base-dodge-rate: 0.0
   seconds-between-health-updates: 10
 core-stats:
-  health:
-    format: "%value% Health"
+  poison-immunity:
     enabled: true
-  damage:
-    format: "%value% Damage"
-    enabled: true
-  melee-damage:
-    format: "%value% Melee Damage"
-    enabled: true
+    format: Poison Immunity
+    percentage: false
+    max-value: -1.0
   ranged-damage:
-    format: "%value% Ranged Damage"
     enabled: true
+    format: '%value% Ranged Damage'
+    percentage: false
+    max-value: 100.0
   regeneration:
-    format: "%value% Regeneration"
     enabled: true
-  armor:
-    format: "%value% Armor"
-    enabled: true
+    format: '%value% Regeneration'
+    percentage: false
+    max-value: 100.0
   critical-rate:
-    format: "%value% Critical Rate"
     enabled: true
+    format: '%value% Critical Rate'
+    percentage: true
     max-value: 100.0
-  critical-damage:
-    format: "%value% Critical Damage"
+  melee-damage:
     enabled: true
-    max-value: 100.0
-  level-requirement:
-    format: "Level Required: %value%"
-    enabled: true
-  armor-penetration:
-    format: "%value% Armor Penetration"
-    enabled: true
-  stun-rate:
-    format: "%value% Stun Rate"
-    enabled: true
-    max-value: 100.0
-  stun-length:
-    format: "%value% Stun Length"
-    enabled: true
-  dodge-rate:
-    format: "%value% Dodge Rate"
-    enabled: true
+    format: '%value% Melee Damage'
+    percentage: false
     max-value: 100.0
   fire-immunity:
-    format: "Fire Immunity"
     enabled: true
-  poison-immunity:
-    format: "Poison Immunity"
+    format: Fire Immunity
+    percentage: false
+    max-value: -1.0
+  health:
     enabled: true
+    format: '%value% Health'
+    percentage: false
+    max-value: 100.0
+  dodge-rate:
+    enabled: true
+    format: '%value% Dodge Rate'
+    percentage: true
+    max-value: 100.0
+  armor:
+    enabled: true
+    format: '%value% Armor'
+    percentage: false
+    max-value: 100.0
+  critical-damage:
+    enabled: true
+    format: '%value% Critical Damage'
+    percentage: true
+    max-value: 100.0
+  stun-rate:
+    enabled: true
+    format: '%value% Stun Rate'
+    percentage: true
+    max-value: 100.0
+  armor-penetration:
+    enabled: true
+    format: '%value% Armor Penetration'
+    percentage: false
+    max-value: 100.0
+  level-requirement:
+    enabled: true
+    format: 'Level Requirement: %value%'
+    percentage: false
+    max-value: 100.0
+  stun-length:
+    enabled: true
+    format: '%value% Stun Length'
+    percentage: false
+    max-value: 100.0
   wither-immunity:
-    format: "Wither Immunity"
     enabled: true
-version: "1.0.11"
+    format: Wither Immunity
+    percentage: false
+    max-value: -1.0
