@@ -19,65 +19,31 @@ public final class ItemAttributesParseUtil {
 			return 0.0;
 		}
 		if (attribute.isPercentage()) {
-			return getDoublePercentage(collection, attribute.getFormat(), attribute.getMaxValue());
+			return getDoublePercentage(collection, attribute, attribute.getMaxValue());
 		}
-		return getDouble(collection, attribute.getFormat());
+		return getDouble(collection, attribute);
 	}
 
-	public static double getDouble(Collection<String> collection, String format) {
+	public static double getDoublePercentage(Collection<String> collection, Attribute attribute, double base) {
 		double d = 0.0;
-		if (collection == null || collection.isEmpty() || format == null || format.isEmpty()) {
+		if (collection == null || collection.isEmpty() || attribute == null) {
 			return d;
 		}
 		for (String s : collection) {
 			String stripped = ChatColor.stripColor(s);
 			String withoutNumbers = stripped.replaceAll("[0-9\\+%\\-]", "").trim();
 			String withoutLetters = stripped.replaceAll("[a-zA-Z\\+%:]", "").trim();
-			String withoutVariables = format.replaceAll("%(?s)(.*?)%", "").trim();
-			if (!withoutNumbers.equals(withoutVariables)) {
-				continue;
-			}
-			if (withoutLetters.contains(" - ")) {
-				String[] split = withoutLetters.split(" - ");
-				if (split.length > 1) {
-					double first = NumberUtils.toDouble(split[0], 0.0);
-					double second = NumberUtils.toDouble(split[1], 0.0);
-					d += RandomUtils.nextDouble() * (Math.max(first, second) - Math.min(first,
-							second) + Math.min(first, second));
-				}
-			} else {
-				d += NumberUtils.toDouble(withoutLetters, 0.0);
-			}
-		}
-		return d;
-	}
-
-	public static double getDoublePercentage(Collection<String> collection, String format) {
-		return getDoublePercentage(collection, format, 100D);
-	}
-
-	public static double getDoublePercentage(Collection<String> collection, String format, double base) {
-		double d = 0.0;
-		if (collection == null || collection.isEmpty()) {
-			return d;
-		}
-		for (String s : collection) {
-			String stripped = ChatColor.stripColor(s);
-			String withoutNumbers = stripped.replaceAll("[0-9\\+%\\-]", "").trim();
-			String withoutLetters = stripped.replaceAll("[a-zA-Z\\+%:]", "").trim();
-			String withoutVariables = format.replaceAll("%(?s)(.*?)%", "").trim();
+			String withoutVariables = attribute.getFormat().replaceAll("%(?s)(.*?)%", "").trim();
 			if (!withoutNumbers.equals(withoutVariables)) {
 				continue;
 			}
 			if (!s.contains("%")) {
 				if (withoutLetters.contains(" - ")) {
 					String[] split = withoutLetters.split(" - ");
-					if (split.length > 1) {
-						double first = NumberUtils.toDouble(split[0], 0.0);
-						double second = NumberUtils.toDouble(split[1], 0.0);
-						d += (RandomUtils.nextDouble() * (Math.max(first, second) - Math.min(first,
-								second) + Math.min(first, second))) / ((base != 0D) ? base : 100D);
-					}
+					double first = NumberUtils.toDouble(split[0], 0.0);
+					double second = NumberUtils.toDouble(split[1], 0.0);
+					d += (RandomUtils.nextDouble() * (Math.max(first, second) - Math.min(first,
+							second)) + Math.min(first, second)) / ((base != 0D) ? base : 100D);
 				} else {
 					d += NumberUtils.toDouble(withoutLetters, 0.0) / ((base != 0D) ? base : 100D);
 				}
@@ -88,7 +54,7 @@ public final class ItemAttributesParseUtil {
 						double first = NumberUtils.toDouble(split[0], 0.0);
 						double second = NumberUtils.toDouble(split[1], 0.0);
 						d += (RandomUtils.nextDouble() * (Math.max(first, second) - Math.min(first,
-								second) + Math.min(first, second))) / 100D;
+								second)) + Math.min(first, second)) / 100D;
 					}
 				} else {
 					d += NumberUtils.toDouble(withoutLetters, 0.0) / 100D;
@@ -98,16 +64,48 @@ public final class ItemAttributesParseUtil {
 		return d;
 	}
 
-	public static int getInt(Collection<String> collection, String format) {
+	public static double getDouble(Collection<String> collection, Attribute attribute) {
+		double d = 0.0;
+		if (collection == null || collection.isEmpty() || attribute == null) {
+			return d;
+		}
+		for (String s : collection) {
+			String stripped = ChatColor.stripColor(s);
+			String withoutNumbers = stripped.replaceAll("[0-9\\+%\\-]", "").trim();
+			String withoutLetters = stripped.replaceAll("[a-zA-Z\\+%:]", "").trim();
+			String withoutVariables = attribute.getFormat().replaceAll("%(?s)(.*?)%", "").trim();
+			if (!withoutNumbers.equals(withoutVariables)) {
+				continue;
+			}
+			if (withoutLetters.contains(" - ")) {
+				String[] split = withoutLetters.split(" - ");
+				if (split.length > 1) {
+					double first = NumberUtils.toDouble(split[0], 0.0);
+					double second = NumberUtils.toDouble(split[1], 0.0);
+					d += RandomUtils.nextDouble() * (Math.max(first, second) - Math.min(first,
+							second)) + Math.min(first, second);
+				}
+			} else {
+				d += NumberUtils.toDouble(withoutLetters, 0.0);
+			}
+		}
+		return d;
+	}
+
+	public static double getDoublePercentage(Collection<String> collection, Attribute attribute) {
+		return getDoublePercentage(collection, attribute, 100D);
+	}
+
+	public static int getInt(Collection<String> collection, Attribute attribute) {
 		int i = 0;
-		if (collection == null || collection.isEmpty() || format == null || format.isEmpty()) {
+		if (collection == null || collection.isEmpty() || attribute == null) {
 			return i;
 		}
 		for (String s : collection) {
 			String stripped = ChatColor.stripColor(s);
 			String withoutNumbers = stripped.replaceAll("[0-9\\+%\\-]", "").trim();
 			String withoutLetters = stripped.replaceAll("[a-zA-Z\\+%:]", "").trim();
-			String withoutVariables = format.replaceAll("%(?s)(.*?)%", "").trim();
+			String withoutVariables = attribute.getFormat().replaceAll("%(?s)(.*?)%", "").trim();
 			if (!withoutNumbers.equals(withoutVariables)) {
 				continue;
 			}
@@ -117,7 +115,7 @@ public final class ItemAttributesParseUtil {
 					int first = NumberUtils.toInt(split[0], 0);
 					int second = NumberUtils.toInt(split[1], 0);
 					i += RandomUtils.nextDouble() * (Math.max(first, second) - Math.min(first,
-							second) + Math.min(first, second));
+							second)) + Math.min(first, second);
 				}
 			} else {
 				i += NumberUtils.toInt(withoutLetters, 0);
@@ -131,17 +129,12 @@ public final class ItemAttributesParseUtil {
 		if (collection == null || collection.isEmpty() || format == null || format.isEmpty()) {
 			return b;
 		}
-		b = containsIgnoreCase(collection, format);
-		return b;
-	}
-
-	private static boolean containsIgnoreCase(Collection<String> collection, String string) {
 		for (String s : collection) {
-			if (ChatColor.stripColor(s).equalsIgnoreCase(ChatColor.stripColor(string))) {
-				return true;
+			if (ChatColor.stripColor(s).equalsIgnoreCase(ChatColor.stripColor(format))) {
+				b = true;
 			}
 		}
-		return false;
+		return b;
 	}
 
 }
