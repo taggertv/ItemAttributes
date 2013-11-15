@@ -196,6 +196,12 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		return name;
 	}
 
+	private void playAttributeSounds(Location location, Attribute... attributes) {
+		for (Attribute attribute : attributes) {
+			location.getWorld().playSound(location, attribute.getSound(), 1F, 1F);
+		}
+	}
+
 	@EventHandler(priority = EventPriority.LOW)
 	public void onInventoryCloseEventLow(InventoryCloseEvent event) {
 		Attribute healthAttribute = getPlugin().getSettingsManager().getAttribute("HEALTH");
@@ -230,6 +236,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			if (he instanceof Player) {
 				((Player) he).setHealthScale(he.getMaxHealth());
 			}
+
+			playAttributeSounds(he.getEyeLocation(), healthAttribute);
 		}
 	}
 
@@ -267,6 +275,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				.getChangeInHealth(), 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
+		playAttributeSounds(event.getPlayer().getEyeLocation(), healthAttribute);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -307,6 +316,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 		entity.setMaxHealth(Math.max(baseMaxHealth + d, 1));
 		entity.setHealth(Math.min(Math.max(currentHealth, 0), entity.getMaxHealth()));
+		playAttributeSounds(event.getEntity().getLocation().add(0D, 1D, 0D), healthAttribute);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -343,6 +353,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				.getChangeInHealth(), 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
+		playAttributeSounds(event.getPlayer().getEyeLocation(), healthAttribute);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -373,6 +384,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				.getChangeInHealth(), 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
+		playAttributeSounds(event.getPlayer().getEyeLocation(), healthAttribute);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -501,6 +513,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				.getChangeInHealth(), 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
+		playAttributeSounds(event.getPlayer().getEyeLocation(), healthAttribute);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -697,6 +710,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		Attribute stunLengthAttribute = getPlugin().getSettingsManager().getAttribute("STUN LENGTH");
 		Attribute dodgeRateAttribute = getPlugin().getSettingsManager().getAttribute("DODGE RATE");
 		Attribute armorAttribute = getPlugin().getSettingsManager().getAttribute("ARMOR");
+		Attribute armorPenetrationAttribute = getPlugin().getSettingsManager().getAttribute("ARMOR PENETRATION");
 
 		if (event.getDamager() instanceof Projectile) {
 			Projectile projectile = (Projectile) event.getDamager();
@@ -772,6 +786,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				stunRate += ItemAttributesParseUtil.getValue(getItemStackLore(is),
 						stunRateAttribute);
 				stunLength += ItemAttributesParseUtil.getValue(getItemStackLore(is), stunLengthAttribute);
+				armorPenetration += ItemAttributesParseUtil.getValue(getItemStackLore(is), armorPenetrationAttribute);
 			}
 			damagerEquipmentDamage += ItemAttributesParseUtil.getValue(getItemStackLore(damager.getEquipment().getItemInHand
 					()), meleeDamageAttribute);
@@ -785,6 +800,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 					()), stunRateAttribute);
 			stunLength += ItemAttributesParseUtil.getValue(getItemStackLore(damager.getEquipment().getItemInHand()),
 					stunLengthAttribute);
+			armorPenetration += ItemAttributesParseUtil.getValue(getItemStackLore(damager.getEquipment()
+					.getItemInHand()), armorPenetrationAttribute);
 		}
 
 		if (event.getEntity() instanceof LivingEntity) {
@@ -816,11 +833,19 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			}
 			event.setDamage(0);
 			event.setCancelled(true);
+			playAttributeSounds(event.getEntity().getLocation().add(0D, 1D, 0D), dodgeRateAttribute);
 			return;
 		}
 
 		double equipmentDamage = damagerEquipmentDamage - (damagedEquipmentReduction - armorPenetration);
 		damage = originalDamage + equipmentDamage;
+
+		if (damagedEquipmentReduction != 0D) {
+			playAttributeSounds(event.getEntity().getLocation().add(0D, 1D, 0D), armorAttribute);
+		}
+		if (armorPenetration != 0D) {
+			playAttributeSounds(event.getEntity().getLocation().add(0D, 1D, 0D), armorPenetrationAttribute);
+		}
 
 		if (RandomUtils.nextDouble() < damagerCriticalChance) {
 
@@ -844,6 +869,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 							"events.critical-hit", new String[][]{{"%percentage%", decimalFormat.format(critPercentage
 							* 100)}});
 				}
+				playAttributeSounds(event.getDamager().getLocation().add(0D, 1D, 0D), criticalRateAttribute, criticalDamageAttribute);
 			} else if (criticalStrikeEvent != null && !criticalStrikeEvent.isCancelled()) {
 				double critPercentage = (1.00 + criticalStrikeEvent.getCriticalDamage());
 				damage *= critPercentage;
@@ -856,6 +882,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 							"events.critical-hit", new String[][]{{"%percentage%", decimalFormat.format(critPercentage
 							* 100)}});
 				}
+				playAttributeSounds(event.getDamager().getLocation().add(0D, 1D, 0D), criticalRateAttribute, criticalDamageAttribute);
 			}
 		}
 
@@ -890,6 +917,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 					}
 				}
 			}
+			playAttributeSounds(event.getEntity().getLocation().add(0D, 1D, 0D), stunLengthAttribute,
+					stunRateAttribute);
 		}
 
 		event.setDamage(damage);
@@ -974,12 +1003,6 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			playAttributeSounds(((LivingEntity) event.getEntity()).getEyeLocation(), getPlugin().getSettingsManager()
 					.getAttribute("FIRE IMMUNITY"), getPlugin().getSettingsManager().getAttribute("POISON IMMUNITY"),
 					getPlugin().getSettingsManager().getAttribute("WITHER IMMUNITY"));
-		}
-	}
-
-	private void playAttributeSounds(Location location, Attribute... attributes) {
-		for (Attribute attribute : attributes) {
-			location.getWorld().playSound(location, attribute.getSound(), 1F, 1F);
 		}
 	}
 
