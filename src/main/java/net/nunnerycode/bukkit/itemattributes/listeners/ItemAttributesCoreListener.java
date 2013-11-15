@@ -689,7 +689,11 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			return;
 		}
 
-		double originalDamage = (getPlugin().getSettingsManager().isItemOnlyDamageSystemEnabled()) ? 0D : event.getDamage();
+		double originalDamage = event.getDamage();
+		if (event.getDamager() instanceof Player) {
+			originalDamage = (getPlugin().getSettingsManager().isItemOnlyDamageSystemEnabled()) ? getPlugin()
+					.getSettingsManager().getItemOnlyDamageSystemBaseDamage() : event.getDamage();
+		}
 
 		double damage;
 
