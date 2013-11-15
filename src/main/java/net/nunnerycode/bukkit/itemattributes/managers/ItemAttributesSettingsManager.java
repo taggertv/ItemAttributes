@@ -21,7 +21,9 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	private int baseStunLength;
 	private int secondsBetweenHealthUpdates;
 	private Map<String, Attribute> attributeMap;
-	private boolean itemOnlyDamageSystem;
+	private boolean itemOnlyDamageSystemEnabled;
+	private double itemOnlyDamageSystemBaseDamage;
+	private boolean pluginCompatible;
 
 	public ItemAttributesSettingsManager(ItemAttributesPlugin plugin) {
 		this.plugin = plugin;
@@ -38,7 +40,7 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		baseDodgeRate = getPlugin().getConfigYAML().getDouble("options.base-dodge-rate", 0.0);
 		secondsBetweenHealthUpdates = getPlugin().getConfigYAML().getInt("options.seconds-between-health-updates",
 				10);
-		itemOnlyDamageSystem = getPlugin().getConfigYAML().getBoolean("options.item-only-damage-system", false);
+		itemOnlyDamageSystemEnabled = getPlugin().getConfigYAML().getBoolean("options.item-only-damage-system", false);
 		attributeMap.put("HEALTH", new ItemAttribute("Health", true, 100D, false, "%value% Health", null));
 		attributeMap.put("ARMOR", new ItemAttribute("Armor", true, 100D, false, "%value% Armor", null));
 		attributeMap.put("MELEE DAMAGE", new ItemAttribute("Melee Damage", true, 100D, false, "%value% Melee Damage",
@@ -135,8 +137,8 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	}
 
 	@Override
-	public boolean isItemOnlyDamageSystem() {
-		return itemOnlyDamageSystem;
+	public boolean isItemOnlyDamageSystemEnabled() {
+		return itemOnlyDamageSystemEnabled;
 	}
 
 	public void save() {
@@ -148,7 +150,7 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 			getPlugin().getConfigYAML().set("options.base-stun-rate", baseStunRate);
 			getPlugin().getConfigYAML().set("options.base-stun-length", baseStunLength);
 			getPlugin().getConfigYAML().set("options.seconds-between-health-updates", secondsBetweenHealthUpdates);
-			getPlugin().getConfigYAML().set("options.item-only-damage-system", itemOnlyDamageSystem);
+			getPlugin().getConfigYAML().set("options.item-only-damage-system", itemOnlyDamageSystemEnabled);
 			for (Map.Entry<String, Attribute> entry : attributeMap.entrySet()) {
 				getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
 						"-") + ".enabled", entry.getValue().isEnabled());
@@ -167,5 +169,35 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 			}
 		}
 		getPlugin().getConfigYAML().save();
+	}
+
+	@Override
+	public double getItemOnlyDamageSystemBaseDamage() {
+		return itemOnlyDamageSystemBaseDamage;
+	}
+
+	@Override
+	public boolean addAttribute(String name, Attribute attribute) {
+		boolean b = false;
+		if (isPluginCompatible()) {
+			attributeMap.put(name.toUpperCase(), attribute);
+			b = attributeMap.containsKey(name.toUpperCase());
+		}
+		return b;
+	}
+
+	@Override
+	public boolean removeAttribute(String name, Attribute attribute) {
+		boolean b = false;
+		if (isPluginCompatible()) {
+			attributeMap.remove(name.toUpperCase());
+			b = !attributeMap.containsKey(name.toUpperCase());
+		}
+		return b;
+	}
+
+	@Override
+	public boolean isPluginCompatible() {
+		return pluginCompatible;
 	}
 }

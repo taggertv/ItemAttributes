@@ -689,7 +689,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			return;
 		}
 
-		double originalDamage = (getPlugin().getSettingsManager().isItemOnlyDamageSystem()) ? 0D : event.getDamage();
+		double originalDamage = (getPlugin().getSettingsManager().isItemOnlyDamageSystemEnabled()) ? 0D : event.getDamage();
 
 		double damage;
 

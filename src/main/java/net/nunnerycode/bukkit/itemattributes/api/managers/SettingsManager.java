@@ -23,6 +23,14 @@ public interface SettingsManager {
 
 	Attribute getAttribute(String name);
 
-	boolean isItemOnlyDamageSystem();
+	boolean isItemOnlyDamageSystemEnabled();
+
+	double getItemOnlyDamageSystemBaseDamage();
+
+	boolean addAttribute(String name, Attribute attribute);
+
+	boolean removeAttribute(String name, Attribute attribute);
+
+	boolean isPluginCompatible();
 
 }

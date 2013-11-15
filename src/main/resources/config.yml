@@ -6,7 +6,10 @@ options:
   base-stun-rate: 0.05
   base-stun-length: 1
   seconds-between-health-updates: 10
-  item-only-damage-system: false
+  item-only-damage-system:
+    enabled: false
+    base-damage: 1.0
+  enable-plugin-compatibility: true
 core-stats:
   poison-immunity:
     enabled: true
