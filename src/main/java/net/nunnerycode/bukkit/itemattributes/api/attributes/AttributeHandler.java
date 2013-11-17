@@ -13,6 +13,10 @@ public interface AttributeHandler {
 
 	Set<Attribute> getAttributesPresentOnItemStack(ItemStack itemStack);
 
+	boolean hasAttributeOnItemStack(ItemStack itemStack, Attribute attribute);
+
+	boolean hasAttributeOnEntity(LivingEntity livingEntity, Attribute attribute);
+
 	ItemAttributes getPlugin();
 
 }
