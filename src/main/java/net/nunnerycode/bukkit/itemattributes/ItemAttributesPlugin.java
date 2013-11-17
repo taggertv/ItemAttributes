@@ -5,10 +5,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
+import net.nunnerycode.bukkit.itemattributes.api.attributes.AttributeHandler;
 import net.nunnerycode.bukkit.itemattributes.api.commands.ItemAttributesCommand;
 import net.nunnerycode.bukkit.itemattributes.api.managers.LanguageManager;
 import net.nunnerycode.bukkit.itemattributes.api.managers.SettingsManager;
 import net.nunnerycode.bukkit.itemattributes.api.tasks.HealthUpdateTask;
+import net.nunnerycode.bukkit.itemattributes.attributes.ItemAttributeHandler;
 import net.nunnerycode.bukkit.itemattributes.commands.ItemAttributesCommands;
 import net.nunnerycode.bukkit.itemattributes.listeners.ItemAttributesCoreListener;
 import net.nunnerycode.bukkit.itemattributes.managers.ItemAttributesLanguageManager;
@@ -29,6 +31,7 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 	private ItemAttributesCoreListener itemAttributesCoreListener;
 	private HealthUpdateTask itemAttributesHealthUpdateTask;
 	private ItemAttributesCommand itemAttributesCommands;
+	private ItemAttributeHandler itemAttributeHandler;
 
 	@Override
 	public ItemAttributesCoreListener getCoreListener() {
@@ -71,6 +74,11 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 	}
 
 	@Override
+	public AttributeHandler getAttributeHandler() {
+		return itemAttributeHandler;
+	}
+
+	@Override
 	public void onDisable() {
 		itemAttributesSettingsManager.save();
 		debugPrinter.debug(Level.INFO, "v" + getDescription().getVersion() + " disabled");
@@ -96,6 +104,8 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 
 		itemAttributesLanguageManager = new ItemAttributesLanguageManager(this);
 		itemAttributesLanguageManager.load();
+
+		itemAttributeHandler = new ItemAttributeHandler(this);
 
 		itemAttributesCoreListener = new ItemAttributesCoreListener(this);
 
