@@ -74,4 +74,35 @@ public class ItemAttribute implements Attribute {
 	public void setSound(Sound s) {
 		this.sound = sound;
 	}
+
+	@Override
+	public int hashCode() {
+		int result;
+		long temp;
+		result = name != null ? name.hashCode() : 0;
+		result = 31 * result + (enabled ? 1 : 0);
+		temp = Double.doubleToLongBits(maxValue);
+		result = 31 * result + (int) (temp ^ (temp >>> 32));
+		result = 31 * result + (percentage ? 1 : 0);
+		result = 31 * result + (format != null ? format.hashCode() : 0);
+		result = 31 * result + (sound != null ? sound.hashCode() : 0);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof ItemAttribute)) return false;
+
+		ItemAttribute that = (ItemAttribute) o;
+
+		if (enabled != that.enabled) return false;
+		if (Double.compare(that.maxValue, maxValue) != 0) return false;
+		if (percentage != that.percentage) return false;
+		if (format != null ? !format.equals(that.format) : that.format != null) return false;
+		if (name != null ? !name.equals(that.name) : that.name != null) return false;
+		if (sound != that.sound) return false;
+
+		return true;
+	}
 }
