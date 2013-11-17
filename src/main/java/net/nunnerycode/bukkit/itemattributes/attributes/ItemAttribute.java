@@ -88,6 +88,24 @@ public class ItemAttribute implements Attribute {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof ItemAttribute)) return false;
+
+		ItemAttribute that = (ItemAttribute) o;
+
+		if (Double.compare(that.baseValue, baseValue) != 0) return false;
+		if (enabled != that.enabled) return false;
+		if (Double.compare(that.maxValue, maxValue) != 0) return false;
+		if (percentage != that.percentage) return false;
+		if (format != null ? !format.equals(that.format) : that.format != null) return false;
+		if (name != null ? !name.equals(that.name) : that.name != null) return false;
+		if (sound != that.sound) return false;
+
+		return true;
+	}
+
+	@Override
 	public int hashCode() {
 		int result;
 		long temp;
@@ -98,23 +116,8 @@ public class ItemAttribute implements Attribute {
 		result = 31 * result + (percentage ? 1 : 0);
 		result = 31 * result + (format != null ? format.hashCode() : 0);
 		result = 31 * result + (sound != null ? sound.hashCode() : 0);
+		temp = Double.doubleToLongBits(baseValue);
+		result = 31 * result + (int) (temp ^ (temp >>> 32));
 		return result;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof ItemAttribute)) return false;
-
-		ItemAttribute that = (ItemAttribute) o;
-
-		if (enabled != that.enabled) return false;
-		if (Double.compare(that.maxValue, maxValue) != 0) return false;
-		if (percentage != that.percentage) return false;
-		if (format != null ? !format.equals(that.format) : that.format != null) return false;
-		if (name != null ? !name.equals(that.name) : that.name != null) return false;
-		if (sound != that.sound) return false;
-
-		return true;
 	}
 }
