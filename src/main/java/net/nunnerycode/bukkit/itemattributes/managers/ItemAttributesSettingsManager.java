@@ -1,7 +1,9 @@
 package net.nunnerycode.bukkit.itemattributes.managers;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import net.nunnerycode.bukkit.itemattributes.ItemAttributesPlugin;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
@@ -198,6 +200,11 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 			b = !attributeMap.containsKey(name.toUpperCase());
 		}
 		return b;
+	}
+
+	@Override
+	public Set<Attribute> getLoadedAttributes() {
+		return new HashSet<Attribute>(attributeMap.values());
 	}
 
 	@Override
