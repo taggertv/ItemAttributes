@@ -8,6 +8,7 @@ import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.AttributeHandler;
 import net.nunnerycode.bukkit.itemattributes.utils.ItemAttributesParseUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 
@@ -47,6 +48,9 @@ public class ItemAttributeHandler implements AttributeHandler {
 	@Override
 	public Set<Attribute> getAttributesPresentOnItemStack(ItemStack itemStack) {
 		Set<Attribute> attributes = new HashSet<Attribute>();
+		if (itemStack == null) {
+			return attributes;
+		}
 		List<String> lore = new ArrayList<String>();
 		if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
 			lore = itemStack.getItemMeta().getLore();
@@ -63,6 +67,37 @@ public class ItemAttributeHandler implements AttributeHandler {
 			}
 		}
 		return attributes;
+	}
+
+	@Override
+	public boolean hasAttributeOnItemStack(ItemStack itemStack, Attribute attribute) {
+		if (itemStack == null || attribute == null || !attribute.isEnabled()) {
+			return false;
+		}
+		List<String> lore = new ArrayList<String>();
+		if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
+			lore = itemStack.getItemMeta().getLore();
+		}
+		for (String s : lore) {
+			if (ChatColor.stripColor(s).contains(ChatColor.stripColor(attribute.getFormat().replaceAll("%(?s)(.*?)%",
+					"").trim()))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean hasAttributeOnEntity(LivingEntity livingEntity, Attribute attribute) {
+		if (livingEntity == null || attribute == null || !attribute.isEnabled()) {
+			return false;
+		}
+		for (ItemStack itemStack : livingEntity.getEquipment().getArmorContents()) {
+			if (hasAttributeOnItemStack(itemStack, attribute)) {
+				return true;
+			}
+		}
+		return hasAttributeOnItemStack(livingEntity.getEquipment().getItemInHand(), attribute);
 	}
 
 	@Override
