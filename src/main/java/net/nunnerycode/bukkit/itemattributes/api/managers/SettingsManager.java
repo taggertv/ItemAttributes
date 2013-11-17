@@ -1,5 +1,6 @@
 package net.nunnerycode.bukkit.itemattributes.api.managers;
 
+import java.util.Set;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 
@@ -30,6 +31,8 @@ public interface SettingsManager {
 	boolean addAttribute(String name, Attribute attribute);
 
 	boolean removeAttribute(String name, Attribute attribute);
+
+	Set<Attribute> getLoadedAttributes();
 
 	boolean isPluginCompatible();
 
