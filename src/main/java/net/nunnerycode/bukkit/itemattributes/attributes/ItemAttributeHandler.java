@@ -1,13 +1,15 @@
 package net.nunnerycode.bukkit.itemattributes.attributes;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.AttributeHandler;
-import net.nunnerycode.bukkit.itemattributes.utils.ItemAttributesParseUtil;
+import org.apache.commons.lang.math.RandomUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
@@ -20,6 +22,47 @@ public class ItemAttributeHandler implements AttributeHandler {
 		this.plugin = plugin;
 	}
 
+	private double getDouble(Collection<String> collection, Attribute attribute) {
+		double d = 0.0;
+		if (collection == null || collection.isEmpty() || attribute == null) {
+			return d;
+		}
+		for (String s : collection) {
+			String stripped = ChatColor.stripColor(s);
+			String withoutNumbers = stripped.replaceAll("[0-9\\+%\\-]", "").trim();
+			String withoutLetters = stripped.replaceAll("[a-zA-Z\\+%:]", "").trim();
+			String withoutVariables = attribute.getFormat().replaceAll("%(?s)(.*?)%", "").trim();
+			if (!withoutNumbers.equals(withoutVariables)) {
+				continue;
+			}
+			if (withoutLetters.contains(" - ")) {
+				String[] split = withoutLetters.split(" - ");
+				if (split.length > 1) {
+					double first = NumberUtils.toDouble(split[0], 0.0);
+					double second = NumberUtils.toDouble(split[1], 0.0);
+					d += RandomUtils.nextDouble() * (Math.max(first, second) - Math.min(first,
+							second)) + Math.min(first, second);
+				}
+			} else {
+				d += NumberUtils.toDouble(withoutLetters, 0.0);
+			}
+		}
+		return d;
+	}
+
+	private double getValue(Collection<String> collection, Attribute attribute) {
+		if (collection == null || attribute == null) {
+			return 0.0;
+		}
+		if (!attribute.isEnabled()) {
+			return 0.0;
+		}
+		if (attribute.isPercentage()) {
+			return getDoublePercentage(collection, attribute);
+		}
+		return getDouble(collection, attribute);
+	}
+
 	@Override
 	public double getAttributeValueFromItemStack(ItemStack itemStack, Attribute attribute) {
 		if (itemStack == null || attribute == null || !attribute.isEnabled()) {
@@ -29,7 +72,49 @@ public class ItemAttributeHandler implements AttributeHandler {
 		if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
 			lore = itemStack.getItemMeta().getLore();
 		}
-		return ItemAttributesParseUtil.getValue(lore, attribute);
+		return getValue(lore, attribute);
+	}
+
+	private double getDoublePercentage(Collection<String> collection, Attribute attribute) {
+		double d = 0.0;
+		if (collection == null || collection.isEmpty() || attribute == null) {
+			return d;
+		}
+		for (String s : collection) {
+			String stripped = ChatColor.stripColor(s);
+			String withoutNumbers = stripped.replaceAll("[0-9\\+%\\-]", "").trim();
+			String withoutLetters = stripped.replaceAll("[a-zA-Z\\+%:]", "").trim();
+			String withoutVariables = attribute.getFormat().replaceAll("%(?s)(.*?)%", "").trim();
+			if (!withoutNumbers.equals(withoutVariables)) {
+				continue;
+			}
+			if (!s.contains("%")) {
+				if (withoutLetters.contains(" - ")) {
+					String[] split = withoutLetters.split(" - ");
+					double first = NumberUtils.toDouble(split[0], 0.0);
+					double second = NumberUtils.toDouble(split[1], 0.0);
+					d += (RandomUtils.nextDouble() * (Math.max(first, second) - Math.min(first,
+							second)) + Math.min(first, second)) / ((attribute.getMaxValue() != 0D) ? attribute
+							.getMaxValue() : 100D);
+				} else {
+					d += NumberUtils.toDouble(withoutLetters, 0.0) / ((attribute.getMaxValue() != 0D) ? attribute
+							.getMaxValue() : 100D);
+				}
+			} else {
+				if (withoutLetters.contains(" - ")) {
+					String[] split = withoutLetters.split(" - ");
+					if (split.length > 1) {
+						double first = NumberUtils.toDouble(split[0], 0.0);
+						double second = NumberUtils.toDouble(split[1], 0.0);
+						d += (RandomUtils.nextDouble() * (Math.max(first, second) - Math.min(first,
+								second)) + Math.min(first, second)) / 100D;
+					}
+				} else {
+					d += NumberUtils.toDouble(withoutLetters, 0.0) / 100D;
+				}
+			}
+		}
+		return d;
 	}
 
 	@Override
@@ -104,4 +189,5 @@ public class ItemAttributeHandler implements AttributeHandler {
 	public ItemAttributes getPlugin() {
 		return plugin;
 	}
+
 }
