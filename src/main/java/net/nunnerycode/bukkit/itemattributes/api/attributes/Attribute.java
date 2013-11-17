@@ -26,4 +26,8 @@ public interface Attribute {
 
 	void setSound(Sound s);
 
+	double getBaseValue();
+
+	void setBaseValue(double d);
+
 }

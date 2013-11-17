@@ -11,15 +11,17 @@ public class ItemAttribute implements Attribute {
 	private boolean percentage;
 	private String format;
 	private Sound sound;
+	private double baseValue;
 
 	public ItemAttribute(String name, boolean enabled, double maxValue, boolean percentage, String format,
-						 Sound sound) {
+						 Sound sound, double baseValue) {
 		this.name = name;
 		this.enabled = enabled;
 		this.maxValue = maxValue;
 		this.percentage = percentage;
 		this.format = format;
 		this.sound = sound;
+		this.baseValue = baseValue;
 	}
 
 	@Override
@@ -73,6 +75,16 @@ public class ItemAttribute implements Attribute {
 
 	public void setSound(Sound s) {
 		this.sound = sound;
+	}
+
+	@Override
+	public double getBaseValue() {
+		return baseValue;
+	}
+
+	@Override
+	public void setBaseValue(double d) {
+		this.baseValue = d;
 	}
 
 	@Override
