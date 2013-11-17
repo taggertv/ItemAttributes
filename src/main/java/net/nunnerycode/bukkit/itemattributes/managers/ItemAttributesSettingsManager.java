@@ -46,32 +46,33 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 				".enabled", false);
 		itemOnlyDamageSystemBaseDamage = getPlugin().getConfigYAML().getDouble("options.item-only-damage-system" +
 				".base-damage", 1.0D);
-		attributeMap.put("HEALTH", new ItemAttribute("Health", true, 100D, false, "%value% Health", null));
-		attributeMap.put("ARMOR", new ItemAttribute("Armor", true, 100D, false, "%value% Armor", null));
+		attributeMap.put("HEALTH", new ItemAttribute("Health", true, 100D, false, "%value% Health", null, 0));
+		attributeMap.put("ARMOR", new ItemAttribute("Armor", true, 100D, false, "%value% Armor", null, 0));
 		attributeMap.put("MELEE DAMAGE", new ItemAttribute("Melee Damage", true, 100D, false, "%value% Melee Damage",
-				null));
+				null, 0));
 		attributeMap.put("RANGED DAMAGE", new ItemAttribute("Ranged Damage", true, 100D, false,
-				"%value% Ranged Damage", null));
+				"%value% Ranged Damage", null, 0D));
 		attributeMap.put("REGENERATION", new ItemAttribute("Regeneration", true, 100D, false, "%value% Regeneration",
-				null));
+				null, 0D));
 		attributeMap.put("CRITICAL RATE", new ItemAttribute("Critical Rate", true, 100D, true,
-				"%value% Critical Rate", null));
+				"%value% Critical Rate", null, 0.05));
 		attributeMap.put("CRITICAL DAMAGE", new ItemAttribute("Critical Damage", true, 100D, true,
-				"%value% Critical Damage", null));
+				"%value% Critical Damage", null, 0.2));
 		attributeMap.put("LEVEL REQUIREMENT", new ItemAttribute("Level Requirement", true, 100D, false,
-				"Level Requirement: %value%", null));
+				"Level Requirement: %value%", null, 0));
 		attributeMap.put("ARMOR PENETRATION", new ItemAttribute("Armor Penetration", true, 100D, false,
-				"%value% Armor Penetration", null));
-		attributeMap.put("STUN RATE", new ItemAttribute("Stun Rate", true, 100D, true, "%value% Stun Rate", null));
+				"%value% Armor Penetration", null, 0));
+		attributeMap.put("STUN RATE", new ItemAttribute("Stun Rate", true, 100D, true, "%value% Stun Rate", null, 0D));
 		attributeMap.put("STUN LENGTH", new ItemAttribute("Stun Length", true, 100D, false, "%value% Stun Length",
-				null));
-		attributeMap.put("DODGE RATE", new ItemAttribute("Dodge Rate", true, 100D, true, "%value% Dodge Rate", null));
+				null, 1));
+		attributeMap.put("DODGE RATE", new ItemAttribute("Dodge Rate", true, 100D, true, "%value% Dodge Rate", null,
+				0D));
 		attributeMap.put("FIRE IMMUNITY", new ItemAttribute("Fire Immunity", true, -1D, false,
-				"Fire Immunity", null));
+				"Fire Immunity", null, -1D));
 		attributeMap.put("WITHER IMMUNITY", new ItemAttribute("Wither Immunity", true, -1D, false,
-				"Wither Immunity", null));
+				"Wither Immunity", null, -1D));
 		attributeMap.put("POISON IMMUNITY", new ItemAttribute("Poison Immunity", true, -1D, false,
-				"Poison Immunity", null));
+				"Poison Immunity", null, -1D));
 
 		if (getPlugin().getConfigYAML().isConfigurationSection("core-stats")) {
 			ConfigurationSection section = getPlugin().getConfigYAML().getConfigurationSection("core-stats");
@@ -84,6 +85,8 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 						"-") + ".max-value", entry.getValue().getMaxValue()));
 				entry.getValue().setPercentage(section.getBoolean(entry.getKey().toLowerCase().replace(" ",
 						"-") + ".percentage", entry.getValue().isPercentage()));
+				entry.getValue().setBaseValue(section.getDouble(entry.getKey().toLowerCase().replace(" ",
+						"-") + ".base-value", entry.getValue().getBaseValue()));
 				try {
 					entry.getValue().setSound(Sound.valueOf(section.getString(entry.getKey().toLowerCase().replace(" ",
 							"-") + ".sound", entry.getValue().getSound().name())));
@@ -166,6 +169,8 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 						"-") + ".percentage", entry.getValue().isPercentage());
 				getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
 						"-") + ".max-value", entry.getValue().getMaxValue());
+				getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
+						"-") + ".base-value", entry.getValue().getBaseValue());
 				try {
 					getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
 							"-") + ".sound", entry.getValue().getSound().name());
