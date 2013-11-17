@@ -74,7 +74,7 @@ public class ItemAttribute implements Attribute {
 	}
 
 	public void setSound(Sound s) {
-		this.sound = sound;
+		this.sound = s;
 	}
 
 	@Override
