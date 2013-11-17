@@ -776,56 +776,30 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			}
 		} else if (event.getDamager() instanceof LivingEntity) {
 			LivingEntity damager = (LivingEntity) event.getDamager();
-			ItemStack[] armor = damager.getEquipment().getArmorContents();
-			for (ItemStack is : armor) {
-				damagerEquipmentDamage += ItemAttributesParseUtil.getValue(getItemStackLore(is),
-						meleeDamageAttribute);
-				damagerEquipmentDamage += ItemAttributesParseUtil.getValue(getItemStackLore(is),
-						damageAttribute);
-				damagerCriticalChance += ItemAttributesParseUtil.getValue(getItemStackLore(is),
-						criticalRateAttribute);
-				damagerCriticalDamage += ItemAttributesParseUtil.getValue(getItemStackLore(is),
-						criticalDamageAttribute);
-				stunRate += ItemAttributesParseUtil.getValue(getItemStackLore(is),
-						stunRateAttribute);
-				stunLength += ItemAttributesParseUtil.getValue(getItemStackLore(is), stunLengthAttribute);
-				armorPenetration += ItemAttributesParseUtil.getValue(getItemStackLore(is), armorPenetrationAttribute);
-			}
-			damagerEquipmentDamage += ItemAttributesParseUtil.getValue(getItemStackLore(damager.getEquipment().getItemInHand
-					()), meleeDamageAttribute);
-			damagerEquipmentDamage += ItemAttributesParseUtil.getValue(getItemStackLore(damager.getEquipment().getItemInHand()),
+			damagerEquipmentDamage += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager,
+					meleeDamageAttribute);
+			damagerEquipmentDamage += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager,
 					damageAttribute);
-			damagerCriticalChance += ItemAttributesParseUtil.getValue(getItemStackLore(damager.getEquipment()
-					.getItemInHand()), criticalRateAttribute);
-			damagerCriticalDamage += ItemAttributesParseUtil.getValue(getItemStackLore(damager.getEquipment().getItemInHand
-					()), criticalDamageAttribute);
-			stunRate += ItemAttributesParseUtil.getValue(getItemStackLore(damager.getEquipment().getItemInHand
-					()), stunRateAttribute);
-			stunLength += ItemAttributesParseUtil.getValue(getItemStackLore(damager.getEquipment().getItemInHand()),
-					stunLengthAttribute);
-			armorPenetration += ItemAttributesParseUtil.getValue(getItemStackLore(damager.getEquipment()
-					.getItemInHand()), armorPenetrationAttribute);
+			damagerCriticalChance += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager,
+					criticalRateAttribute);
+			damagerCriticalDamage += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager,
+					criticalDamageAttribute);
+			stunRate += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager, stunRateAttribute);
+			stunLength += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager, stunLengthAttribute);
+			armorPenetration += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager,
+					armorPenetrationAttribute);
 		}
 
 		if (event.getEntity() instanceof LivingEntity) {
-			for (ItemStack is : ((LivingEntity) event.getEntity()).getEquipment().getArmorContents()) {
-				dodgeRate += ItemAttributesParseUtil.getValue(getItemStackLore(is),
-						dodgeRateAttribute);
-			}
-			dodgeRate += ItemAttributesParseUtil.getValue(getItemStackLore(((LivingEntity) event.getEntity
-					()).getEquipment().getItemInHand()), dodgeRateAttribute);
+			LivingEntity entity = (LivingEntity) event.getEntity();
+			dodgeRate += getPlugin().getAttributeHandler().getAttributeValueFromEntity(entity, dodgeRateAttribute);
 		}
 
 		double damagedEquipmentReduction = 0D;
 		if (event.getEntity() instanceof LivingEntity) {
 			LivingEntity entity = (LivingEntity) event.getEntity();
-			ItemStack[] armor = entity.getEquipment().getArmorContents();
-			for (ItemStack is : armor) {
-				damagedEquipmentReduction += ItemAttributesParseUtil.getValue(getItemStackLore(is),
-						armorAttribute);
-			}
-			damagedEquipmentReduction += ItemAttributesParseUtil.getValue(getItemStackLore(entity.getEquipment()
-					.getItemInHand()), armorAttribute);
+			damagedEquipmentReduction += getPlugin().getAttributeHandler().getAttributeValueFromEntity(entity,
+					armorAttribute);
 		}
 
 		boolean dodged = RandomUtils.nextDouble() < dodgeRate;
