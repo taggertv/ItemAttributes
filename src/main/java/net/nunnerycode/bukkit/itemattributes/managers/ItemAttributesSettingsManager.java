@@ -48,6 +48,7 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 				".base-damage", 1.0D);
 		attributeMap.put("HEALTH", new ItemAttribute("Health", true, 100D, false, "%value% Health", null, 0));
 		attributeMap.put("ARMOR", new ItemAttribute("Armor", true, 100D, false, "%value% Armor", null, 0));
+		attributeMap.put("DAMAGE", new ItemAttribute("Damage", true, 100D, false, "%value% Damage", null, 1));
 		attributeMap.put("MELEE DAMAGE", new ItemAttribute("Melee Damage", true, 100D, false, "%value% Melee Damage",
 				null, 0));
 		attributeMap.put("RANGED DAMAGE", new ItemAttribute("Ranged Damage", true, 100D, false,
