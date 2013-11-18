@@ -1,7 +1,7 @@
 messages:
   events:
     unable-to-use-level: "&CYou are unable to use %itemname% until you are level %level%."
-    unable-to-use-permission: "&CYou cannot use this item as you do not have the right permissions."
+    unable-to-use-permission: "&CYou cannot use %itemname% as you do not have the right permissions."
     critical-hit: "&AYou scored a critical hit and dealt %percentage%% of your normal damage!"
     stun: "&AYou have stunned your opponent!"
     dodge: "&AYou dodged an attack!"
