@@ -70,6 +70,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			}
 			Player player = (Player) he;
 			handleLevelRequirementCheck(player);
+			handlePermissionCheck(player);
 		}
 	}
 
@@ -471,6 +472,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 	public void onPlayerJoinEventLowest(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		handleLevelRequirementCheck(player);
+		handlePermissionCheck(player);
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
@@ -549,6 +551,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 	public void onPlayerRespawnEventLowest(PlayerRespawnEvent event) {
 		Player player = event.getPlayer();
 		handleLevelRequirementCheck(player);
+		handlePermissionCheck(player);
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
@@ -617,6 +620,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 	public void onItemHeldEventLowest(PlayerItemHeldEvent event) {
 		Player player = event.getPlayer();
 		handleLevelRequirementCheckSlot(player, event.getNewSlot());
+		handlePermissionCheck(player, event.getNewSlot());
 	}
 
 	private boolean handleLevelRequirementCheckSlot(Player player, int i) {
@@ -749,6 +753,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 		Player player = (Player) event.getEntity();
 		handleLevelRequirementCheck(player);
+		handlePermissionCheck(player);
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
@@ -895,11 +900,13 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		boolean b = false;
 
 		if (event.getEntity() instanceof Player) {
-			b = handleLevelRequirementCheck((Player) event.getEntity());
+			b = handleLevelRequirementCheck((Player) event.getEntity()) || handlePermissionCheck((Player) event
+					.getEntity());
 		}
 
 		if (event.getDamager() instanceof Player) {
-			b = handleLevelRequirementCheck((Player) event.getDamager());
+			b = handleLevelRequirementCheck((Player) event.getDamager()) || handlePermissionCheck((Player) event
+					.getEntity());
 		}
 
 		event.setCancelled(b);
@@ -1135,6 +1142,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 		Player player = (Player) event.getEntity();
 		handleLevelRequirementCheck(player);
+		handlePermissionCheck(player);
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
