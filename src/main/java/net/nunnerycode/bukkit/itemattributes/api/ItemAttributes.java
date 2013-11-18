@@ -18,6 +18,8 @@ public interface ItemAttributes {
 
 	CommentedConventYamlConfiguration getLanguageYAML();
 
+	CommentedConventYamlConfiguration getPermissionsYAML();
+
 	LanguageManager getLanguageManager();
 
 	SettingsManager getSettingsManager();

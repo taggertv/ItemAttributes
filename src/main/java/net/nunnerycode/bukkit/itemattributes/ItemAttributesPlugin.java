@@ -26,6 +26,7 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 	private DebugPrinter debugPrinter;
 	private CommentedConventYamlConfiguration configYAML;
 	private CommentedConventYamlConfiguration languageYAML;
+	private CommentedConventYamlConfiguration permissionsYAML;
 	private ItemAttributesLanguageManager itemAttributesLanguageManager;
 	private ItemAttributesSettingsManager itemAttributesSettingsManager;
 	private ItemAttributesCoreListener itemAttributesCoreListener;
@@ -86,7 +87,7 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 
 	@Override
 	public void onEnable() {
-		unpackConfigurationFiles(new String[]{"config.yml", "language.yml"}, false);
+		unpackConfigurationFiles(new String[]{"config.yml", "language.yml", "permissions.yml"}, false);
 
 		configYAML = new CommentedConventYamlConfiguration(new File(getDataFolder(), "config.yml"),
 				YamlConfiguration.loadConfiguration(getResource("config.yml")).getString("version"));
@@ -96,6 +97,10 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 				YamlConfiguration.loadConfiguration(getResource("language.yml")).getString("version"));
 		languageYAML.options().updateOnLoad(true);
 		languageYAML.options().backupOnUpdate(true);
+		permissionsYAML = new CommentedConventYamlConfiguration(new File(getDataFolder(), "permissions.yml"),
+				YamlConfiguration.loadConfiguration(getResource("permissions.yml")).getString("version"));
+		permissionsYAML.options().updateOnLoad(true);
+		permissionsYAML.options().backupOnUpdate(true);
 
 		debugPrinter = new DebugPrinter(getDataFolder().getPath() + "/log/", "debug.log");
 
@@ -139,5 +144,10 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 				getLogger().warning("Could not unpack " + s);
 			}
 		}
+	}
+
+	@Override
+	public CommentedConventYamlConfiguration getPermissionsYAML() {
+		return permissionsYAML;
 	}
 }
