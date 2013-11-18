@@ -75,6 +75,8 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 				"Wither Immunity", null, -1D));
 		attributeMap.put("POISON IMMUNITY", new ItemAttribute("Poison Immunity", true, -1D, false,
 				"Poison Immunity", null, -1D));
+		attributeMap.put("PERMISSION REQUIREMENT", new ItemAttribute("Permission Requirement", true, -1D, false,
+				"Permission Requirement: %value%", null, -1D));
 
 		if (getPlugin().getConfigYAML().isConfigurationSection("core-stats")) {
 			ConfigurationSection section = getPlugin().getConfigYAML().getConfigurationSection("core-stats");
