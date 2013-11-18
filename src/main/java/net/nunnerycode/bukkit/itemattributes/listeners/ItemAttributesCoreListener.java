@@ -906,7 +906,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 		if (event.getDamager() instanceof Player) {
 			b = handleLevelRequirementCheck((Player) event.getDamager()) || handlePermissionCheck((Player) event
-					.getEntity());
+					.getDamager());
 		}
 
 		event.setCancelled(b);
