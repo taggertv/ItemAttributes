@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.managers.PermissionsManager;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 public class ItemAttributesPermissionsManager implements PermissionsManager {
 
@@ -50,5 +52,11 @@ public class ItemAttributesPermissionsManager implements PermissionsManager {
 				this.permissions.remove(s);
 			}
 		}
+	}
+
+	@Override
+	public boolean hasPermission(Player player, String permission) {
+		return player.hasPermission(permission) && (permissions.contains(permission) || Bukkit.getPluginManager()
+				.getPermission(permission) != null);
 	}
 }
