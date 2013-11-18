@@ -1,4 +1,4 @@
-version: 1.0.13
+version: 1.0.14
 options:
   base-player-health: 20.0
   base-critical-rate: 0.05
@@ -76,6 +76,11 @@ core-stats:
     format: 'Level Requirement: %value%'
     percentage: false
     max-value: 100.0
+  permission-requirement:
+    enabled: true
+    format: 'Permission Requirement: %value%'
+    percentage: false
+    max-value: -1.0
   stun-length:
     enabled: true
     format: '%value% Stun Length'
