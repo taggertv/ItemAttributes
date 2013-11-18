@@ -154,6 +154,7 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	}
 
 	public void save() {
+		getPlugin().getConfigYAML().load();
 		if (!getPlugin().getConfigYAML().isSet("version")) {
 			getPlugin().getConfigYAML().set("version", getPlugin().getConfigYAML().getVersion());
 			getPlugin().getConfigYAML().set("options.base-player-health", basePlayerHealth);
