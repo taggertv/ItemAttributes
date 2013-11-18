@@ -19,4 +19,8 @@ public interface AttributeHandler {
 
 	ItemAttributes getPlugin();
 
+	String getAttributeStringFromItemStack(ItemStack itemStack, Attribute attribute);
+
+	String[] getAttributeStringsFromEntity(LivingEntity livingEntity, Attribute attribute);
+
 }
