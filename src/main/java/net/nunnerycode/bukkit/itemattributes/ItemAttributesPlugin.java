@@ -113,6 +113,9 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 		itemAttributesLanguageManager = new ItemAttributesLanguageManager(this);
 		itemAttributesLanguageManager.load();
 
+		itemAttributesPermissionsManager = new ItemAttributesPermissionsManager(this);
+		itemAttributesPermissionsManager.load();
+
 		itemAttributeHandler = new ItemAttributeHandler(this);
 
 		itemAttributesCoreListener = new ItemAttributesCoreListener(this);
