@@ -39,6 +39,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.permissions.Permission;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -94,7 +95,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		List<String> perms = getPlugin().getAttributeHandler().getAttributeStringsFromItemStack(itemInHand,
 				permissionRequirementAttribute);
 		for (String s : perms) {
-			if (!player.hasPermission(s)) {
+			Permission perm = Bukkit.getPluginManager().getPermission(s);
+			if (perm != null && !player.hasPermission(perm)) {
 				if (player.getInventory().firstEmpty() >= 0) {
 					player.getInventory().addItem(itemInHand);
 				} else {
@@ -112,7 +114,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		perms = getPlugin().getAttributeHandler().getAttributeStringsFromItemStack(helmet,
 				permissionRequirementAttribute);
 		for (String s : perms) {
-			if (!player.hasPermission(s)) {
+			Permission perm = Bukkit.getPluginManager().getPermission(s);
+			if (perm != null && !player.hasPermission(perm)) {
 				if (player.getInventory().firstEmpty() >= 0) {
 					player.getInventory().addItem(helmet);
 				} else {
@@ -130,7 +133,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		perms = getPlugin().getAttributeHandler().getAttributeStringsFromItemStack(chestplate,
 				permissionRequirementAttribute);
 		for (String s : perms) {
-			if (!player.hasPermission(s)) {
+			Permission perm = Bukkit.getPluginManager().getPermission(s);
+			if (perm != null && !player.hasPermission(perm)) {
 				if (player.getInventory().firstEmpty() >= 0) {
 					player.getInventory().addItem(chestplate);
 				} else {
@@ -148,7 +152,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		perms = getPlugin().getAttributeHandler().getAttributeStringsFromItemStack(leggings,
 				permissionRequirementAttribute);
 		for (String s : perms) {
-			if (!player.hasPermission(s)) {
+			Permission perm = Bukkit.getPluginManager().getPermission(s);
+			if (perm != null && !player.hasPermission(perm)) {
 				if (player.getInventory().firstEmpty() >= 0) {
 					player.getInventory().addItem(leggings);
 				} else {
@@ -166,7 +171,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		perms = getPlugin().getAttributeHandler().getAttributeStringsFromItemStack(boots,
 				permissionRequirementAttribute);
 		for (String s : perms) {
-			if (!player.hasPermission(s)) {
+			Permission perm = Bukkit.getPluginManager().getPermission(s);
+			if (perm != null && !player.hasPermission(perm)) {
 				if (player.getInventory().firstEmpty() >= 0) {
 					player.getInventory().addItem(boots);
 				} else {
@@ -207,7 +213,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		List<String> perms = getPlugin().getAttributeHandler().getAttributeStringsFromItemStack(itemInHand,
 				permissionRequirementAttribute);
 		for (String s : perms) {
-			if (!player.hasPermission(s)) {
+			Permission perm = Bukkit.getPluginManager().getPermission(s);
+			if (perm != null && !player.hasPermission(perm)) {
 				if (player.getInventory().firstEmpty() >= 0) {
 					player.getInventory().addItem(itemInHand);
 				} else {
@@ -225,7 +232,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		perms = getPlugin().getAttributeHandler().getAttributeStringsFromItemStack(helmet,
 				permissionRequirementAttribute);
 		for (String s : perms) {
-			if (!player.hasPermission(s)) {
+			Permission perm = Bukkit.getPluginManager().getPermission(s);
+			if (perm != null && !player.hasPermission(perm)) {
 				if (player.getInventory().firstEmpty() >= 0) {
 					player.getInventory().addItem(helmet);
 				} else {
@@ -243,7 +251,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		perms = getPlugin().getAttributeHandler().getAttributeStringsFromItemStack(chestplate,
 				permissionRequirementAttribute);
 		for (String s : perms) {
-			if (!player.hasPermission(s)) {
+			Permission perm = Bukkit.getPluginManager().getPermission(s);
+			if (perm != null && !player.hasPermission(perm)) {
 				if (player.getInventory().firstEmpty() >= 0) {
 					player.getInventory().addItem(chestplate);
 				} else {
@@ -261,7 +270,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		perms = getPlugin().getAttributeHandler().getAttributeStringsFromItemStack(leggings,
 				permissionRequirementAttribute);
 		for (String s : perms) {
-			if (!player.hasPermission(s)) {
+			Permission perm = Bukkit.getPluginManager().getPermission(s);
+			if (perm != null && !player.hasPermission(perm)) {
 				if (player.getInventory().firstEmpty() >= 0) {
 					player.getInventory().addItem(leggings);
 				} else {
@@ -279,7 +289,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		perms = getPlugin().getAttributeHandler().getAttributeStringsFromItemStack(boots,
 				permissionRequirementAttribute);
 		for (String s : perms) {
-			if (!player.hasPermission(s)) {
+			Permission perm = Bukkit.getPluginManager().getPermission(s);
+			if (perm != null && !player.hasPermission(perm)) {
 				if (player.getInventory().firstEmpty() >= 0) {
 					player.getInventory().addItem(boots);
 				} else {
