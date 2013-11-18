@@ -22,9 +22,24 @@ public class ItemAttributeHandler implements AttributeHandler {
 		this.plugin = plugin;
 	}
 
+	private List<String> getStrings(Collection<String> collection, Attribute attribute) {
+		List<String> list = new ArrayList<String>();
+		if (collection == null || collection.isEmpty() || attribute == null || !attribute.isEnabled()) {
+			return list;
+		}
+		for (String s : collection) {
+			String stripped = ChatColor.stripColor(s);
+			String withoutVariables = attribute.getFormat().replaceAll("%(?s)(.*?)%", "").trim();
+			if (stripped.contains(withoutVariables)) {
+				list.add(stripped.replace(withoutVariables, "").trim());
+			}
+		}
+		return list;
+	}
+
 	private double getDouble(Collection<String> collection, Attribute attribute) {
 		double d = 0.0;
-		if (collection == null || collection.isEmpty() || attribute == null) {
+		if (collection == null || collection.isEmpty() || attribute == null || !attribute.isEnabled()) {
 			return d;
 		}
 		for (String s : collection) {
@@ -51,7 +66,7 @@ public class ItemAttributeHandler implements AttributeHandler {
 	}
 
 	private double getValue(Collection<String> collection, Attribute attribute) {
-		if (collection == null || attribute == null) {
+		if (collection == null || attribute == null || !attribute.isEnabled()) {
 			return 0.0;
 		}
 		if (!attribute.isEnabled()) {
@@ -77,7 +92,7 @@ public class ItemAttributeHandler implements AttributeHandler {
 
 	private double getDoublePercentage(Collection<String> collection, Attribute attribute) {
 		double d = 0.0;
-		if (collection == null || collection.isEmpty() || attribute == null) {
+		if (collection == null || collection.isEmpty() || attribute == null || !attribute.isEnabled()) {
 			return d;
 		}
 		for (String s : collection) {
@@ -188,6 +203,34 @@ public class ItemAttributeHandler implements AttributeHandler {
 	@Override
 	public ItemAttributes getPlugin() {
 		return plugin;
+	}
+
+
+	@Override
+	public List<String> getAttributeStringsFromItemStack(ItemStack itemStack, Attribute attribute) {
+		List<String> list = new ArrayList<String>();
+		if (itemStack == null || attribute == null || !attribute.isEnabled()) {
+			return list;
+		}
+		List<String> lore = new ArrayList<String>();
+		if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
+			lore = itemStack.getItemMeta().getLore();
+		}
+		list = getStrings(lore, attribute);
+		return list;
+	}
+
+	@Override
+	public List<String> getAttributeStringsFromEntity(LivingEntity livingEntity, Attribute attribute) {
+		List<String> list = new ArrayList<String>();
+		if (livingEntity == null || attribute == null || !attribute.isEnabled()) {
+			return list;
+		}
+		for (ItemStack itemStack : livingEntity.getEquipment().getArmorContents()) {
+			list.addAll(getAttributeStringsFromItemStack(itemStack, attribute));
+		}
+		list.addAll(getAttributeStringsFromItemStack(livingEntity.getEquipment().getItemInHand(), attribute));
+		return list;
 	}
 
 }
