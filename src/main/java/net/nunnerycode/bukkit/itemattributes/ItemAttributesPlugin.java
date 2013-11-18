@@ -8,12 +8,14 @@ import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.AttributeHandler;
 import net.nunnerycode.bukkit.itemattributes.api.commands.ItemAttributesCommand;
 import net.nunnerycode.bukkit.itemattributes.api.managers.LanguageManager;
+import net.nunnerycode.bukkit.itemattributes.api.managers.PermissionsManager;
 import net.nunnerycode.bukkit.itemattributes.api.managers.SettingsManager;
 import net.nunnerycode.bukkit.itemattributes.api.tasks.HealthUpdateTask;
 import net.nunnerycode.bukkit.itemattributes.attributes.ItemAttributeHandler;
 import net.nunnerycode.bukkit.itemattributes.commands.ItemAttributesCommands;
 import net.nunnerycode.bukkit.itemattributes.listeners.ItemAttributesCoreListener;
 import net.nunnerycode.bukkit.itemattributes.managers.ItemAttributesLanguageManager;
+import net.nunnerycode.bukkit.itemattributes.managers.ItemAttributesPermissionsManager;
 import net.nunnerycode.bukkit.itemattributes.managers.ItemAttributesSettingsManager;
 import net.nunnerycode.bukkit.itemattributes.tasks.ItemAttributesHealthUpdateTask;
 import net.nunnerycode.java.libraries.cannonball.DebugPrinter;
@@ -29,6 +31,7 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 	private CommentedConventYamlConfiguration permissionsYAML;
 	private ItemAttributesLanguageManager itemAttributesLanguageManager;
 	private ItemAttributesSettingsManager itemAttributesSettingsManager;
+	private ItemAttributesPermissionsManager itemAttributesPermissionsManager;
 	private ItemAttributesCoreListener itemAttributesCoreListener;
 	private HealthUpdateTask itemAttributesHealthUpdateTask;
 	private ItemAttributesCommand itemAttributesCommands;
@@ -149,5 +152,10 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 	@Override
 	public CommentedConventYamlConfiguration getPermissionsYAML() {
 		return permissionsYAML;
+	}
+
+	@Override
+	public PermissionsManager getPermissionsManager() {
+		return itemAttributesPermissionsManager;
 	}
 }
