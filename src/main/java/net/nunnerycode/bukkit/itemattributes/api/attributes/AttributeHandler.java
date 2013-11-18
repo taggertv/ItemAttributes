@@ -1,5 +1,6 @@
 package net.nunnerycode.bukkit.itemattributes.api.attributes;
 
+import java.util.List;
 import java.util.Set;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import org.bukkit.entity.LivingEntity;
@@ -19,8 +20,8 @@ public interface AttributeHandler {
 
 	ItemAttributes getPlugin();
 
-	String getAttributeStringFromItemStack(ItemStack itemStack, Attribute attribute);
+	List<String> getAttributeStringsFromItemStack(ItemStack itemStack, Attribute attribute);
 
-	String[] getAttributeStringsFromEntity(LivingEntity livingEntity, Attribute attribute);
+	List<String> getAttributeStringsFromEntity(LivingEntity livingEntity, Attribute attribute);
 
 }
