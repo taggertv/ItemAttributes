@@ -74,117 +74,133 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 	}
 
-	private boolean handlePermissionCheck(Player player, int slot) {
-		if (player.hasPermission("itemattributes.admin.ignorepermissions")) {
+	private boolean handleLevelRequirementCheck(Player player) {
+		if (player.hasPermission("itemattributes.admin.ignorelevels")) {
 			return false;
 		}
 
 		boolean b = false;
 
-		ItemStack itemInHand = player.getInventory().getItem(slot);
+		ItemStack itemInHand = player.getEquipment().getItemInHand();
 		ItemStack helmet = player.getEquipment().getHelmet();
 		ItemStack chestplate = player.getEquipment().getChestplate();
 		ItemStack leggings = player.getEquipment().getLeggings();
 		ItemStack boots = player.getEquipment().getBoots();
 
-		Attribute permissionRequirementAttribute = getPlugin().getSettingsManager().getAttribute("PERMISSION " +
-				"REQUIREMENT");
+		Attribute levelRequirementAttribute = getPlugin().getSettingsManager().getAttribute("LEVEL REQUIREMENT");
 
 		// item in hand check
-		List<String> perms = getPlugin().getAttributeHandler().getAttributeStringsFromItemStack(itemInHand,
-				permissionRequirementAttribute);
-		for (String s : perms) {
-			if (!getPlugin().getPermissionsManager().hasPermission(player, s)) {
-				if (player.getInventory().firstEmpty() >= 0) {
-					player.getInventory().addItem(itemInHand);
-				} else {
-					player.getWorld().dropItem(player.getLocation(), itemInHand);
-				}
-				player.getEquipment().setItemInHand(null);
-				getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-permission",
-						new String[][]{{"%itemname%", getItemName(itemInHand)}});
-				b = true;
-				break;
+		int level = (int) ItemAttributesParseUtil.getValue(getItemStackLore(itemInHand), levelRequirementAttribute);
+		if (player.getLevel() < level) {
+			if (player.getInventory().firstEmpty() >= 0) {
+				player.getInventory().addItem(itemInHand);
+			} else {
+				player.getWorld().dropItem(player.getLocation(), itemInHand);
 			}
+			player.getEquipment().setItemInHand(null);
+			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-level",
+					new String[][]{{"%itemname%", getItemName(itemInHand)}, {"%level%", String.valueOf(level)}});
+			b = true;
 		}
 
 		// helmet check
-		perms = getPlugin().getAttributeHandler().getAttributeStringsFromItemStack(helmet,
-				permissionRequirementAttribute);
-		for (String s : perms) {
-			if (!getPlugin().getPermissionsManager().hasPermission(player, s)) {
-				if (player.getInventory().firstEmpty() >= 0) {
-					player.getInventory().addItem(helmet);
-				} else {
-					player.getWorld().dropItem(player.getLocation(), helmet);
-				}
-				player.getEquipment().setHelmet(null);
-				getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-permission",
-						new String[][]{{"%itemname%", getItemName(helmet)}});
-				b = true;
-				break;
+		level = (int) ItemAttributesParseUtil.getValue(getItemStackLore(helmet), levelRequirementAttribute);
+		if (player.getLevel() < level) {
+			if (player.getInventory().firstEmpty() >= 0) {
+				player.getInventory().addItem(helmet);
+			} else {
+				player.getWorld().dropItem(player.getLocation(), helmet);
 			}
+			player.getEquipment().setHelmet(null);
+			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-level",
+					new String[][]{{"%itemname%", getItemName(helmet)}, {"%level%", String.valueOf(level)}});
+			b = true;
 		}
 
 		// chestplate check
-		perms = getPlugin().getAttributeHandler().getAttributeStringsFromItemStack(chestplate,
-				permissionRequirementAttribute);
-		for (String s : perms) {
-			if (!getPlugin().getPermissionsManager().hasPermission(player, s)) {
-				if (player.getInventory().firstEmpty() >= 0) {
-					player.getInventory().addItem(chestplate);
-				} else {
-					player.getWorld().dropItem(player.getLocation(), chestplate);
-				}
-				player.getEquipment().setChestplate(null);
-				getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-permission",
-						new String[][]{{"%itemname%", getItemName(chestplate)}});
-				b = true;
-				break;
+		level = (int) ItemAttributesParseUtil.getValue(getItemStackLore(chestplate), levelRequirementAttribute);
+		if (player.getLevel() < level) {
+			if (player.getInventory().firstEmpty() >= 0) {
+				player.getInventory().addItem(chestplate);
+			} else {
+				player.getWorld().dropItem(player.getLocation(), chestplate);
 			}
+			player.getEquipment().setChestplate(null);
+			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-level",
+					new String[][]{{"%itemname%", getItemName(chestplate)}, {"%level%", String.valueOf(level)}});
+			b = true;
 		}
 
 		// leggings check
-		perms = getPlugin().getAttributeHandler().getAttributeStringsFromItemStack(leggings,
-				permissionRequirementAttribute);
-		for (String s : perms) {
-			if (!getPlugin().getPermissionsManager().hasPermission(player, s)) {
-				if (player.getInventory().firstEmpty() >= 0) {
-					player.getInventory().addItem(leggings);
-				} else {
-					player.getWorld().dropItem(player.getLocation(), leggings);
-				}
-				player.getEquipment().setLeggings(null);
-				getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-permission",
-						new String[][]{{"%itemname%", getItemName(leggings)}});
-				b = true;
-				break;
+		level = (int) ItemAttributesParseUtil.getValue(getItemStackLore(leggings), levelRequirementAttribute);
+		if (player.getLevel() < level) {
+			if (player.getInventory().firstEmpty() >= 0) {
+				player.getInventory().addItem(leggings);
+			} else {
+				player.getWorld().dropItem(player.getLocation(), leggings);
 			}
+			player.getEquipment().setLeggings(null);
+			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-level",
+					new String[][]{{"%itemname%", getItemName(leggings)}, {"%level%", String.valueOf(level)}});
+			b = true;
 		}
 
 		// boots check
-		perms = getPlugin().getAttributeHandler().getAttributeStringsFromItemStack(boots,
-				permissionRequirementAttribute);
-		for (String s : perms) {
-			if (!getPlugin().getPermissionsManager().hasPermission(player, s)) {
-				if (player.getInventory().firstEmpty() >= 0) {
-					player.getInventory().addItem(boots);
-				} else {
-					player.getWorld().dropItem(player.getLocation(), boots);
-				}
-				player.getEquipment().setBoots(null);
-				getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-permission",
-						new String[][]{{"%itemname%", getItemName(boots)}});
-				b = true;
-				break;
+		level = (int) ItemAttributesParseUtil.getValue(getItemStackLore(boots), levelRequirementAttribute);
+		if (player.getLevel() < level) {
+			if (player.getInventory().firstEmpty() >= 0) {
+				player.getInventory().addItem(boots);
+			} else {
+				player.getWorld().dropItem(player.getLocation(), boots);
 			}
+			player.getEquipment().setBoots(null);
+			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-level",
+					new String[][]{{"%itemname%", getItemName(boots)}, {"%level%", String.valueOf(level)}});
+			b = true;
 		}
 
 		if (b) {
-			playAttributeSounds(player.getEyeLocation(), permissionRequirementAttribute);
+			playAttributeSounds(player.getEyeLocation(), levelRequirementAttribute);
 		}
 
 		return b;
+	}
+
+	private void playAttributeSounds(Location location, Attribute... attributes) {
+		for (Attribute attribute : attributes) {
+			location.getWorld().playSound(location, attribute.getSound(), 1F, 1F);
+		}
+	}
+
+	private String getItemName(ItemStack itemStack) {
+		String name = "";
+		if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName()) {
+			name = ChatColor.stripColor(itemStack.getItemMeta().getDisplayName());
+		} else {
+			String matName = itemStack.getType().name();
+			String[] splitMatName = matName.split("_");
+			for (int i = 0; i < splitMatName.length; i++) {
+				if (i < splitMatName.length - 1) {
+					name = name.concat(WordUtils.capitalizeFully(splitMatName[i]).concat(" "));
+				} else {
+					name = name.concat(WordUtils.capitalizeFully(splitMatName[i]));
+				}
+			}
+		}
+		return name;
+	}
+
+	private List<String> getItemStackLore(ItemStack itemStack) {
+		List<String> lore = new ArrayList<String>();
+		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
+			lore.addAll(itemStack.getItemMeta().getLore());
+		}
+		return lore;
+	}
+
+	@Override
+	public ItemAttributes getPlugin() {
+		return plugin;
 	}
 
 	private boolean handlePermissionCheck(Player player) {
@@ -298,135 +314,6 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 
 		return b;
-	}
-
-	private boolean handleLevelRequirementCheck(Player player) {
-		if (player.hasPermission("itemattributes.admin.ignorelevels")) {
-			return false;
-		}
-
-		boolean b = false;
-
-		ItemStack itemInHand = player.getEquipment().getItemInHand();
-		ItemStack helmet = player.getEquipment().getHelmet();
-		ItemStack chestplate = player.getEquipment().getChestplate();
-		ItemStack leggings = player.getEquipment().getLeggings();
-		ItemStack boots = player.getEquipment().getBoots();
-
-		Attribute levelRequirementAttribute = getPlugin().getSettingsManager().getAttribute("LEVEL REQUIREMENT");
-
-		// item in hand check
-		int level = (int) ItemAttributesParseUtil.getValue(getItemStackLore(itemInHand), levelRequirementAttribute);
-		if (player.getLevel() < level) {
-			if (player.getInventory().firstEmpty() >= 0) {
-				player.getInventory().addItem(itemInHand);
-			} else {
-				player.getWorld().dropItem(player.getLocation(), itemInHand);
-			}
-			player.getEquipment().setItemInHand(null);
-			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-level",
-					new String[][]{{"%itemname%", getItemName(itemInHand)}, {"%level%", String.valueOf(level)}});
-			b = true;
-		}
-
-		// helmet check
-		level = (int) ItemAttributesParseUtil.getValue(getItemStackLore(helmet), levelRequirementAttribute);
-		if (player.getLevel() < level) {
-			if (player.getInventory().firstEmpty() >= 0) {
-				player.getInventory().addItem(helmet);
-			} else {
-				player.getWorld().dropItem(player.getLocation(), helmet);
-			}
-			player.getEquipment().setHelmet(null);
-			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-level",
-					new String[][]{{"%itemname%", getItemName(helmet)}, {"%level%", String.valueOf(level)}});
-			b = true;
-		}
-
-		// chestplate check
-		level = (int) ItemAttributesParseUtil.getValue(getItemStackLore(chestplate), levelRequirementAttribute);
-		if (player.getLevel() < level) {
-			if (player.getInventory().firstEmpty() >= 0) {
-				player.getInventory().addItem(chestplate);
-			} else {
-				player.getWorld().dropItem(player.getLocation(), chestplate);
-			}
-			player.getEquipment().setChestplate(null);
-			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-level",
-					new String[][]{{"%itemname%", getItemName(chestplate)}, {"%level%", String.valueOf(level)}});
-			b = true;
-		}
-
-		// leggings check
-		level = (int) ItemAttributesParseUtil.getValue(getItemStackLore(leggings), levelRequirementAttribute);
-		if (player.getLevel() < level) {
-			if (player.getInventory().firstEmpty() >= 0) {
-				player.getInventory().addItem(leggings);
-			} else {
-				player.getWorld().dropItem(player.getLocation(), leggings);
-			}
-			player.getEquipment().setLeggings(null);
-			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-level",
-					new String[][]{{"%itemname%", getItemName(leggings)}, {"%level%", String.valueOf(level)}});
-			b = true;
-		}
-
-		// boots check
-		level = (int) ItemAttributesParseUtil.getValue(getItemStackLore(boots), levelRequirementAttribute);
-		if (player.getLevel() < level) {
-			if (player.getInventory().firstEmpty() >= 0) {
-				player.getInventory().addItem(boots);
-			} else {
-				player.getWorld().dropItem(player.getLocation(), boots);
-			}
-			player.getEquipment().setBoots(null);
-			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-level",
-					new String[][]{{"%itemname%", getItemName(boots)}, {"%level%", String.valueOf(level)}});
-			b = true;
-		}
-
-		if (b) {
-			playAttributeSounds(player.getEyeLocation(), levelRequirementAttribute);
-		}
-
-		return b;
-	}
-
-	@Override
-	public ItemAttributes getPlugin() {
-		return plugin;
-	}
-
-	private List<String> getItemStackLore(ItemStack itemStack) {
-		List<String> lore = new ArrayList<String>();
-		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
-			lore.addAll(itemStack.getItemMeta().getLore());
-		}
-		return lore;
-	}
-
-	private String getItemName(ItemStack itemStack) {
-		String name = "";
-		if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName()) {
-			name = ChatColor.stripColor(itemStack.getItemMeta().getDisplayName());
-		} else {
-			String matName = itemStack.getType().name();
-			String[] splitMatName = matName.split("_");
-			for (int i = 0; i < splitMatName.length; i++) {
-				if (i < splitMatName.length - 1) {
-					name = name.concat(WordUtils.capitalizeFully(splitMatName[i]).concat(" "));
-				} else {
-					name = name.concat(WordUtils.capitalizeFully(splitMatName[i]));
-				}
-			}
-		}
-		return name;
-	}
-
-	private void playAttributeSounds(Location location, Attribute... attributes) {
-		for (Attribute attribute : attributes) {
-			location.getWorld().playSound(location, attribute.getSound(), 1F, 1F);
-		}
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
@@ -715,6 +602,119 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		return b;
 	}
 
+	private boolean handlePermissionCheck(Player player, int slot) {
+		if (player.hasPermission("itemattributes.admin.ignorepermissions")) {
+			return false;
+		}
+
+		boolean b = false;
+
+		ItemStack itemInHand = player.getInventory().getItem(slot);
+		ItemStack helmet = player.getEquipment().getHelmet();
+		ItemStack chestplate = player.getEquipment().getChestplate();
+		ItemStack leggings = player.getEquipment().getLeggings();
+		ItemStack boots = player.getEquipment().getBoots();
+
+		Attribute permissionRequirementAttribute = getPlugin().getSettingsManager().getAttribute("PERMISSION " +
+				"REQUIREMENT");
+
+		// item in hand check
+		List<String> perms = getPlugin().getAttributeHandler().getAttributeStringsFromItemStack(itemInHand,
+				permissionRequirementAttribute);
+		for (String s : perms) {
+			if (!getPlugin().getPermissionsManager().hasPermission(player, s)) {
+				if (player.getInventory().firstEmpty() >= 0) {
+					player.getInventory().addItem(itemInHand);
+				} else {
+					player.getWorld().dropItem(player.getLocation(), itemInHand);
+				}
+				player.getEquipment().setItemInHand(null);
+				getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-permission",
+						new String[][]{{"%itemname%", getItemName(itemInHand)}});
+				b = true;
+				break;
+			}
+		}
+
+		// helmet check
+		perms = getPlugin().getAttributeHandler().getAttributeStringsFromItemStack(helmet,
+				permissionRequirementAttribute);
+		for (String s : perms) {
+			if (!getPlugin().getPermissionsManager().hasPermission(player, s)) {
+				if (player.getInventory().firstEmpty() >= 0) {
+					player.getInventory().addItem(helmet);
+				} else {
+					player.getWorld().dropItem(player.getLocation(), helmet);
+				}
+				player.getEquipment().setHelmet(null);
+				getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-permission",
+						new String[][]{{"%itemname%", getItemName(helmet)}});
+				b = true;
+				break;
+			}
+		}
+
+		// chestplate check
+		perms = getPlugin().getAttributeHandler().getAttributeStringsFromItemStack(chestplate,
+				permissionRequirementAttribute);
+		for (String s : perms) {
+			if (!getPlugin().getPermissionsManager().hasPermission(player, s)) {
+				if (player.getInventory().firstEmpty() >= 0) {
+					player.getInventory().addItem(chestplate);
+				} else {
+					player.getWorld().dropItem(player.getLocation(), chestplate);
+				}
+				player.getEquipment().setChestplate(null);
+				getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-permission",
+						new String[][]{{"%itemname%", getItemName(chestplate)}});
+				b = true;
+				break;
+			}
+		}
+
+		// leggings check
+		perms = getPlugin().getAttributeHandler().getAttributeStringsFromItemStack(leggings,
+				permissionRequirementAttribute);
+		for (String s : perms) {
+			if (!getPlugin().getPermissionsManager().hasPermission(player, s)) {
+				if (player.getInventory().firstEmpty() >= 0) {
+					player.getInventory().addItem(leggings);
+				} else {
+					player.getWorld().dropItem(player.getLocation(), leggings);
+				}
+				player.getEquipment().setLeggings(null);
+				getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-permission",
+						new String[][]{{"%itemname%", getItemName(leggings)}});
+				b = true;
+				break;
+			}
+		}
+
+		// boots check
+		perms = getPlugin().getAttributeHandler().getAttributeStringsFromItemStack(boots,
+				permissionRequirementAttribute);
+		for (String s : perms) {
+			if (!getPlugin().getPermissionsManager().hasPermission(player, s)) {
+				if (player.getInventory().firstEmpty() >= 0) {
+					player.getInventory().addItem(boots);
+				} else {
+					player.getWorld().dropItem(player.getLocation(), boots);
+				}
+				player.getEquipment().setBoots(null);
+				getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-permission",
+						new String[][]{{"%itemname%", getItemName(boots)}});
+				b = true;
+				break;
+			}
+		}
+
+		if (b) {
+			playAttributeSounds(player.getEyeLocation(), permissionRequirementAttribute);
+		}
+
+		return b;
+	}
+
 	@EventHandler(priority = EventPriority.LOW)
 	public void onItemHeldEventLow(PlayerItemHeldEvent event) {
 		Attribute healthAttribute = getPlugin().getSettingsManager().getAttribute("HEALTH");
@@ -907,6 +907,11 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		if (event.getDamager() instanceof Player) {
 			b = handleLevelRequirementCheck((Player) event.getDamager()) || handlePermissionCheck((Player) event
 					.getDamager());
+		}
+
+		if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player) {
+			b = handleLevelRequirementCheck((Player) ((Projectile) event.getDamager()).getShooter()) ||
+					handlePermissionCheck((Player) ((Projectile) event.getDamager()).getShooter());
 		}
 
 		event.setCancelled(b);
