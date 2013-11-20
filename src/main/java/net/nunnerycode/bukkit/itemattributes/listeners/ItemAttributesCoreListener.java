@@ -216,8 +216,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		ItemStack leggings = player.getEquipment().getLeggings();
 		ItemStack boots = player.getEquipment().getBoots();
 
-		Attribute permissionRequirementAttribute = getPlugin().getSettingsManager().getAttribute("PERMISSION " +
-				"REQUIREMENT");
+		Attribute permissionRequirementAttribute = getPlugin().getSettingsManager().getAttribute("PERMISSION REQUIREMENT");
 
 		// item in hand check
 		List<String> perms = getPlugin().getAttributeHandler().getAttributeStringsFromItemStack(itemInHand,

@@ -10,6 +10,9 @@ permissions:
     itemattributes.admin.ignorelevels:
         description: Allows player to have the plugin ignore their level on check.
         default: op
+    itemattributes.admin.ignorepermissions:
+        description: Allows player to have the plugin ignore their permissions on check.
+        default: op
 
 commands:
     itemattributes:
