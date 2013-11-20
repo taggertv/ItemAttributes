@@ -97,7 +97,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			} else {
 				player.getWorld().dropItem(player.getLocation(), itemInHand);
 			}
-			player.getEquipment().setItemInHand(null);
+			player.getEquipment().setItemInHand(new ItemStack(Material.AIR));
 			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-level",
 					new String[][]{{"%itemname%", getItemName(itemInHand)}, {"%level%", String.valueOf(level)}});
 			b = true;
@@ -111,7 +111,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			} else {
 				player.getWorld().dropItem(player.getLocation(), helmet);
 			}
-			player.getEquipment().setHelmet(null);
+			player.getEquipment().setHelmet(new ItemStack(Material.AIR));
 			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-level",
 					new String[][]{{"%itemname%", getItemName(helmet)}, {"%level%", String.valueOf(level)}});
 			b = true;
@@ -125,7 +125,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			} else {
 				player.getWorld().dropItem(player.getLocation(), chestplate);
 			}
-			player.getEquipment().setChestplate(null);
+			player.getEquipment().setChestplate(new ItemStack(Material.AIR));
 			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-level",
 					new String[][]{{"%itemname%", getItemName(chestplate)}, {"%level%", String.valueOf(level)}});
 			b = true;
@@ -139,7 +139,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			} else {
 				player.getWorld().dropItem(player.getLocation(), leggings);
 			}
-			player.getEquipment().setLeggings(null);
+			player.getEquipment().setLeggings(new ItemStack(Material.AIR));
 			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-level",
 					new String[][]{{"%itemname%", getItemName(leggings)}, {"%level%", String.valueOf(level)}});
 			b = true;
@@ -153,7 +153,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			} else {
 				player.getWorld().dropItem(player.getLocation(), boots);
 			}
-			player.getEquipment().setBoots(null);
+			player.getEquipment().setBoots(new ItemStack(Material.AIR));
 			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-level",
 					new String[][]{{"%itemname%", getItemName(boots)}, {"%level%", String.valueOf(level)}});
 			b = true;
@@ -228,7 +228,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				} else {
 					player.getWorld().dropItem(player.getLocation(), itemInHand);
 				}
-				player.getEquipment().setItemInHand(null);
+				player.getEquipment().setItemInHand(new ItemStack(Material.AIR));
 				getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-permission",
 						new String[][]{{"%itemname%", getItemName(itemInHand)}});
 				b = true;
@@ -246,7 +246,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				} else {
 					player.getWorld().dropItem(player.getLocation(), helmet);
 				}
-				player.getEquipment().setHelmet(null);
+				player.getEquipment().setHelmet(new ItemStack(Material.AIR));
 				getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-permission",
 						new String[][]{{"%itemname%", getItemName(helmet)}});
 				b = true;
@@ -264,7 +264,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				} else {
 					player.getWorld().dropItem(player.getLocation(), chestplate);
 				}
-				player.getEquipment().setChestplate(null);
+				player.getEquipment().setChestplate(new ItemStack(Material.AIR));
 				getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-permission",
 						new String[][]{{"%itemname%", getItemName(chestplate)}});
 				b = true;
@@ -282,7 +282,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				} else {
 					player.getWorld().dropItem(player.getLocation(), leggings);
 				}
-				player.getEquipment().setLeggings(null);
+				player.getEquipment().setLeggings(new ItemStack(Material.AIR));
 				getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-permission",
 						new String[][]{{"%itemname%", getItemName(leggings)}});
 				b = true;
@@ -300,7 +300,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				} else {
 					player.getWorld().dropItem(player.getLocation(), boots);
 				}
-				player.getEquipment().setBoots(null);
+				player.getEquipment().setBoots(new ItemStack(Material.AIR));
 				getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-permission",
 						new String[][]{{"%itemname%", getItemName(boots)}});
 				b = true;
@@ -532,7 +532,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			} else {
 				player.getWorld().dropItem(player.getLocation(), itemInHand);
 			}
-			player.getInventory().setItem(i, null);
+			player.getInventory().setItem(i, new ItemStack(Material.AIR));
 			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-level",
 					new String[][]{{"%itemname%", getItemName(itemInHand)}, {"%level%", String.valueOf(level)}});
 			b = true;
@@ -546,7 +546,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			} else {
 				player.getWorld().dropItem(player.getLocation(), helmet);
 			}
-			player.getEquipment().setHelmet(null);
+			player.getEquipment().setHelmet(new ItemStack(Material.AIR));
 			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-level",
 					new String[][]{{"%itemname%", getItemName(helmet)}, {"%level%", String.valueOf(level)}});
 			b = true;
@@ -560,7 +560,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			} else {
 				player.getWorld().dropItem(player.getLocation(), chestplate);
 			}
-			player.getEquipment().setChestplate(null);
+			player.getEquipment().setChestplate(new ItemStack(Material.AIR));
 			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-level",
 					new String[][]{{"%itemname%", getItemName(chestplate)}, {"%level%", String.valueOf(level)}});
 			b = true;
@@ -574,7 +574,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			} else {
 				player.getWorld().dropItem(player.getLocation(), leggings);
 			}
-			player.getEquipment().setLeggings(null);
+			player.getEquipment().setLeggings(new ItemStack(Material.AIR));
 			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-level",
 					new String[][]{{"%itemname%", getItemName(leggings)}, {"%level%", String.valueOf(level)}});
 			b = true;
@@ -588,7 +588,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			} else {
 				player.getWorld().dropItem(player.getLocation(), boots);
 			}
-			player.getEquipment().setBoots(null);
+			player.getEquipment().setBoots(new ItemStack(Material.AIR));
 			getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-level",
 					new String[][]{{"%itemname%", getItemName(boots)}, {"%level%", String.valueOf(level)}});
 			b = true;
@@ -627,7 +627,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				} else {
 					player.getWorld().dropItem(player.getLocation(), itemInHand);
 				}
-				player.getEquipment().setItemInHand(null);
+				player.getInventory().setItem(slot, new ItemStack(Material.AIR));
 				getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-permission",
 						new String[][]{{"%itemname%", getItemName(itemInHand)}});
 				b = true;
@@ -645,7 +645,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				} else {
 					player.getWorld().dropItem(player.getLocation(), helmet);
 				}
-				player.getEquipment().setHelmet(null);
+				player.getEquipment().setHelmet(new ItemStack(Material.AIR));
 				getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-permission",
 						new String[][]{{"%itemname%", getItemName(helmet)}});
 				b = true;
@@ -663,7 +663,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				} else {
 					player.getWorld().dropItem(player.getLocation(), chestplate);
 				}
-				player.getEquipment().setChestplate(null);
+				player.getEquipment().setChestplate(new ItemStack(Material.AIR));
 				getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-permission",
 						new String[][]{{"%itemname%", getItemName(chestplate)}});
 				b = true;
@@ -681,7 +681,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				} else {
 					player.getWorld().dropItem(player.getLocation(), leggings);
 				}
-				player.getEquipment().setLeggings(null);
+				player.getEquipment().setLeggings(new ItemStack(Material.AIR));
 				getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-permission",
 						new String[][]{{"%itemname%", getItemName(leggings)}});
 				b = true;
@@ -699,7 +699,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				} else {
 					player.getWorld().dropItem(player.getLocation(), boots);
 				}
-				player.getEquipment().setBoots(null);
+				player.getEquipment().setBoots(new ItemStack(Material.AIR));
 				getPlugin().getLanguageManager().sendMessage(player, "events.unable-to-use-permission",
 						new String[][]{{"%itemname%", getItemName(boots)}});
 				b = true;
