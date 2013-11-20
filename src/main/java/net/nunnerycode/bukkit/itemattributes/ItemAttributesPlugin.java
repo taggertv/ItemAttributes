@@ -3,8 +3,11 @@ package net.nunnerycode.bukkit.itemattributes;
 import com.conventnunnery.libraries.config.CommentedConventYamlConfiguration;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
+import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.AttributeHandler;
 import net.nunnerycode.bukkit.itemattributes.api.commands.ItemAttributesCommand;
 import net.nunnerycode.bukkit.itemattributes.api.managers.LanguageManager;
@@ -128,6 +131,12 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 
 		itemAttributesCommands = new ItemAttributesCommands(this);
 
+		List<String> loadedAttributes = new ArrayList<String>();
+		for (Attribute attribute : itemAttributesSettingsManager.getLoadedAttributes()) {
+			loadedAttributes.add(attribute.getName());
+		}
+
+		debugPrinter.debug(Level.INFO, "Loaded attributes: " + loadedAttributes.toString());
 		debugPrinter.debug(Level.INFO, "v" + getDescription().getVersion() + " enabled");
 	}
 
