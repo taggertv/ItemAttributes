@@ -93,7 +93,8 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 						"-") + ".base-value", entry.getValue().getBaseValue()));
 				try {
 					entry.getValue().setSound(Sound.valueOf(section.getString(entry.getKey().toLowerCase().replace(" ",
-							"-") + ".sound", entry.getValue().getSound().name())));
+							"-") + ".sound", (entry.getValue().getSound() != null) ? entry.getValue().getSound().name
+							() : "")));
 				} catch (Exception e) {
 					// do nothing
 				}
