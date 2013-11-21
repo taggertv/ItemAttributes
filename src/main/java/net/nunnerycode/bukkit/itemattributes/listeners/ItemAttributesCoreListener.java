@@ -171,10 +171,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 	}
 
 	private void playAttributeSoundsAndEffects(Location location, Attribute... attributes) {
-		for (Attribute attribute : attributes) {
-			location.getWorld().playSound(location, attribute.getSound(), 1F, 1F);
-			location.getWorld().playEffect(location, attribute.getEffect(), RandomUtils.nextInt(4));
-		}
+		getPlugin().getAttributeHandler().playAttributeEffects(location, attributes);
+		getPlugin().getAttributeHandler().playAttributeSounds(location, attributes);
 	}
 
 	private String getItemName(ItemStack itemStack) {
