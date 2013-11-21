@@ -170,11 +170,6 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		return b;
 	}
 
-	private void playAttributeSoundsAndEffects(Location location, Attribute... attributes) {
-		getPlugin().getAttributeHandler().playAttributeEffects(location, attributes);
-		getPlugin().getAttributeHandler().playAttributeSounds(location, attributes);
-	}
-
 	private String getItemName(ItemStack itemStack) {
 		String name = "";
 		if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName()) {
@@ -191,11 +186,6 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			}
 		}
 		return name;
-	}
-
-	@Override
-	public ItemAttributes getPlugin() {
-		return plugin;
 	}
 
 	private boolean handlePermissionCheck(Player player) {
@@ -341,6 +331,16 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 			playAttributeSoundsAndEffects(he.getEyeLocation(), healthAttribute);
 		}
+	}
+
+	@Override
+	public ItemAttributes getPlugin() {
+		return plugin;
+	}
+
+	private void playAttributeSoundsAndEffects(Location location, Attribute... attributes) {
+		getPlugin().getAttributeHandler().playAttributeEffects(location, attributes);
+		getPlugin().getAttributeHandler().playAttributeSounds(location, attributes);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -1025,7 +1025,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 					attackSpeedAttribute));
 			double timeToSet = 20.0D * Math.max(attackSpeed, 0D);
 			if (timeLeft > 0) {
-				double frac = timeLeft / timeToSet;
+				double frac = Math.max(0D, Math.min(1D, 1 - (timeLeft / timeToSet)));
 				damage *= frac;
 			}
 
