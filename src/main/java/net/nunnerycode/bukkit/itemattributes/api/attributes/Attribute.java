@@ -1,5 +1,6 @@
 package net.nunnerycode.bukkit.itemattributes.api.attributes;
 
+import org.bukkit.Effect;
 import org.bukkit.Sound;
 
 public interface Attribute {
@@ -29,5 +30,9 @@ public interface Attribute {
 	double getBaseValue();
 
 	void setBaseValue(double d);
+
+	Effect getEffect();
+
+	void setEffect(Effect e);
 
 }
