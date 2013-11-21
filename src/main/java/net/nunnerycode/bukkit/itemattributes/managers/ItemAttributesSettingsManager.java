@@ -22,14 +22,16 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	private double baseDodgeRate;
 	private int baseStunLength;
 	private int secondsBetweenHealthUpdates;
-	private Map<String, Attribute> attributeMap;
+	private Map<String, Attribute> coreAttributeMap;
+	private Map<String, Attribute> externalAttributeMap;
 	private boolean itemOnlyDamageSystemEnabled;
 	private double itemOnlyDamageSystemBaseDamage;
 	private boolean pluginCompatible;
 
 	public ItemAttributesSettingsManager(ItemAttributesPlugin plugin) {
 		this.plugin = plugin;
-		attributeMap = new HashMap<String, Attribute>();
+		coreAttributeMap = new HashMap<String, Attribute>();
+		externalAttributeMap = new HashMap<String, Attribute>();
 	}
 
 	public void load() {
@@ -47,40 +49,40 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		itemOnlyDamageSystemBaseDamage = getPlugin().getConfigYAML().getDouble("options.item-only-damage-system" +
 				".base-damage", 1.0D);
 		pluginCompatible = getPlugin().getConfigYAML().getBoolean("options.enable-plugin-compatibility", true);
-		attributeMap.put("HEALTH", new ItemAttribute("Health", true, 100D, false, "%value% Health", null, 0));
-		attributeMap.put("ARMOR", new ItemAttribute("Armor", true, 100D, false, "%value% Armor", null, 0));
-		attributeMap.put("DAMAGE", new ItemAttribute("Damage", true, 100D, false, "%value% Damage", null, 1));
-		attributeMap.put("MELEE DAMAGE", new ItemAttribute("Melee Damage", true, 100D, false, "%value% Melee Damage",
+		coreAttributeMap.put("HEALTH", new ItemAttribute("Health", true, 100D, false, "%value% Health", null, 0));
+		coreAttributeMap.put("ARMOR", new ItemAttribute("Armor", true, 100D, false, "%value% Armor", null, 0));
+		coreAttributeMap.put("DAMAGE", new ItemAttribute("Damage", true, 100D, false, "%value% Damage", null, 1));
+		coreAttributeMap.put("MELEE DAMAGE", new ItemAttribute("Melee Damage", true, 100D, false, "%value% Melee Damage",
 				null, 0));
-		attributeMap.put("RANGED DAMAGE", new ItemAttribute("Ranged Damage", true, 100D, false,
+		coreAttributeMap.put("RANGED DAMAGE", new ItemAttribute("Ranged Damage", true, 100D, false,
 				"%value% Ranged Damage", null, 0D));
-		attributeMap.put("REGENERATION", new ItemAttribute("Regeneration", true, 100D, false, "%value% Regeneration",
+		coreAttributeMap.put("REGENERATION", new ItemAttribute("Regeneration", true, 100D, false, "%value% Regeneration",
 				null, 0D));
-		attributeMap.put("CRITICAL RATE", new ItemAttribute("Critical Rate", true, 100D, true,
+		coreAttributeMap.put("CRITICAL RATE", new ItemAttribute("Critical Rate", true, 100D, true,
 				"%value% Critical Rate", null, 0.05));
-		attributeMap.put("CRITICAL DAMAGE", new ItemAttribute("Critical Damage", true, 100D, true,
+		coreAttributeMap.put("CRITICAL DAMAGE", new ItemAttribute("Critical Damage", true, 100D, true,
 				"%value% Critical Damage", null, 0.2));
-		attributeMap.put("LEVEL REQUIREMENT", new ItemAttribute("Level Requirement", true, 100D, false,
+		coreAttributeMap.put("LEVEL REQUIREMENT", new ItemAttribute("Level Requirement", true, 100D, false,
 				"Level Requirement: %value%", null, 0));
-		attributeMap.put("ARMOR PENETRATION", new ItemAttribute("Armor Penetration", true, 100D, false,
+		coreAttributeMap.put("ARMOR PENETRATION", new ItemAttribute("Armor Penetration", true, 100D, false,
 				"%value% Armor Penetration", null, 0));
-		attributeMap.put("STUN RATE", new ItemAttribute("Stun Rate", true, 100D, true, "%value% Stun Rate", null, 0D));
-		attributeMap.put("STUN LENGTH", new ItemAttribute("Stun Length", true, 100D, false, "%value% Stun Length",
+		coreAttributeMap.put("STUN RATE", new ItemAttribute("Stun Rate", true, 100D, true, "%value% Stun Rate", null, 0D));
+		coreAttributeMap.put("STUN LENGTH", new ItemAttribute("Stun Length", true, 100D, false, "%value% Stun Length",
 				null, 1));
-		attributeMap.put("DODGE RATE", new ItemAttribute("Dodge Rate", true, 100D, true, "%value% Dodge Rate", null,
+		coreAttributeMap.put("DODGE RATE", new ItemAttribute("Dodge Rate", true, 100D, true, "%value% Dodge Rate", null,
 				0D));
-		attributeMap.put("FIRE IMMUNITY", new ItemAttribute("Fire Immunity", true, -1D, false,
+		coreAttributeMap.put("FIRE IMMUNITY", new ItemAttribute("Fire Immunity", true, -1D, false,
 				"Fire Immunity", null, -1D));
-		attributeMap.put("WITHER IMMUNITY", new ItemAttribute("Wither Immunity", true, -1D, false,
+		coreAttributeMap.put("WITHER IMMUNITY", new ItemAttribute("Wither Immunity", true, -1D, false,
 				"Wither Immunity", null, -1D));
-		attributeMap.put("POISON IMMUNITY", new ItemAttribute("Poison Immunity", true, -1D, false,
+		coreAttributeMap.put("POISON IMMUNITY", new ItemAttribute("Poison Immunity", true, -1D, false,
 				"Poison Immunity", null, -1D));
-		attributeMap.put("PERMISSION REQUIREMENT", new ItemAttribute("Permission Requirement", true, -1D, false,
+		coreAttributeMap.put("PERMISSION REQUIREMENT", new ItemAttribute("Permission Requirement", true, -1D, false,
 				"Permission Requirement: %value%", null, -1D));
 
 		if (getPlugin().getConfigYAML().isConfigurationSection("core-stats")) {
 			ConfigurationSection section = getPlugin().getConfigYAML().getConfigurationSection("core-stats");
-			for (Map.Entry<String, Attribute> entry : attributeMap.entrySet()) {
+			for (Map.Entry<String, Attribute> entry : coreAttributeMap.entrySet()) {
 				entry.getValue().setEnabled(section.getBoolean(entry.getKey().toLowerCase().replace(" ",
 						"-") + ".enabled", entry.getValue().isEnabled()));
 				entry.getValue().setFormat(section.getString(entry.getKey().toLowerCase().replace(" ",
@@ -143,8 +145,8 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	}
 
 	public Attribute getAttribute(String name) {
-		if (attributeMap.containsKey(name.toUpperCase())) {
-			return attributeMap.get(name.toUpperCase());
+		if (coreAttributeMap.containsKey(name.toUpperCase())) {
+			return coreAttributeMap.get(name.toUpperCase());
 		}
 		return null;
 	}
@@ -166,7 +168,7 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 			getPlugin().getConfigYAML().set("options.seconds-between-health-updates", secondsBetweenHealthUpdates);
 			getPlugin().getConfigYAML().set("options.item-only-damage-system.enabled", itemOnlyDamageSystemEnabled);
 			getPlugin().getConfigYAML().set("options.item-only-damage-system.base-damage", itemOnlyDamageSystemBaseDamage);
-			for (Map.Entry<String, Attribute> entry : attributeMap.entrySet()) {
+			for (Map.Entry<String, Attribute> entry : coreAttributeMap.entrySet()) {
 				getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
 						"-") + ".enabled", entry.getValue().isEnabled());
 				getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
@@ -197,8 +199,8 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	public boolean addAttribute(String name, Attribute attribute) {
 		boolean b = false;
 		if (isPluginCompatible()) {
-			attributeMap.put(name.toUpperCase(), attribute);
-			b = attributeMap.containsKey(name.toUpperCase());
+			externalAttributeMap.put(name.toUpperCase(), attribute);
+			b = externalAttributeMap.containsKey(name.toUpperCase());
 		}
 		return b;
 	}
@@ -207,15 +209,27 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	public boolean removeAttribute(String name, Attribute attribute) {
 		boolean b = false;
 		if (isPluginCompatible()) {
-			attributeMap.remove(name.toUpperCase());
-			b = !attributeMap.containsKey(name.toUpperCase());
+			externalAttributeMap.remove(name.toUpperCase());
+			b = !externalAttributeMap.containsKey(name.toUpperCase());
 		}
 		return b;
 	}
 
 	@Override
 	public Set<Attribute> getLoadedAttributes() {
-		return new HashSet<Attribute>(attributeMap.values());
+		Set<Attribute> allAttributes = new HashSet<Attribute>(getLoadedCoreAttributes());
+		allAttributes.addAll(getLoadedExtraAttributes());
+		return allAttributes;
+	}
+
+	@Override
+	public Set<Attribute> getLoadedCoreAttributes() {
+		return new HashSet<Attribute>(coreAttributeMap.values());
+	}
+
+	@Override
+	public Set<Attribute> getLoadedExtraAttributes() {
+		return new HashSet<Attribute>(externalAttributeMap.values());
 	}
 
 	@Override
