@@ -6,11 +6,13 @@ import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.ChatColor;
 
+@Deprecated
 public final class ItemAttributesParseUtil {
 
 	private ItemAttributesParseUtil() {
 	}
 
+	@Deprecated
 	public static double getValue(Collection<String> collection, Attribute attribute) {
 		if (collection == null || attribute == null) {
 			return 0.0;
@@ -24,6 +26,7 @@ public final class ItemAttributesParseUtil {
 		return getDouble(collection, attribute);
 	}
 
+	@Deprecated
 	public static double getDoublePercentage(Collection<String> collection, Attribute attribute, double base) {
 		double d = 0.0;
 		if (collection == null || collection.isEmpty() || attribute == null) {
@@ -64,6 +67,7 @@ public final class ItemAttributesParseUtil {
 		return d;
 	}
 
+	@Deprecated
 	public static double getDouble(Collection<String> collection, Attribute attribute) {
 		double d = 0.0;
 		if (collection == null || collection.isEmpty() || attribute == null) {
@@ -92,10 +96,12 @@ public final class ItemAttributesParseUtil {
 		return d;
 	}
 
+	@Deprecated
 	public static double getDoublePercentage(Collection<String> collection, Attribute attribute) {
 		return getDoublePercentage(collection, attribute, 100D);
 	}
 
+	@Deprecated
 	public static int getInt(Collection<String> collection, Attribute attribute) {
 		int i = 0;
 		if (collection == null || collection.isEmpty() || attribute == null) {
@@ -124,6 +130,7 @@ public final class ItemAttributesParseUtil {
 		return i;
 	}
 
+	@Deprecated
 	public static boolean hasFormatInCollection(Collection<String> collection, String format) {
 		boolean b = false;
 		if (collection == null || collection.isEmpty() || format == null || format.isEmpty()) {
