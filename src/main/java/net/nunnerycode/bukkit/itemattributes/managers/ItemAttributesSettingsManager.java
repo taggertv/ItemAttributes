@@ -80,6 +80,8 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 				"Poison Immunity", null, -1D));
 		coreAttributeMap.put("PERMISSION REQUIREMENT", new ItemAttribute("Permission Requirement", true, -1D, false,
 				"Permission Requirement: %value%", null, -1D));
+		coreAttributeMap.put("ATTACK SPEED", new ItemAttribute("Attack Speed", true, 100D, true,
+				"%value% Attack Speed", null, 1D));
 
 		if (getPlugin().getConfigYAML().isConfigurationSection("core-stats")) {
 			ConfigurationSection section = getPlugin().getConfigYAML().getConfigurationSection("core-stats");
