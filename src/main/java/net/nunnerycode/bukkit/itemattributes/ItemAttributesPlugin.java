@@ -13,6 +13,7 @@ import net.nunnerycode.bukkit.itemattributes.api.commands.ItemAttributesCommand;
 import net.nunnerycode.bukkit.itemattributes.api.managers.LanguageManager;
 import net.nunnerycode.bukkit.itemattributes.api.managers.PermissionsManager;
 import net.nunnerycode.bukkit.itemattributes.api.managers.SettingsManager;
+import net.nunnerycode.bukkit.itemattributes.api.tasks.AttackSpeedTask;
 import net.nunnerycode.bukkit.itemattributes.api.tasks.HealthUpdateTask;
 import net.nunnerycode.bukkit.itemattributes.attributes.ItemAttributeHandler;
 import net.nunnerycode.bukkit.itemattributes.commands.ItemAttributesCommands;
@@ -85,6 +86,11 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 	@Override
 	public HealthUpdateTask getHealthUpdateTask() {
 		return itemAttributesHealthUpdateTask;
+	}
+
+	@Override
+	public AttackSpeedTask getAttackSpeedTask() {
+		return itemAttributesAttackSpeedTask;
 	}
 
 	@Override

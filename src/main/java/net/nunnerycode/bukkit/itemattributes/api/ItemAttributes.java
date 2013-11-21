@@ -7,6 +7,7 @@ import net.nunnerycode.bukkit.itemattributes.api.listeners.CoreListener;
 import net.nunnerycode.bukkit.itemattributes.api.managers.LanguageManager;
 import net.nunnerycode.bukkit.itemattributes.api.managers.PermissionsManager;
 import net.nunnerycode.bukkit.itemattributes.api.managers.SettingsManager;
+import net.nunnerycode.bukkit.itemattributes.api.tasks.AttackSpeedTask;
 import net.nunnerycode.bukkit.itemattributes.api.tasks.HealthUpdateTask;
 import net.nunnerycode.java.libraries.cannonball.DebugPrinter;
 
@@ -28,6 +29,8 @@ public interface ItemAttributes {
 	PermissionsManager getPermissionsManager();
 
 	HealthUpdateTask getHealthUpdateTask();
+
+	AttackSpeedTask getAttackSpeedTask();
 
 	ItemAttributesCommand getItemAttributesCommand();
 
