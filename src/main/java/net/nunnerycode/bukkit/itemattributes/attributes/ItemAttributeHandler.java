@@ -11,6 +11,7 @@ import net.nunnerycode.bukkit.itemattributes.api.attributes.AttributeHandler;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 
@@ -231,6 +232,32 @@ public class ItemAttributeHandler implements AttributeHandler {
 		}
 		list.addAll(getAttributeStringsFromItemStack(livingEntity.getEquipment().getItemInHand(), attribute));
 		return list;
+	}
+
+	@Override
+	public void playAttributeEffects(Location location, Attribute... attributes) {
+		if (location == null || attributes == null) {
+			return;
+		}
+		for (Attribute attribute : attributes) {
+			if (attribute == null || !attribute.isEnabled() || attribute.getEffect() == null) {
+				continue;
+			}
+			location.getWorld().playEffect(location, attribute.getEffect(), RandomUtils.nextInt(4));
+		}
+	}
+
+	@Override
+	public void playAttributeSounds(Location location, Attribute... attributes) {
+		if (location == null || attributes == null) {
+			return;
+		}
+		for (Attribute attribute : attributes) {
+			if (attribute == null || !attribute.isEnabled() || attribute.getSound() == null) {
+				continue;
+			}
+			location.getWorld().playSound(location, attribute.getSound(), 1F, 1F);
+		}
 	}
 
 }
