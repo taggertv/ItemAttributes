@@ -179,7 +179,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 
 		if (b) {
-			playAttributeSounds(player.getEyeLocation(), permissionRequirementAttribute);
+			playAttributeSoundsAndEffects(player.getEyeLocation(), permissionRequirementAttribute);
 		}
 
 		return b;
@@ -276,7 +276,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 
 		if (b) {
-			playAttributeSounds(player.getEyeLocation(), levelRequirementAttribute);
+			playAttributeSoundsAndEffects(player.getEyeLocation(), levelRequirementAttribute);
 		}
 
 		return b;
@@ -305,9 +305,10 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		return name;
 	}
 
-	private void playAttributeSounds(Location location, Attribute... attributes) {
+	private void playAttributeSoundsAndEffects(Location location, Attribute... attributes) {
 		for (Attribute attribute : attributes) {
 			location.getWorld().playSound(location, attribute.getSound(), 1F, 1F);
+			location.getWorld().playEffect(location, attribute.getEffect(), RandomUtils.nextInt(4));
 		}
 	}
 
@@ -340,7 +341,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				((Player) he).setHealthScale(he.getMaxHealth());
 			}
 
-			playAttributeSounds(he.getEyeLocation(), healthAttribute);
+			playAttributeSoundsAndEffects(he.getEyeLocation(), healthAttribute);
 		}
 	}
 
@@ -373,7 +374,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				.getChangeInHealth(), 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
-		playAttributeSounds(event.getPlayer().getEyeLocation(), healthAttribute);
+		playAttributeSoundsAndEffects(event.getPlayer().getEyeLocation(), healthAttribute);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -408,7 +409,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		entity.setHealth(Math.max((baseMaxHealth + d) / 2, 1));
 		entity.setMaxHealth(Math.max(baseMaxHealth + d, 1));
 		entity.setHealth(Math.min(Math.max(currentHealth, 1), entity.getMaxHealth()));
-		playAttributeSounds(event.getEntity().getLocation().add(0D, 1D, 0D), healthAttribute);
+		playAttributeSoundsAndEffects(event.getEntity().getLocation().add(0D, 1D, 0D), healthAttribute);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -440,7 +441,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				.getChangeInHealth(), 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
-		playAttributeSounds(event.getPlayer().getEyeLocation(), healthAttribute);
+		playAttributeSoundsAndEffects(event.getPlayer().getEyeLocation(), healthAttribute);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -465,7 +466,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				.getChangeInHealth(), 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
-		playAttributeSounds(event.getPlayer().getEyeLocation(), healthAttribute);
+		playAttributeSoundsAndEffects(event.getPlayer().getEyeLocation(), healthAttribute);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -582,7 +583,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 
 		if (b) {
-			playAttributeSounds(player.getEyeLocation(), permissionRequirementAttribute);
+			playAttributeSoundsAndEffects(player.getEyeLocation(), permissionRequirementAttribute);
 		}
 
 		return b;
@@ -679,7 +680,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 
 		if (b) {
-			playAttributeSounds(player.getEyeLocation(), levelRequirementAttribute);
+			playAttributeSoundsAndEffects(player.getEyeLocation(), levelRequirementAttribute);
 		}
 
 		return b;
@@ -707,7 +708,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				.getChangeInHealth(), 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
-		playAttributeSounds(event.getPlayer().getEyeLocation(), healthAttribute);
+		playAttributeSoundsAndEffects(event.getPlayer().getEyeLocation(), healthAttribute);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -1009,7 +1010,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			}
 			event.setDamage(0);
 			event.setCancelled(true);
-			playAttributeSounds(event.getEntity().getLocation().add(0D, 1D, 0D), dodgeRateAttribute);
+			playAttributeSoundsAndEffects(event.getEntity().getLocation().add(0D, 1D, 0D), dodgeRateAttribute);
 			return;
 		}
 
@@ -1017,10 +1018,10 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		damage = originalDamage + equipmentDamage;
 
 		if (damagedEquipmentReduction != 0D) {
-			playAttributeSounds(event.getEntity().getLocation().add(0D, 1D, 0D), armorAttribute);
+			playAttributeSoundsAndEffects(event.getEntity().getLocation().add(0D, 1D, 0D), armorAttribute);
 		}
 		if (armorPenetration != 0D) {
-			playAttributeSounds(event.getEntity().getLocation().add(0D, 1D, 0D), armorPenetrationAttribute);
+			playAttributeSoundsAndEffects(event.getEntity().getLocation().add(0D, 1D, 0D), armorPenetrationAttribute);
 		}
 
 		if (RandomUtils.nextDouble() < damagerCriticalChance) {
@@ -1045,7 +1046,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 							"events.critical-hit", new String[][]{{"%percentage%", decimalFormat.format(critPercentage
 							* 100)}});
 				}
-				playAttributeSounds(event.getDamager().getLocation().add(0D, 1D, 0D), criticalRateAttribute, criticalDamageAttribute);
+				playAttributeSoundsAndEffects(event.getDamager().getLocation().add(0D, 1D, 0D), criticalRateAttribute, criticalDamageAttribute);
 			} else if (criticalStrikeEvent != null && !criticalStrikeEvent.isCancelled()) {
 				double critPercentage = (1.00 + criticalStrikeEvent.getCriticalDamage());
 				damage *= critPercentage;
@@ -1058,7 +1059,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 							"events.critical-hit", new String[][]{{"%percentage%", decimalFormat.format(critPercentage
 							* 100)}});
 				}
-				playAttributeSounds(event.getDamager().getLocation().add(0D, 1D, 0D), criticalRateAttribute, criticalDamageAttribute);
+				playAttributeSoundsAndEffects(event.getDamager().getLocation().add(0D, 1D, 0D), criticalRateAttribute, criticalDamageAttribute);
 			}
 		}
 
@@ -1093,7 +1094,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 					}
 				}
 			}
-			playAttributeSounds(event.getEntity().getLocation().add(0D, 1D, 0D), stunLengthAttribute,
+			playAttributeSoundsAndEffects(event.getEntity().getLocation().add(0D, 1D, 0D), stunLengthAttribute,
 					stunRateAttribute);
 		}
 
@@ -1146,7 +1147,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 
 		if (event.isCancelled()) {
-			playAttributeSounds(((LivingEntity) event.getEntity()).getEyeLocation(), getPlugin().getSettingsManager()
+			playAttributeSoundsAndEffects(((LivingEntity) event.getEntity()).getEyeLocation(), getPlugin().getSettingsManager()
 					.getAttribute("FIRE IMMUNITY"), getPlugin().getSettingsManager().getAttribute("POISON IMMUNITY"),
 					getPlugin().getSettingsManager().getAttribute("WITHER IMMUNITY"));
 		}
