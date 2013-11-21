@@ -1,6 +1,7 @@
 package net.nunnerycode.bukkit.itemattributes.attributes;
 
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
+import org.bukkit.Effect;
 import org.bukkit.Sound;
 
 public class ItemAttribute implements Attribute {
@@ -12,9 +13,15 @@ public class ItemAttribute implements Attribute {
 	private String format;
 	private Sound sound;
 	private double baseValue;
+	private Effect effect;
 
 	public ItemAttribute(String name, boolean enabled, double maxValue, boolean percentage, String format,
 						 Sound sound, double baseValue) {
+		this(name, enabled, maxValue, percentage, format, sound, baseValue, null);
+	}
+
+	public ItemAttribute(String name, boolean enabled, double maxValue, boolean percentage, String format,
+						 Sound sound, double baseValue, Effect effect) {
 		this.name = name;
 		this.enabled = enabled;
 		this.maxValue = maxValue;
@@ -22,6 +29,7 @@ public class ItemAttribute implements Attribute {
 		this.format = format;
 		this.sound = sound;
 		this.baseValue = baseValue;
+		this.effect = effect;
 	}
 
 	@Override
@@ -85,6 +93,16 @@ public class ItemAttribute implements Attribute {
 	@Override
 	public void setBaseValue(double d) {
 		this.baseValue = d;
+	}
+
+	@Override
+	public Effect getEffect() {
+		return effect;
+	}
+
+	@Override
+	public void setEffect(Effect e) {
+		this.effect = e;
 	}
 
 	@Override
