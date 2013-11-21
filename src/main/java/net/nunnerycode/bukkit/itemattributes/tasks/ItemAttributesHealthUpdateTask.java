@@ -1,6 +1,5 @@
 package net.nunnerycode.bukkit.itemattributes.tasks;
 
-import java.util.ArrayList;
 import java.util.List;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
@@ -11,7 +10,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 
 public final class ItemAttributesHealthUpdateTask implements HealthUpdateTask, Runnable {
@@ -25,6 +23,9 @@ public final class ItemAttributesHealthUpdateTask implements HealthUpdateTask, R
 	@Override
 	public void run() {
 		Attribute healthAttribute = getPlugin().getSettingsManager().getAttribute("HEALTH");
+		if (!healthAttribute.isEnabled()) {
+			return;
+		}
 		for (World w : Bukkit.getWorlds()) {
 			for (Entity e : w.getEntities()) {
 				if (e instanceof Player) {
@@ -86,14 +87,6 @@ public final class ItemAttributesHealthUpdateTask implements HealthUpdateTask, R
 	@Override
 	public ItemAttributes getPlugin() {
 		return plugin;
-	}
-
-	public List<String> getItemStackLore(ItemStack itemStack) {
-		List<String> lore = new ArrayList<String>();
-		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
-			lore.addAll(itemStack.getItemMeta().getLore());
-		}
-		return lore;
 	}
 
 }

@@ -38,6 +38,10 @@ public final class ItemAttributesAttackSpeedTask implements AttackSpeedTask, Run
 
 	@Override
 	public void run() {
+		Attribute attackSpeedAttribute = getPlugin().getSettingsManager().getAttribute("ATTACK SPEED");
+		if (!attackSpeedAttribute.isEnabled()) {
+			return;
+		}
 		Iterator<Map.Entry<LivingEntity, Long>> iterator = chargeTimer.entrySet().iterator();
 		while (iterator.hasNext()) {
 			Map.Entry<LivingEntity, Long> entry = iterator.next();
@@ -45,14 +49,14 @@ public final class ItemAttributesAttackSpeedTask implements AttackSpeedTask, Run
 				iterator.remove();
 				continue;
 			}
-			Attribute attribute = getPlugin().getSettingsManager().getAttribute("ATTACK SPEED");
-			if (entry.getValue() < Math.round(attribute.getBaseValue())) {
+
+			if (entry.getValue() < Math.round(attackSpeedAttribute.getBaseValue())) {
 				LivingEntity entity = entry.getKey();
-				getPlugin().getAttributeHandler().playAttributeEffects(entity.getEyeLocation(), attribute);
-				getPlugin().getAttributeHandler().playAttributeSounds(entity.getEyeLocation(), attribute);
+				getPlugin().getAttributeHandler().playAttributeEffects(entity.getEyeLocation(), attackSpeedAttribute);
+				getPlugin().getAttributeHandler().playAttributeSounds(entity.getEyeLocation(), attackSpeedAttribute);
 				iterator.remove();
 			} else {
-				entry.setValue(entry.getValue() - Math.round(attribute.getBaseValue()));
+				entry.setValue(entry.getValue() - Math.round(attackSpeedAttribute.getBaseValue()));
 			}
 		}
 	}
