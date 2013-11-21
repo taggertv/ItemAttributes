@@ -400,15 +400,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			return;
 		}
 		LivingEntity entity = (LivingEntity) event.getEntity();
-		ItemStack[] armorContents = entity.getEquipment().getArmorContents();
-		double d = 0.0;
-		for (ItemStack is : armorContents) {
-			d += ItemAttributesParseUtil.getValue(getItemStackLore(is), healthAttribute);
-		}
-		d += ItemAttributesParseUtil.getValue(getItemStackLore(entity.getEquipment().getItemInHand()),
-				healthAttribute);
+		double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(entity, healthAttribute);
 		double currentHealth = entity.getHealth();
-		entity.resetMaxHealth();
 		double baseMaxHealth = entity.getMaxHealth();
 		if (entity.hasMetadata("itemattributes.basehealth")) {
 			List<MetadataValue> metadataValueList = entity.getMetadata("itemattributes.basehealth");
@@ -428,8 +421,9 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			return;
 		}
 
+		entity.setHealth(Math.max((baseMaxHealth + d) / 2, 1));
 		entity.setMaxHealth(Math.max(baseMaxHealth + d, 1));
-		entity.setHealth(Math.min(Math.max(currentHealth, 0), entity.getMaxHealth()));
+		entity.setHealth(Math.min(Math.max(currentHealth, 1), entity.getMaxHealth()));
 		playAttributeSounds(event.getEntity().getLocation().add(0D, 1D, 0D), healthAttribute);
 	}
 
