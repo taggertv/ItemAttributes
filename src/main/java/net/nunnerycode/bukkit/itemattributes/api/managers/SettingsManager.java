@@ -34,6 +34,10 @@ public interface SettingsManager {
 
 	Set<Attribute> getLoadedAttributes();
 
+	Set<Attribute> getLoadedCoreAttributes();
+
+	Set<Attribute> getLoadedExtraAttributes();
+
 	boolean isPluginCompatible();
 
 }
