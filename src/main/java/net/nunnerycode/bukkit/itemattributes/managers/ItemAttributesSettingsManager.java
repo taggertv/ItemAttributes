@@ -10,6 +10,7 @@ import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.managers.SettingsManager;
 import net.nunnerycode.bukkit.itemattributes.attributes.ItemAttribute;
+import org.bukkit.Effect;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -103,6 +104,13 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 				} catch (Exception e) {
 					// do nothing
 				}
+				try {
+					entry.getValue().setEffect(Effect.valueOf(section.getString(entry.getKey().toLowerCase().replace
+							(" ", "-") + ".sound", (entry.getValue().getEffect() != null) ? entry.getValue().getEffect
+							().name() : "")));
+				} catch (Exception e) {
+					// do nothing
+				}
 			}
 		}
 	}
@@ -185,6 +193,12 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 				try {
 					getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
 							"-") + ".sound", entry.getValue().getSound().name());
+				} catch (Exception e) {
+					// do nothing
+				}
+				try {
+					getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
+							"-") + ".effect", entry.getValue().getEffect().name());
 				} catch (Exception e) {
 					// do nothing
 				}
