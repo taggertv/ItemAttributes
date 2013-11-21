@@ -2,13 +2,11 @@ package net.nunnerycode.bukkit.itemattributes.tasks;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.nunnerycode.bukkit.itemattributes.ItemAttributesPlugin;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.tasks.HealthUpdateTask;
 import net.nunnerycode.bukkit.itemattributes.events.ItemAttributesHealthUpdateEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -19,12 +17,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public final class ItemAttributesHealthUpdateTask extends BukkitRunnable implements HealthUpdateTask {
 
-	private final ItemAttributesPlugin plugin;
+	private final ItemAttributes plugin;
 
-	public ItemAttributesHealthUpdateTask(ItemAttributesPlugin plugin) {
+	public ItemAttributesHealthUpdateTask(ItemAttributes plugin) {
 		this.plugin = plugin;
-		this.runTaskTimer(plugin, 20L * getPlugin().getSettingsManager().getSecondsBetweenHealthUpdates(),
-				20L * getPlugin().getSettingsManager().getSecondsBetweenHealthUpdates());
 	}
 
 	@Override
@@ -52,7 +48,7 @@ public final class ItemAttributesHealthUpdateTask extends BukkitRunnable impleme
 							.getChangeInHealth(), 1));
 					player.setHealth(Math.min(Math.max(currentHealth, 0), player.getMaxHealth()));
 					player.setHealthScale(player.getMaxHealth());
-					playAttributeSounds(player.getEyeLocation(), healthAttribute);
+					getPlugin().getAttributeHandler().playAttributeSounds(player.getEyeLocation(), healthAttribute);
 				} else if (e instanceof LivingEntity) {
 					LivingEntity entity = (LivingEntity) e;
 					double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(entity, healthAttribute);
@@ -82,7 +78,7 @@ public final class ItemAttributesHealthUpdateTask extends BukkitRunnable impleme
 					entity.setMaxHealth(Math.max(healthUpdateEvent.getBaseHealth() + healthUpdateEvent
 							.getChangeInHealth(), 1));
 					entity.setHealth(Math.min(Math.max(currentHealth, 0), entity.getMaxHealth()));
-					playAttributeSounds(entity.getEyeLocation(), healthAttribute);
+					getPlugin().getAttributeHandler().playAttributeSounds(entity.getEyeLocation(), healthAttribute);
 				}
 			}
 		}
@@ -99,12 +95,6 @@ public final class ItemAttributesHealthUpdateTask extends BukkitRunnable impleme
 			lore.addAll(itemStack.getItemMeta().getLore());
 		}
 		return lore;
-	}
-
-	private void playAttributeSounds(Location location, Attribute... attributes) {
-		for (Attribute attribute : attributes) {
-			location.getWorld().playSound(location, attribute.getSound(), 1F, 1F);
-		}
 	}
 
 }
