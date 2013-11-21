@@ -1,4 +1,4 @@
-version: 1.0.14
+version: 1.0.15
 options:
   base-player-health: 20.0
   base-critical-rate: 0.05
@@ -9,85 +9,112 @@ options:
   item-only-damage-system:
     enabled: false
     base-damage: 1.0
-  enable-plugin-compatibility: true
 core-stats:
   poison-immunity:
     enabled: true
     format: Poison Immunity
     percentage: false
     max-value: -1.0
+    base-value: -1.0
   ranged-damage:
     enabled: true
     format: '%value% Ranged Damage'
     percentage: false
     max-value: 100.0
+    base-value: 0.0
   regeneration:
     enabled: true
     format: '%value% Regeneration'
     percentage: false
     max-value: 100.0
+    base-value: 0.0
   critical-rate:
     enabled: true
     format: '%value% Critical Rate'
     percentage: true
     max-value: 100.0
+    base-value: 0.05
   melee-damage:
     enabled: true
     format: '%value% Melee Damage'
     percentage: false
     max-value: 100.0
+    base-value: 0.0
   fire-immunity:
     enabled: true
     format: Fire Immunity
     percentage: false
     max-value: -1.0
-  health:
-    enabled: true
-    format: '%value% Health'
-    percentage: false
-    max-value: 100.0
+    base-value: -1.0
   dodge-rate:
     enabled: true
     format: '%value% Dodge Rate'
     percentage: true
     max-value: 100.0
+    base-value: 0.0
+  health:
+    enabled: true
+    format: '%value% Health'
+    percentage: false
+    max-value: 100.0
+    base-value: 0.0
+  damage:
+    enabled: true
+    format: '%value% Damage'
+    percentage: false
+    max-value: 100.0
+    base-value: 1.0
   armor:
     enabled: true
     format: '%value% Armor'
     percentage: false
     max-value: 100.0
+    base-value: 0.0
   critical-damage:
     enabled: true
     format: '%value% Critical Damage'
     percentage: true
     max-value: 100.0
-  stun-rate:
-    enabled: true
-    format: '%value% Stun Rate'
-    percentage: true
-    max-value: 100.0
-  armor-penetration:
-    enabled: true
-    format: '%value% Armor Penetration'
-    percentage: false
-    max-value: 100.0
-  level-requirement:
-    enabled: true
-    format: 'Level Requirement: %value%'
-    percentage: false
-    max-value: 100.0
+    base-value: 0.2
   permission-requirement:
     enabled: true
     format: 'Permission Requirement: %value%'
     percentage: false
     max-value: -1.0
+    base-value: -1.0
+  stun-rate:
+    enabled: true
+    format: '%value% Stun Rate'
+    percentage: true
+    max-value: 100.0
+    base-value: 0.0
+  attack-speed:
+    enabled: true
+    format: '%value% Attack Speed'
+    percentage: true
+    max-value: 100.0
+    base-value: 1.0
+  armor-penetration:
+    enabled: true
+    format: '%value% Armor Penetration'
+    percentage: false
+    max-value: 100.0
+    base-value: 0.0
+  level-requirement:
+    enabled: true
+    format: 'Level Requirement: %value%'
+    percentage: false
+    max-value: 100.0
+    base-value: 0.0
   stun-length:
     enabled: true
     format: '%value% Stun Length'
     percentage: false
     max-value: 100.0
+    base-value: 1.0
   wither-immunity:
     enabled: true
     format: Wither Immunity
     percentage: false
     max-value: -1.0
+    base-value: -1.0
