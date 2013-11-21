@@ -30,7 +30,7 @@ public interface SettingsManager {
 
 	boolean addAttribute(String name, Attribute attribute);
 
-	boolean removeAttribute(String name, Attribute attribute);
+	boolean removeAttribute(String name);
 
 	Set<Attribute> getLoadedAttributes();
 

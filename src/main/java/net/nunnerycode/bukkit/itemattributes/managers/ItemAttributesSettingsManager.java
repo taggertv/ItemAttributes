@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import net.nunnerycode.bukkit.itemattributes.ItemAttributesPlugin;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
@@ -198,19 +199,21 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	@Override
 	public boolean addAttribute(String name, Attribute attribute) {
 		boolean b = false;
-		if (isPluginCompatible()) {
+		if (name != null && attribute != null && isPluginCompatible()) {
 			externalAttributeMap.put(name.toUpperCase(), attribute);
 			b = externalAttributeMap.containsKey(name.toUpperCase());
+			getPlugin().getDebugPrinter().debug(Level.INFO, "Adding attribute: " + attribute.getName());
 		}
 		return b;
 	}
 
 	@Override
-	public boolean removeAttribute(String name, Attribute attribute) {
+	public boolean removeAttribute(String name) {
 		boolean b = false;
-		if (isPluginCompatible()) {
+		if (name != null && isPluginCompatible()) {
 			externalAttributeMap.remove(name.toUpperCase());
 			b = !externalAttributeMap.containsKey(name.toUpperCase());
+			getPlugin().getDebugPrinter().debug(Level.INFO, "Removing attribute: " + name);
 		}
 		return b;
 	}
