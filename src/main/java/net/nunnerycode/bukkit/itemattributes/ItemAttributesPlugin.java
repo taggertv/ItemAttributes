@@ -20,6 +20,7 @@ import net.nunnerycode.bukkit.itemattributes.listeners.ItemAttributesCoreListene
 import net.nunnerycode.bukkit.itemattributes.managers.ItemAttributesLanguageManager;
 import net.nunnerycode.bukkit.itemattributes.managers.ItemAttributesPermissionsManager;
 import net.nunnerycode.bukkit.itemattributes.managers.ItemAttributesSettingsManager;
+import net.nunnerycode.bukkit.itemattributes.tasks.ItemAttributesAttackSpeedTask;
 import net.nunnerycode.bukkit.itemattributes.tasks.ItemAttributesHealthUpdateTask;
 import net.nunnerycode.java.libraries.cannonball.DebugPrinter;
 import org.bukkit.Bukkit;
@@ -36,7 +37,8 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 	private ItemAttributesSettingsManager itemAttributesSettingsManager;
 	private ItemAttributesPermissionsManager itemAttributesPermissionsManager;
 	private ItemAttributesCoreListener itemAttributesCoreListener;
-	private HealthUpdateTask itemAttributesHealthUpdateTask;
+	private ItemAttributesHealthUpdateTask itemAttributesHealthUpdateTask;
+	private ItemAttributesAttackSpeedTask itemAttributesAttackSpeedTask;
 	private ItemAttributesCommand itemAttributesCommands;
 	private ItemAttributeHandler itemAttributeHandler;
 
@@ -61,6 +63,11 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 	}
 
 	@Override
+	public CommentedConventYamlConfiguration getPermissionsYAML() {
+		return permissionsYAML;
+	}
+
+	@Override
 	public LanguageManager getLanguageManager() {
 		return itemAttributesLanguageManager;
 	}
@@ -68,6 +75,11 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 	@Override
 	public SettingsManager getSettingsManager() {
 		return itemAttributesSettingsManager;
+	}
+
+	@Override
+	public PermissionsManager getPermissionsManager() {
+		return itemAttributesPermissionsManager;
 	}
 
 	@Override
@@ -123,9 +135,15 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 
 		itemAttributesCoreListener = new ItemAttributesCoreListener(this);
 
-		if (itemAttributesSettingsManager.getAttribute("HEALTH").isEnabled()) {
-			itemAttributesHealthUpdateTask = new ItemAttributesHealthUpdateTask(this);
-		}
+		itemAttributesHealthUpdateTask = new ItemAttributesHealthUpdateTask(this);
+		getServer().getScheduler().runTaskTimer(this, itemAttributesHealthUpdateTask,
+				20 * getSettingsManager().getSecondsBetweenHealthUpdates(),
+				20 * getSettingsManager().getSecondsBetweenHealthUpdates());
+
+		itemAttributesAttackSpeedTask = new ItemAttributesAttackSpeedTask(this);
+		getServer().getScheduler().runTaskTimer(this, itemAttributesAttackSpeedTask,
+				(long) Math.ceil(getSettingsManager().getAttribute("ATTACK SPEED").getBaseValue()),
+				(long) Math.ceil(getSettingsManager().getAttribute("ATTACK SPEED").getBaseValue()));
 
 		Bukkit.getServer().getPluginManager().registerEvents(itemAttributesCoreListener, this);
 
@@ -159,15 +177,5 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 				getLogger().warning("Could not unpack " + s);
 			}
 		}
-	}
-
-	@Override
-	public CommentedConventYamlConfiguration getPermissionsYAML() {
-		return permissionsYAML;
-	}
-
-	@Override
-	public PermissionsManager getPermissionsManager() {
-		return itemAttributesPermissionsManager;
 	}
 }
