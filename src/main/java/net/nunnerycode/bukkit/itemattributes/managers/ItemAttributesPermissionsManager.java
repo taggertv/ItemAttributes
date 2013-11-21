@@ -8,7 +8,7 @@ import net.nunnerycode.bukkit.itemattributes.api.managers.PermissionsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class ItemAttributesPermissionsManager implements PermissionsManager {
+public final class ItemAttributesPermissionsManager implements PermissionsManager {
 
 	private final ItemAttributes plugin;
 	private final List<String> permissions;
