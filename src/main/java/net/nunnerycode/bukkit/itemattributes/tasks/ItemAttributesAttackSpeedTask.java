@@ -7,9 +7,8 @@ import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.tasks.AttackSpeedTask;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.scheduler.BukkitRunnable;
 
-public final class ItemAttributesAttackSpeedTask extends BukkitRunnable implements AttackSpeedTask {
+public final class ItemAttributesAttackSpeedTask implements AttackSpeedTask, Runnable {
 
 	private final ItemAttributes plugin;
 	private final Map<LivingEntity, Long> chargeTimer;

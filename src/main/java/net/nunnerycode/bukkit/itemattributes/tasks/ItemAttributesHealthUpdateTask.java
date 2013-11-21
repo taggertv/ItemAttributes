@@ -13,9 +13,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
-import org.bukkit.scheduler.BukkitRunnable;
 
-public final class ItemAttributesHealthUpdateTask extends BukkitRunnable implements HealthUpdateTask {
+public final class ItemAttributesHealthUpdateTask implements HealthUpdateTask, Runnable {
 
 	private final ItemAttributes plugin;
 
