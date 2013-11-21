@@ -7,7 +7,6 @@ import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.tasks.HealthUpdateTask;
 import net.nunnerycode.bukkit.itemattributes.events.ItemAttributesHealthUpdateEvent;
-import net.nunnerycode.bukkit.itemattributes.utils.ItemAttributesParseUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -35,12 +34,7 @@ public final class ItemAttributesHealthUpdateTask extends BukkitRunnable impleme
 			for (Entity e : w.getEntities()) {
 				if (e instanceof Player) {
 					Player player = (Player) e;
-					ItemStack[] armorContents = player.getEquipment().getArmorContents();
-					double d = 0.0;
-					for (ItemStack is : armorContents) {
-						d += ItemAttributesParseUtil.getValue(getItemStackLore(is), healthAttribute);
-					}
-					d += ItemAttributesParseUtil.getValue(getItemStackLore(player.getItemInHand()), healthAttribute);
+					double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(player, healthAttribute);
 					double currentHealth = player.getHealth();
 					double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 
@@ -61,13 +55,7 @@ public final class ItemAttributesHealthUpdateTask extends BukkitRunnable impleme
 					playAttributeSounds(player.getEyeLocation(), healthAttribute);
 				} else if (e instanceof LivingEntity) {
 					LivingEntity entity = (LivingEntity) e;
-					ItemStack[] armorContents = entity.getEquipment().getArmorContents();
-					double d = 0.0;
-					for (ItemStack is : armorContents) {
-						d += ItemAttributesParseUtil.getValue(getItemStackLore(is), healthAttribute);
-					}
-					d += ItemAttributesParseUtil.getValue(getItemStackLore(entity.getEquipment().getItemInHand()),
-							healthAttribute);
+					double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(entity, healthAttribute);
 					double currentHealth = entity.getHealth();
 					entity.resetMaxHealth();
 					double baseMaxHealth = entity.getMaxHealth();
