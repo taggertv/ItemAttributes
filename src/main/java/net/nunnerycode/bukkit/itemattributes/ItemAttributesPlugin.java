@@ -147,9 +147,7 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 				20 * getSettingsManager().getSecondsBetweenHealthUpdates());
 
 		itemAttributesAttackSpeedTask = new ItemAttributesAttackSpeedTask(this);
-		getServer().getScheduler().runTaskTimer(this, itemAttributesAttackSpeedTask,
-				(long) Math.ceil(getSettingsManager().getAttribute("ATTACK SPEED").getBaseValue()),
-				(long) Math.ceil(getSettingsManager().getAttribute("ATTACK SPEED").getBaseValue()));
+		getServer().getScheduler().runTaskTimer(this, itemAttributesAttackSpeedTask, 20L / 4, 20L / 4);
 
 		Bukkit.getServer().getPluginManager().registerEvents(itemAttributesCoreListener, this);
 
