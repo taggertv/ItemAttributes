@@ -83,6 +83,7 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 				"Permission Requirement: %value%", null, -1D));
 		coreAttributeMap.put("ATTACK SPEED", new ItemAttribute("Attack Speed", true, 100D, true,
 				"%value% Attack Speed", null, 1D));
+		coreAttributeMap.put("BLOCK", new ItemAttribute("Block", true, 100D, true, "%value% Block", null, 0.5D));
 
 		if (getPlugin().getConfigYAML().isConfigurationSection("core-stats")) {
 			ConfigurationSection section = getPlugin().getConfigYAML().getConfigurationSection("core-stats");
