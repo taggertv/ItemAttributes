@@ -167,46 +167,6 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		return itemOnlyDamageSystemEnabled;
 	}
 
-	public void save() {
-		getPlugin().getConfigYAML().load();
-		if (!getPlugin().getConfigYAML().isSet("version")) {
-			getPlugin().getConfigYAML().set("version", getPlugin().getConfigYAML().getVersion());
-			getPlugin().getConfigYAML().set("options.base-player-health", basePlayerHealth);
-			getPlugin().getConfigYAML().set("options.base-critical-rate", baseCriticalRate);
-			getPlugin().getConfigYAML().set("options.base-critical-damage", baseCriticalDamage);
-			getPlugin().getConfigYAML().set("options.base-stun-rate", baseStunRate);
-			getPlugin().getConfigYAML().set("options.base-stun-length", baseStunLength);
-			getPlugin().getConfigYAML().set("options.seconds-between-health-updates", secondsBetweenHealthUpdates);
-			getPlugin().getConfigYAML().set("options.item-only-damage-system.enabled", itemOnlyDamageSystemEnabled);
-			getPlugin().getConfigYAML().set("options.item-only-damage-system.base-damage", itemOnlyDamageSystemBaseDamage);
-			for (Map.Entry<String, Attribute> entry : coreAttributeMap.entrySet()) {
-				getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
-						"-") + ".enabled", entry.getValue().isEnabled());
-				getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
-						"-") + ".format", entry.getValue().getFormat());
-				getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
-						"-") + ".percentage", entry.getValue().isPercentage());
-				getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
-						"-") + ".max-value", entry.getValue().getMaxValue());
-				getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
-						"-") + ".base-value", entry.getValue().getBaseValue());
-				try {
-					getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
-							"-") + ".sound", entry.getValue().getSound().name());
-				} catch (Exception e) {
-					// do nothing
-				}
-				try {
-					getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
-							"-") + ".effect", entry.getValue().getEffect().name());
-				} catch (Exception e) {
-					// do nothing
-				}
-			}
-		}
-		getPlugin().getConfigYAML().save();
-	}
-
 	@Override
 	public double getItemOnlyDamageSystemBaseDamage() {
 		return itemOnlyDamageSystemBaseDamage;
@@ -254,5 +214,42 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	@Override
 	public boolean isPluginCompatible() {
 		return pluginCompatible;
+	}
+
+	public void save() {
+		getPlugin().getConfigYAML().load();
+		getPlugin().getConfigYAML().set("options.base-player-health", basePlayerHealth);
+		getPlugin().getConfigYAML().set("options.base-critical-rate", baseCriticalRate);
+		getPlugin().getConfigYAML().set("options.base-critical-damage", baseCriticalDamage);
+		getPlugin().getConfigYAML().set("options.base-stun-rate", baseStunRate);
+		getPlugin().getConfigYAML().set("options.base-stun-length", baseStunLength);
+		getPlugin().getConfigYAML().set("options.seconds-between-health-updates", secondsBetweenHealthUpdates);
+		getPlugin().getConfigYAML().set("options.item-only-damage-system.enabled", itemOnlyDamageSystemEnabled);
+		getPlugin().getConfigYAML().set("options.item-only-damage-system.base-damage", itemOnlyDamageSystemBaseDamage);
+		for (Map.Entry<String, Attribute> entry : coreAttributeMap.entrySet()) {
+			getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
+					"-") + ".enabled", entry.getValue().isEnabled());
+			getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
+					"-") + ".format", entry.getValue().getFormat());
+			getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
+					"-") + ".percentage", entry.getValue().isPercentage());
+			getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
+					"-") + ".max-value", entry.getValue().getMaxValue());
+			getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
+					"-") + ".base-value", entry.getValue().getBaseValue());
+			try {
+				getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
+						"-") + ".sound", entry.getValue().getSound().name());
+			} catch (Exception e) {
+				// do nothing
+			}
+			try {
+				getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
+						"-") + ".effect", entry.getValue().getEffect().name());
+			} catch (Exception e) {
+				// do nothing
+			}
+		}
+		getPlugin().getConfigYAML().save();
 	}
 }
