@@ -913,6 +913,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		Attribute armorAttribute = getPlugin().getSettingsManager().getAttribute("ARMOR");
 		Attribute armorPenetrationAttribute = getPlugin().getSettingsManager().getAttribute("ARMOR PENETRATION");
 		Attribute attackSpeedAttribute = getPlugin().getSettingsManager().getAttribute("ATTACK SPEED");
+		Attribute blockAttribute = getPlugin().getSettingsManager().getAttribute("BLOCK");
+		Attribute parryAttribute = getPlugin().getSettingsManager().getAttribute("PARRY");
 
 		if (event.getDamager() instanceof Projectile) {
 			Projectile projectile = (Projectile) event.getDamager();
@@ -1030,6 +1032,15 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			}
 
 			getPlugin().getAttackSpeedTask().setTimeLeft((LivingEntity) event.getDamager(), Math.round(timeToSet));
+		}
+
+		if (event.getEntity() instanceof Player) {
+			if (((Player) event.getEntity()).isBlocking()) {
+				double blockDamageReduction = blockAttribute.getBaseValue() + getPlugin().getAttributeHandler()
+						.getAttributeValueFromEntity((LivingEntity) event.getEntity(), blockAttribute);
+				damage = Math.max(0D, damage * blockDamageReduction);
+				playAttributeSoundsAndEffects(((LivingEntity) event.getEntity()).getEyeLocation(), blockAttribute);
+			}
 		}
 
 		if (damagedEquipmentReduction != 0D) {
