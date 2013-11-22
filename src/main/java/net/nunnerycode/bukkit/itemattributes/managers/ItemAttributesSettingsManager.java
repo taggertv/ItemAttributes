@@ -84,6 +84,7 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		coreAttributeMap.put("ATTACK SPEED", new ItemAttribute("Attack Speed", true, 100D, true,
 				"%value% Attack Speed", null, 1D));
 		coreAttributeMap.put("BLOCK", new ItemAttribute("Block", true, 100D, true, "%value% Block", null, 0.5D));
+		coreAttributeMap.put("PARRY", new ItemAttribute("Parry", true, 100D, true, "%value% Parry", null, 1.5D));
 
 		if (getPlugin().getConfigYAML().isConfigurationSection("core-stats")) {
 			ConfigurationSection section = getPlugin().getConfigYAML().getConfigurationSection("core-stats");
