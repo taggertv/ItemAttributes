@@ -333,14 +333,14 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 	}
 
-	private void playAttributeSoundsAndEffects(Location location, Attribute... attributes) {
-		getPlugin().getAttributeHandler().playAttributeEffects(location, attributes);
-		getPlugin().getAttributeHandler().playAttributeSounds(location, attributes);
-	}
-
 	@Override
 	public ItemAttributes getPlugin() {
 		return plugin;
+	}
+
+	private void playAttributeSoundsAndEffects(Location location, Attribute... attributes) {
+		getPlugin().getAttributeHandler().playAttributeEffects(location, attributes);
+		getPlugin().getAttributeHandler().playAttributeSounds(location, attributes);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -1026,7 +1026,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			double timeToSet = (20D * 4D) * Math.max(attackSpeed, 0D);
 			if (timeLeft > 0) {
 				double frac = Math.max(0D, Math.min(1D, 1 - (timeLeft / timeToSet)));
-				damage *= frac;
+				damage = Math.max(1D, damage * frac);
 			}
 
 			getPlugin().getAttackSpeedTask().setTimeLeft((LivingEntity) event.getDamager(), Math.round(timeToSet));
