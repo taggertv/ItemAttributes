@@ -4,7 +4,8 @@ import java.util.List;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.tasks.HealthUpdateTask;
-import net.nunnerycode.bukkit.itemattributes.events.ItemAttributesHealthUpdateEvent;
+import net.nunnerycode.bukkit.itemattributes.attributes.ItemAttributeValue;
+import net.nunnerycode.bukkit.itemattributes.events.ItemAttributesAttributeEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -34,21 +35,20 @@ public final class ItemAttributesHealthUpdateTask implements HealthUpdateTask, R
 					double currentHealth = player.getHealth();
 					double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 
-					ItemAttributesHealthUpdateEvent healthUpdateEvent = new ItemAttributesHealthUpdateEvent(player,
-							player.getMaxHealth(), baseMaxHealth, d);
-					Bukkit.getPluginManager().callEvent(healthUpdateEvent);
+					ItemAttributesAttributeEvent iaae = new ItemAttributesAttributeEvent(player, player,
+							healthAttribute, new ItemAttributeValue(d));
+					Bukkit.getPluginManager().callEvent(iaae);
 
-					if (healthUpdateEvent.isCancelled()) {
+					if (iaae.isCancelled()) {
 						return;
 					}
 
-					player.setHealth(Math.min(Math.max((healthUpdateEvent.getBaseHealth() + healthUpdateEvent
-							.getChangeInHealth()) / 2, 1), player.getMaxHealth()));
-					player.setMaxHealth(Math.max(healthUpdateEvent.getBaseHealth() + healthUpdateEvent
-							.getChangeInHealth(), 1));
+					player.setMaxHealth(Math.max(healthAttribute.getBaseValue() + iaae.getAttributeValue().asDouble(),
+							1));
 					player.setHealth(Math.min(Math.max(currentHealth, 0), player.getMaxHealth()));
 					player.setHealthScale(player.getMaxHealth());
 					getPlugin().getAttributeHandler().playAttributeSounds(player.getEyeLocation(), healthAttribute);
+					getPlugin().getAttributeHandler().playAttributeEffects(player.getEyeLocation(), healthAttribute);
 				} else if (e instanceof LivingEntity) {
 					LivingEntity entity = (LivingEntity) e;
 					double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(entity, healthAttribute);
@@ -65,18 +65,18 @@ public final class ItemAttributesHealthUpdateTask implements HealthUpdateTask, R
 						}
 					}
 
-					ItemAttributesHealthUpdateEvent healthUpdateEvent = new ItemAttributesHealthUpdateEvent(entity,
-							entity.getMaxHealth(), baseMaxHealth, d);
-					Bukkit.getPluginManager().callEvent(healthUpdateEvent);
+					ItemAttributesAttributeEvent iaae = new ItemAttributesAttributeEvent(entity, entity,
+							healthAttribute, new ItemAttributeValue(d));
+					Bukkit.getPluginManager().callEvent(iaae);
 
-					if (healthUpdateEvent.isCancelled()) {
+					if (iaae.isCancelled()) {
 						return;
 					}
 
-					entity.setHealth(Math.min(Math.max((healthUpdateEvent.getBaseHealth() + healthUpdateEvent
-							.getChangeInHealth()) / 2, 1), entity.getMaxHealth()));
-					entity.setMaxHealth(Math.max(healthUpdateEvent.getBaseHealth() + healthUpdateEvent
-							.getChangeInHealth(), 1));
+					entity.setHealth(Math.min(Math.max((iaae.getAttribute().getBaseValue() + iaae.getAttributeValue()
+							.asDouble()) / 2, 1), entity.getMaxHealth()));
+					entity.setMaxHealth(Math.max(iaae.getAttribute().getBaseValue() + iaae.getAttributeValue()
+							.asDouble(), 1));
 					entity.setHealth(Math.min(Math.max(currentHealth, 0), entity.getMaxHealth()));
 					getPlugin().getAttributeHandler().playAttributeSounds(entity.getEyeLocation(), healthAttribute);
 				}
