@@ -14,4 +14,6 @@ public interface LivingEntityAttributeEvent {
 
 	AttributeValue getAttributeValue();
 
+	void setAttributeValue(AttributeValue value);
+
 }
