@@ -11,7 +11,7 @@ public class ItemAttributesAttributeEvent extends ItemAttributesEvent implements
 	private final LivingEntity livingEntity;
 	private final LivingEntity target;
 	private final Attribute attribute;
-	private final AttributeValue attributeValue;
+	private AttributeValue attributeValue;
 
 	public ItemAttributesAttributeEvent(LivingEntity livingEntity, LivingEntity target, Attribute attribute,
 										AttributeValue attributeValue) {
@@ -39,5 +39,10 @@ public class ItemAttributesAttributeEvent extends ItemAttributesEvent implements
 	@Override
 	public AttributeValue getAttributeValue() {
 		return attributeValue;
+	}
+
+	@Override
+	public void setAttributeValue(AttributeValue value) {
+		this.attributeValue = value;
 	}
 }
