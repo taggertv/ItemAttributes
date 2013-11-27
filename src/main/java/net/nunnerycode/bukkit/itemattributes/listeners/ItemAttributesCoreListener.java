@@ -9,7 +9,6 @@ import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.listeners.CoreListener;
 import net.nunnerycode.bukkit.itemattributes.attributes.ItemAttributeValue;
 import net.nunnerycode.bukkit.itemattributes.events.ItemAttributesAttributeEvent;
-import net.nunnerycode.bukkit.itemattributes.events.ItemAttributesHealthUpdateEvent;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.Bukkit;
@@ -310,25 +309,24 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			if (he.isDead()) {
 				continue;
 			}
-			double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(he, healthAttribute);
 
-			double currentHealth = he.getHealth();
+			double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(he, healthAttribute);
+			double currentHealth = event.getPlayer().getHealth();
 			double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 
-			ItemAttributesHealthUpdateEvent healthUpdateEvent = new ItemAttributesHealthUpdateEvent(he,
-					he.getMaxHealth(), baseMaxHealth, d);
-			Bukkit.getPluginManager().callEvent(healthUpdateEvent);
+			ItemAttributesAttributeEvent iaae = new ItemAttributesAttributeEvent(he, he,
+					healthAttribute, new ItemAttributeValue(d));
+			Bukkit.getPluginManager().callEvent(iaae);
 
-			if (healthUpdateEvent.isCancelled()) {
-				continue;
+			if (iaae.isCancelled()) {
+				return;
 			}
 
-			he.setMaxHealth(Math.max(healthUpdateEvent.getBaseHealth() + healthUpdateEvent.getChangeInHealth(), 1));
-			he.setHealth(Math.min(Math.max(currentHealth, 0), he.getMaxHealth()));
+			he.setMaxHealth(Math.max(healthAttribute.getBaseValue() + iaae.getAttributeValue().asDouble(), 1));
+			he.setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 			if (he instanceof Player) {
 				((Player) he).setHealthScale(he.getMaxHealth());
 			}
-
 			playAttributeSoundsAndEffects(he.getEyeLocation(), healthAttribute);
 		}
 	}
@@ -353,23 +351,24 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerJoinEventLow(PlayerJoinEvent event) {
 		Attribute healthAttribute = getPlugin().getSettingsManager().getAttribute("HEALTH");
+
 		if (!healthAttribute.isEnabled()) {
 			return;
 		}
+
 		double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(event.getPlayer(), healthAttribute);
 		double currentHealth = event.getPlayer().getHealth();
 		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 
-		ItemAttributesHealthUpdateEvent healthUpdateEvent = new ItemAttributesHealthUpdateEvent(event.getPlayer(),
-				event.getPlayer().getMaxHealth(), baseMaxHealth, d);
-		Bukkit.getPluginManager().callEvent(healthUpdateEvent);
+		ItemAttributesAttributeEvent iaae = new ItemAttributesAttributeEvent(event.getPlayer(), event.getPlayer(),
+				healthAttribute, new ItemAttributeValue(d));
+		Bukkit.getPluginManager().callEvent(iaae);
 
-		if (healthUpdateEvent.isCancelled()) {
+		if (iaae.isCancelled()) {
 			return;
 		}
 
-		event.getPlayer().setMaxHealth(Math.max(healthUpdateEvent.getBaseHealth() + healthUpdateEvent
-				.getChangeInHealth(), 1));
+		event.getPlayer().setMaxHealth(Math.max(healthAttribute.getBaseValue() + iaae.getAttributeValue().asDouble(), 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
 		playAttributeSoundsAndEffects(event.getPlayer().getEyeLocation(), healthAttribute);
@@ -396,18 +395,18 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			}
 		}
 
-		ItemAttributesHealthUpdateEvent healthUpdateEvent = new ItemAttributesHealthUpdateEvent(entity,
-				entity.getMaxHealth(), baseMaxHealth, d);
-		Bukkit.getPluginManager().callEvent(healthUpdateEvent);
-
-		if (healthUpdateEvent.isCancelled()) {
-			return;
-		}
-
-		entity.setHealth(Math.max((baseMaxHealth + d) / 2, 1));
-		entity.setMaxHealth(Math.max(baseMaxHealth + d, 1));
-		entity.setHealth(Math.min(Math.max(currentHealth, 1), entity.getMaxHealth()));
-		playAttributeSoundsAndEffects(event.getEntity().getLocation().add(0D, 1D, 0D), healthAttribute);
+//		ItemAttributesHealthUpdateEvent healthUpdateEvent = new ItemAttributesHealthUpdateEvent(entity,
+//				entity.getMaxHealth(), baseMaxHealth, d);
+//		Bukkit.getPluginManager().callEvent(healthUpdateEvent);
+//
+//		if (healthUpdateEvent.isCancelled()) {
+//			return;
+//		}
+//
+//		entity.setHealth(Math.max((baseMaxHealth + d) / 2, 1));
+//		entity.setMaxHealth(Math.max(baseMaxHealth + d, 1));
+//		entity.setHealth(Math.min(Math.max(currentHealth, 1), entity.getMaxHealth()));
+//		playAttributeSoundsAndEffects(event.getEntity().getLocation().add(0D, 1D, 0D), healthAttribute);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -420,23 +419,24 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerRespawnEventLow(PlayerRespawnEvent event) {
 		Attribute healthAttribute = getPlugin().getSettingsManager().getAttribute("HEALTH");
+
 		if (!healthAttribute.isEnabled()) {
 			return;
 		}
+
 		double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(event.getPlayer(), healthAttribute);
 		double currentHealth = event.getPlayer().getHealth();
 		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 
-		ItemAttributesHealthUpdateEvent healthUpdateEvent = new ItemAttributesHealthUpdateEvent(event.getPlayer(),
-				event.getPlayer().getMaxHealth(), baseMaxHealth, d);
-		Bukkit.getPluginManager().callEvent(healthUpdateEvent);
+		ItemAttributesAttributeEvent iaae = new ItemAttributesAttributeEvent(event.getPlayer(), event.getPlayer(),
+				healthAttribute, new ItemAttributeValue(d));
+		Bukkit.getPluginManager().callEvent(iaae);
 
-		if (healthUpdateEvent.isCancelled()) {
+		if (iaae.isCancelled()) {
 			return;
 		}
 
-		event.getPlayer().setMaxHealth(Math.max(healthUpdateEvent.getBaseHealth() + healthUpdateEvent
-				.getChangeInHealth(), 1));
+		event.getPlayer().setMaxHealth(Math.max(healthAttribute.getBaseValue() + iaae.getAttributeValue().asDouble(), 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
 		playAttributeSoundsAndEffects(event.getPlayer().getEyeLocation(), healthAttribute);
@@ -445,23 +445,24 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onItemBreakEventLowest(PlayerItemBreakEvent event) {
 		Attribute healthAttribute = getPlugin().getSettingsManager().getAttribute("HEALTH");
+
 		if (!healthAttribute.isEnabled()) {
 			return;
 		}
+
 		double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(event.getPlayer(), healthAttribute);
 		double currentHealth = event.getPlayer().getHealth();
 		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 
-		ItemAttributesHealthUpdateEvent healthUpdateEvent = new ItemAttributesHealthUpdateEvent(event.getPlayer(),
-				event.getPlayer().getMaxHealth(), baseMaxHealth, d);
-		Bukkit.getPluginManager().callEvent(healthUpdateEvent);
+		ItemAttributesAttributeEvent iaae = new ItemAttributesAttributeEvent(event.getPlayer(), event.getPlayer(),
+				healthAttribute, new ItemAttributeValue(d));
+		Bukkit.getPluginManager().callEvent(iaae);
 
-		if (healthUpdateEvent.isCancelled()) {
+		if (iaae.isCancelled()) {
 			return;
 		}
 
-		event.getPlayer().setMaxHealth(Math.max(healthUpdateEvent.getBaseHealth() + healthUpdateEvent
-				.getChangeInHealth(), 1));
+		event.getPlayer().setMaxHealth(Math.max(healthAttribute.getBaseValue() + iaae.getAttributeValue().asDouble(), 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
 		playAttributeSoundsAndEffects(event.getPlayer().getEyeLocation(), healthAttribute);
@@ -687,23 +688,24 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onItemHeldEventLow(PlayerItemHeldEvent event) {
 		Attribute healthAttribute = getPlugin().getSettingsManager().getAttribute("HEALTH");
+
 		if (!healthAttribute.isEnabled()) {
 			return;
 		}
+
 		double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(event.getPlayer(), healthAttribute);
 		double currentHealth = event.getPlayer().getHealth();
 		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 
-		ItemAttributesHealthUpdateEvent healthUpdateEvent = new ItemAttributesHealthUpdateEvent(event.getPlayer(),
-				event.getPlayer().getMaxHealth(), baseMaxHealth, d);
-		Bukkit.getPluginManager().callEvent(healthUpdateEvent);
+		ItemAttributesAttributeEvent iaae = new ItemAttributesAttributeEvent(event.getPlayer(), event.getPlayer(),
+				healthAttribute, new ItemAttributeValue(d));
+		Bukkit.getPluginManager().callEvent(iaae);
 
-		if (healthUpdateEvent.isCancelled()) {
+		if (iaae.isCancelled()) {
 			return;
 		}
 
-		event.getPlayer().setMaxHealth(Math.max(healthUpdateEvent.getBaseHealth() + healthUpdateEvent
-				.getChangeInHealth(), 1));
+		event.getPlayer().setMaxHealth(Math.max(healthAttribute.getBaseValue() + iaae.getAttributeValue().asDouble(), 1));
 		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
 		playAttributeSoundsAndEffects(event.getPlayer().getEyeLocation(), healthAttribute);
