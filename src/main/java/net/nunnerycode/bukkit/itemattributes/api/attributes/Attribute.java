@@ -35,4 +35,12 @@ public interface Attribute {
 
 	void setEffect(Effect e);
 
+	boolean isAffectsMobs();
+
+	void setAffectsMobs(boolean b);
+
+	boolean isAffectsPlayers();
+
+	void setAffectsPlayers(boolean b);
+
 }
