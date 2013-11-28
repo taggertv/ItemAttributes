@@ -1,4 +1,4 @@
-version: 1.0.15
+version: 1.0.16
 options:
   base-player-health: 20.0
   base-critical-rate: 0.05
@@ -118,3 +118,15 @@ core-stats:
     percentage: false
     max-value: -1.0
     base-value: -1.0
+  block:
+    enabled: true
+    format: '%value% Block'
+    percentage: true
+    max-value: 100.0
+    base-value: 0.5
+  parry:
+    enabled: true
+    format: '%value% Parry'
+    percentage: true
+    max-value: 100.0
+    base-value: 1.5
