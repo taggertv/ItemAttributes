@@ -14,14 +14,21 @@ public class ItemAttribute implements Attribute {
 	private Sound sound;
 	private double baseValue;
 	private Effect effect;
+	private boolean affectsPlayers;
+	private boolean affectsMobs;
 
 	public ItemAttribute(String name, boolean enabled, double maxValue, boolean percentage, String format,
 						 Sound sound, double baseValue) {
-		this(name, enabled, maxValue, percentage, format, sound, baseValue, null);
+		this(name, enabled, maxValue, percentage, format, sound, baseValue, null, true, true);
 	}
 
 	public ItemAttribute(String name, boolean enabled, double maxValue, boolean percentage, String format,
 						 Sound sound, double baseValue, Effect effect) {
+		this(name, enabled, maxValue, percentage, format, sound, baseValue, effect, true, true);
+	}
+
+	public ItemAttribute(String name, boolean enabled, double maxValue, boolean percentage, String format,
+						 Sound sound, double baseValue, Effect effect, boolean affectsPlayers, boolean affectsMobs) {
 		this.name = name;
 		this.enabled = enabled;
 		this.maxValue = maxValue;
@@ -30,6 +37,8 @@ public class ItemAttribute implements Attribute {
 		this.sound = sound;
 		this.baseValue = baseValue;
 		this.effect = effect;
+		this.affectsPlayers = affectsPlayers;
+		this.affectsMobs = affectsMobs;
 	}
 
 	@Override
@@ -103,6 +112,26 @@ public class ItemAttribute implements Attribute {
 	@Override
 	public void setEffect(Effect e) {
 		this.effect = e;
+	}
+
+	@Override
+	public boolean isAffectsMobs() {
+		return affectsMobs;
+	}
+
+	@Override
+	public void setAffectsMobs(boolean b) {
+		this.affectsMobs = b;
+	}
+
+	@Override
+	public boolean isAffectsPlayers() {
+		return affectsPlayers;
+	}
+
+	@Override
+	public void setAffectsPlayers(boolean b) {
+		this.affectsPlayers = b;
 	}
 
 	@Override
