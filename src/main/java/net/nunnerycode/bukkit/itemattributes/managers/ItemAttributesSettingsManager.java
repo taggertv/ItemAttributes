@@ -62,7 +62,7 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		coreAttributeMap.put("ARMOR PENETRATION", new ItemAttribute("Armor Penetration", true, 100D, 100D, false,
 				"%value% Armor Penetration", null, 0, 0, null, true, true));
 		coreAttributeMap.put("STUN RATE", new ItemAttribute("Stun Rate", true, 100D, 100D, true, "%value% Stun Rate",
-				null, 0D, 0D, null, true, true));
+				null, 0.05D, 0D, null, true, true));
 		coreAttributeMap.put("STUN LENGTH", new ItemAttribute("Stun Length", true, 100D, 100D, false,
 				"%value% Stun Length", null, 1D, 0D, null, true, true));
 		coreAttributeMap.put("DODGE RATE", new ItemAttribute("Dodge Rate", true, 100D, 100D, true,
