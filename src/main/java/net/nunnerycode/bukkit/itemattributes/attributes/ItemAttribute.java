@@ -52,11 +52,13 @@ public class ItemAttribute implements Attribute {
 	}
 
 	@Override
+	@Deprecated
 	public double getMaxValue() {
 		return maxValue;
 	}
 
 	@Override
+	@Deprecated
 	public void setMaxValue(double d) {
 		this.maxValue = d;
 	}
@@ -95,11 +97,13 @@ public class ItemAttribute implements Attribute {
 	}
 
 	@Override
+	@Deprecated
 	public double getBaseValue() {
 		return baseValue;
 	}
 
 	@Override
+	@Deprecated
 	public void setBaseValue(double d) {
 		this.baseValue = d;
 	}
