@@ -1,10 +1,5 @@
-version: 1.0.16
+version: 1.0.18
 options:
-  base-player-health: 20.0
-  base-critical-rate: 0.05
-  base-critical-damage: 0.2
-  base-stun-rate: 0.05
-  base-stun-length: 1
   seconds-between-health-updates: 10
   item-only-damage-system:
     enabled: false
@@ -14,119 +9,159 @@ core-stats:
     enabled: true
     format: Poison Immunity
     percentage: false
-    max-value: -1.0
-    base-value: -1.0
+    players-max-value: -1.0
+    mobs-max-value: -1.0
+    players-base-value: -1.0
+    mobs-base-value: -1.0
   ranged-damage:
     enabled: true
     format: '%value% Ranged Damage'
     percentage: false
-    max-value: 100.0
-    base-value: 0.0
+    players-max-value: 100.0
+    mobs-max-value: 100.0
+    players-base-value: 0.0
+    mobs-base-value: 0.0
   regeneration:
     enabled: true
     format: '%value% Regeneration'
     percentage: false
-    max-value: 100.0
-    base-value: 0.0
+    players-max-value: 100.0
+    mobs-max-value: 100.0
+    players-base-value: 0.0
+    mobs-base-value: 0.0
   critical-rate:
     enabled: true
     format: '%value% Critical Rate'
     percentage: true
-    max-value: 100.0
-    base-value: 0.05
+    players-max-value: 100.0
+    mobs-max-value: 100.0
+    players-base-value: 0.05
+    mobs-base-value: 0.0
   melee-damage:
     enabled: true
     format: '%value% Melee Damage'
     percentage: false
-    max-value: 100.0
-    base-value: 0.0
+    players-max-value: 100.0
+    mobs-max-value: 100.0
+    players-base-value: 0.0
+    mobs-base-value: 0.0
   fire-immunity:
     enabled: true
     format: Fire Immunity
     percentage: false
-    max-value: -1.0
-    base-value: -1.0
+    players-max-value: -1.0
+    mobs-max-value: -1.0
+    players-base-value: -1.0
+    mobs-base-value: -1.0
   dodge-rate:
     enabled: true
     format: '%value% Dodge Rate'
     percentage: true
-    max-value: 100.0
-    base-value: 0.0
+    players-max-value: 100.0
+    mobs-max-value: 100.0
+    players-base-value: 0.0
+    mobs-base-value: 0.0
   health:
     enabled: true
     format: '%value% Health'
     percentage: false
-    max-value: 100.0
-    base-value: 0.0
+    players-max-value: 100.0
+    mobs-max-value: 100.0
+    players-base-value: 20.0
+    mobs-base-value: 20.0
   damage:
     enabled: true
     format: '%value% Damage'
     percentage: false
-    max-value: 100.0
-    base-value: 1.0
+    players-max-value: 100.0
+    mobs-max-value: 100.0
+    players-base-value: 1.0
+    mobs-base-value: 1.0
   armor:
     enabled: true
     format: '%value% Armor'
     percentage: false
-    max-value: 100.0
-    base-value: 0.0
+    players-max-value: 100.0
+    mobs-max-value: 100.0
+    players-base-value: 0.0
+    mobs-base-value: 0.0
   critical-damage:
     enabled: true
     format: '%value% Critical Damage'
     percentage: true
-    max-value: 100.0
-    base-value: 0.2
+    players-max-value: 100.0
+    mobs-max-value: 100.0
+    players-base-value: 0.2
+    mobs-base-value: 0.0
   permission-requirement:
     enabled: true
     format: 'Permission Requirement: %value%'
     percentage: false
-    max-value: -1.0
-    base-value: -1.0
+    players-max-value: -1.0
+    mobs-max-value: -1.0
+    players-base-value: -1.0
+    mobs-base-value: -1.0
   stun-rate:
     enabled: true
     format: '%value% Stun Rate'
     percentage: true
-    max-value: 100.0
-    base-value: 0.0
+    players-max-value: 100.0
+    mobs-max-value: 100.0
+    players-base-value: 0.05
+    mobs-base-value: 0.0
   attack-speed:
     enabled: true
     format: '%value% Attack Speed'
     percentage: true
-    max-value: 100.0
-    base-value: 1.0
+    players-max-value: 100.0
+    mobs-max-value: 100.0
+    players-base-value: 1.0
+    mobs-base-value: -1.0
   armor-penetration:
     enabled: true
     format: '%value% Armor Penetration'
     percentage: false
-    max-value: 100.0
-    base-value: 0.0
+    players-max-value: 100.0
+    mobs-max-value: 100.0
+    players-base-value: 0.0
+    mobs-base-value: 0.0
   level-requirement:
     enabled: true
     format: 'Level Requirement: %value%'
     percentage: false
-    max-value: 100.0
-    base-value: 0.0
+    players-max-value: 100.0
+    mobs-max-value: 100.0
+    players-base-value: 0.0
+    mobs-base-value: 0.0
   stun-length:
     enabled: true
     format: '%value% Stun Length'
     percentage: false
-    max-value: 100.0
-    base-value: 1.0
+    players-max-value: 100.0
+    mobs-max-value: 100.0
+    players-base-value: 1.0
+    mobs-base-value: 0.0
   wither-immunity:
     enabled: true
     format: Wither Immunity
     percentage: false
-    max-value: -1.0
-    base-value: -1.0
+    players-max-value: -1.0
+    mobs-max-value: -1.0
+    players-base-value: -1.0
+    mobs-base-value: -1.0
   block:
     enabled: true
     format: '%value% Block'
     percentage: true
-    max-value: 100.0
-    base-value: 0.5
+    players-max-value: 100.0
+    mobs-max-value: 100.0
+    players-base-value: 0.5
+    mobs-base-value: 0.0
   parry:
     enabled: true
     format: '%value% Parry'
     percentage: true
-    max-value: 100.0
-    base-value: 1.5
+    players-max-value: 100.0
+    mobs-max-value: 100.0
+    players-base-value: 1.5
+    mobs-base-value: 0.0
