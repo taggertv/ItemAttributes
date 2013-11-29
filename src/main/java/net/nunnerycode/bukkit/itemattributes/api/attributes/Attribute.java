@@ -21,9 +21,13 @@ public interface Attribute {
 
 	void setMaxValueMobs(double d);
 
+	double getDefaultMaxValueMobs();
+
 	double getMaxValuePlayers();
 
 	void setMaxValuePlayers(double d);
+
+	double getDefaultMaxValuePlayers();
 
 	boolean isPercentage();
 
