@@ -20,16 +20,19 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -350,15 +353,45 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerJoinEventLow(PlayerJoinEvent event) {
+		handlePlayerHealthCheck(event);
+	}
+
+	private void handleLivingEntityHealthCheck(EntityEvent event) {
+		Attribute healthAttribute = getPlugin().getSettingsManager().getAttribute("HEALTH");
+		if (!(event.getEntity() instanceof LivingEntity) || event.getEntity() instanceof Player || !healthAttribute
+				.isEnabled() || !healthAttribute.isAffectsMobs() || event instanceof Cancellable && ((Cancellable)
+				event).isCancelled()) {
+			return;
+		}
+		LivingEntity entity = (LivingEntity) event.getEntity();
+		double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(entity, healthAttribute);
+		double currentHealth = entity.getHealth();
+		double baseMaxHealth = 0D;
+		if (entity.hasMetadata("itemattributes.basehealth")) {
+			List<MetadataValue> metadataValueList = entity.getMetadata("itemattributes.basehealth");
+			for (MetadataValue mv : metadataValueList) {
+				if (mv.getOwningPlugin().equals(getPlugin())) {
+					baseMaxHealth = mv.asDouble();
+					break;
+				}
+			}
+		} else {
+			entity.resetMaxHealth();
+			baseMaxHealth = entity.getMaxHealth();
+		}
+		entity.setMaxHealth(baseMaxHealth + d);
+	}
+
+	private void handlePlayerHealthCheck(PlayerEvent event) {
 		Attribute healthAttribute = getPlugin().getSettingsManager().getAttribute("HEALTH");
 
-		if (!healthAttribute.isEnabled()) {
+		if (!healthAttribute.isEnabled() || !healthAttribute.isAffectsPlayers() || event instanceof Cancellable &&
+				((Cancellable) event).isCancelled()) {
 			return;
 		}
 
 		double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(event.getPlayer(), healthAttribute);
 		double currentHealth = event.getPlayer().getHealth();
-		double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 
 		ItemAttributesAttributeEvent iaae = new ItemAttributesAttributeEvent(event.getPlayer(), event.getPlayer(),
 				healthAttribute, new ItemAttributeValue(d));
