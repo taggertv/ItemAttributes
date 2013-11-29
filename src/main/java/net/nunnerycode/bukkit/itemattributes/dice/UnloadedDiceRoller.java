@@ -17,13 +17,17 @@ public class UnloadedDiceRoller implements DiceRoller {
 
 	public UnloadedDiceRoller(Double... diceSizes) {
 		acceptableDiceSizes = Arrays.asList(diceSizes);
-		diceRollOperator = new CustomOperator(";", false, 6, 1) {
+		diceRollOperator = new CustomOperator(";", false, 6, 2) {
 			@Override
 			protected double applyOperation(double[] doubles) {
-				if (!acceptableDiceSizes.contains(doubles[0])) {
-					return 0.0;
+				double total = 0D;
+				if (!acceptableDiceSizes.contains(doubles[1])) {
+					return total;
 				}
-				return (RandomUtils.nextDouble() * doubles[0] + 1);
+				for (int i = 0; i < doubles[0]; i++) {
+					total += (RandomUtils.nextDouble() * doubles[1] + 1);
+				}
+				return total;
 			}
 		};
 	}
