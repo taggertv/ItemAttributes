@@ -1,7 +1,6 @@
 package net.nunnerycode.bukkit.itemattributes.listeners;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 import net.nunnerycode.bukkit.itemattributes.ItemAttributesPlugin;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
@@ -876,14 +875,6 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			default:
 				return null;
 		}
-	}
-
-	private List<String> getItemStackLore(ItemStack itemStack) {
-		List<String> lore = new ArrayList<String>();
-		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
-			lore.addAll(itemStack.getItemMeta().getLore());
-		}
-		return lore;
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
