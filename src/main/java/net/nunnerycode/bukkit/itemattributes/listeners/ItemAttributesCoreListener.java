@@ -983,7 +983,9 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			Bukkit.getPluginManager().callEvent(attackSpeedEvent);
 
 			if (!attackSpeedEvent.isCancelled()) {
-				double timeToSet = (20D * 4D) * Math.max(attackSpeed, 0D);
+				double timeToSet = 4D * Math.max(attackSpeed, 0D);
+				((Player) event.getDamager()).sendMessage(ChatColor.GRAY + "Attack Speed Checks Set: " + decimalFormat
+						.format(timeToSet));
 				if (timeLeft > 0) {
 					double frac = Math.max(0D, Math.min(1D, 1 - (timeLeft / timeToSet)));
 					damage = Math.max(1D, damage * frac);

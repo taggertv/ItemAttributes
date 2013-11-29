@@ -6,6 +6,7 @@ import java.util.Map;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.tasks.AttackSpeedTask;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -77,25 +78,26 @@ public final class ItemAttributesAttackSpeedTask implements AttackSpeedTask, Run
 				if (!attackSpeedAttribute.isAffectsPlayers()) {
 					continue;
 				}
-				if (entry.getValue() < Math.round(attackSpeedAttribute.getPlayersBaseValue())) {
+				((Player) entry.getKey()).sendMessage(ChatColor.BLUE + "Attack Speed Checks Left: " + entry.getValue());
+				if (entry.getValue() < 1) {
 					LivingEntity entity = entry.getKey();
 					getPlugin().getAttributeHandler().playAttributeEffects(entity.getEyeLocation(), attackSpeedAttribute);
 					getPlugin().getAttributeHandler().playAttributeSounds(entity.getEyeLocation(), attackSpeedAttribute);
 					iterator.remove();
 				} else {
-					entry.setValue(entry.getValue() - Math.round(attackSpeedAttribute.getPlayersBaseValue()));
+					entry.setValue(entry.getValue() - 1);
 				}
 			} else {
 				if (!attackSpeedAttribute.isAffectsMobs()) {
 					continue;
 				}
-				if (entry.getValue() < Math.round(attackSpeedAttribute.getMobsBaseValue())) {
+				if (entry.getValue() < 1) {
 					LivingEntity entity = entry.getKey();
 					getPlugin().getAttributeHandler().playAttributeEffects(entity.getEyeLocation(), attackSpeedAttribute);
 					getPlugin().getAttributeHandler().playAttributeSounds(entity.getEyeLocation(), attackSpeedAttribute);
 					iterator.remove();
 				} else {
-					entry.setValue(entry.getValue() - Math.round(attackSpeedAttribute.getMobsBaseValue()));
+					entry.setValue(entry.getValue() - 1);
 				}
 			}
 		}
