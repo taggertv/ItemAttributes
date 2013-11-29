@@ -236,6 +236,10 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 			getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
 					"-") + ".percentage", entry.getValue().isPercentage());
 			getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
+					"-") + ".max-value", null);
+			getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
+					"-") + ".base-value", null);
+			getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
 					"-") + ".players-max-value", entry.getValue().getMaxValuePlayers());
 			getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
 					"-") + ".mobs-max-value", entry.getValue().getMaxValueMobs());
