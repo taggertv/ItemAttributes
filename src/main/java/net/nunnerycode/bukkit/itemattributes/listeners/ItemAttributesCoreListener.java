@@ -333,14 +333,14 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 	}
 
-	@Override
-	public ItemAttributes getPlugin() {
-		return plugin;
-	}
-
 	private void playAttributeSoundsAndEffects(Location location, Attribute... attributes) {
 		getPlugin().getAttributeHandler().playAttributeEffects(location, attributes);
 		getPlugin().getAttributeHandler().playAttributeSounds(location, attributes);
+	}
+
+	@Override
+	public ItemAttributes getPlugin() {
+		return plugin;
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -374,8 +374,9 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			return;
 		}
 
-		event.getPlayer().setMaxHealth(Math.max(healthAttribute.getBaseValue() + iaae.getAttributeValue().asDouble(), 1));
-		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
+		event.getPlayer().setMaxHealth(Math.max(healthAttribute.getPlayersBaseValue() + iaae.getAttributeValue()
+				.asDouble(), 1));
+		event.getPlayer().setHealth(Math.min(Math.max(currentHealth, 1), event.getPlayer().getMaxHealth()));
 		event.getPlayer().setHealthScale(event.getPlayer().getMaxHealth());
 		playAttributeSoundsAndEffects(event.getPlayer().getEyeLocation(), healthAttribute);
 	}
@@ -408,7 +409,9 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			entity.resetMaxHealth();
 			baseMaxHealth = entity.getMaxHealth();
 		}
+		entity.setHealth((baseMaxHealth + d) / 2);
 		entity.setMaxHealth(baseMaxHealth + d);
+		entity.setHealth(Math.max(1, Math.min(currentHealth, entity.getMaxHealth())));
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
