@@ -333,14 +333,14 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 	}
 
-	private void playAttributeSoundsAndEffects(Location location, Attribute... attributes) {
-		getPlugin().getAttributeHandler().playAttributeEffects(location, attributes);
-		getPlugin().getAttributeHandler().playAttributeSounds(location, attributes);
-	}
-
 	@Override
 	public ItemAttributes getPlugin() {
 		return plugin;
+	}
+
+	private void playAttributeSoundsAndEffects(Location location, Attribute... attributes) {
+		getPlugin().getAttributeHandler().playAttributeEffects(location, attributes);
+		getPlugin().getAttributeHandler().playAttributeSounds(location, attributes);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -972,13 +972,21 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			double attackSpeed = attackSpeedAttribute.getBaseValue() - (attackSpeedAttribute.getBaseValue() * getPlugin
 					().getAttributeHandler().getAttributeValueFromEntity((LivingEntity) event.getDamager(),
 					attackSpeedAttribute));
-			double timeToSet = (20D * 4D) * Math.max(attackSpeed, 0D);
-			if (timeLeft > 0) {
-				double frac = Math.max(0D, Math.min(1D, 1 - (timeLeft / timeToSet)));
-				damage = Math.max(1D, damage * frac);
-			}
 
-			getPlugin().getAttackSpeedTask().setTimeLeft((LivingEntity) event.getDamager(), Math.round(timeToSet));
+			ItemAttributesAttributeEvent attackSpeedEvent = new ItemAttributesAttributeEvent((LivingEntity) event
+					.getDamager(), (event.getEntity() instanceof LivingEntity) ? (LivingEntity) event.getEntity() :
+					null, attackSpeedAttribute, new ItemAttributeValue(attackSpeed));
+			Bukkit.getPluginManager().callEvent(attackSpeedEvent);
+
+			if (!attackSpeedEvent.isCancelled()) {
+				double timeToSet = (20D * 4D) * Math.max(attackSpeed, 0D);
+				if (timeLeft > 0) {
+					double frac = Math.max(0D, Math.min(1D, 1 - (timeLeft / timeToSet)));
+					damage = Math.max(1D, damage * frac);
+				}
+
+				getPlugin().getAttackSpeedTask().setTimeLeft((LivingEntity) event.getDamager(), Math.round(timeToSet));
+			}
 		}
 		return damage;
 	}
