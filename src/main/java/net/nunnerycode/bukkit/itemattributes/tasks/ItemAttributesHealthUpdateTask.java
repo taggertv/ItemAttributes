@@ -30,10 +30,12 @@ public final class ItemAttributesHealthUpdateTask implements HealthUpdateTask, R
 		for (World w : Bukkit.getWorlds()) {
 			for (Entity e : w.getEntities()) {
 				if (e instanceof Player) {
+					if (!healthAttribute.isAffectsPlayers()) {
+						continue;
+					}
 					Player player = (Player) e;
 					double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(player, healthAttribute);
 					double currentHealth = player.getHealth();
-					double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
 
 					ItemAttributesAttributeEvent iaae = new ItemAttributesAttributeEvent(player, player,
 							healthAttribute, new ItemAttributeValue(d));
@@ -43,18 +45,20 @@ public final class ItemAttributesHealthUpdateTask implements HealthUpdateTask, R
 						return;
 					}
 
-					player.setMaxHealth(Math.max(healthAttribute.getBaseValue() + iaae.getAttributeValue().asDouble(),
-							1));
+					player.setMaxHealth(Math.max(healthAttribute.getPlayersBaseValue() + iaae.getAttributeValue()
+							.asDouble(), 1));
 					player.setHealth(Math.min(Math.max(currentHealth, 0), player.getMaxHealth()));
 					player.setHealthScale(player.getMaxHealth());
 					getPlugin().getAttributeHandler().playAttributeSounds(player.getEyeLocation(), healthAttribute);
 					getPlugin().getAttributeHandler().playAttributeEffects(player.getEyeLocation(), healthAttribute);
 				} else if (e instanceof LivingEntity) {
+					if (!healthAttribute.isAffectsMobs()) {
+						continue;
+					}
 					LivingEntity entity = (LivingEntity) e;
 					double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(entity, healthAttribute);
 					double currentHealth = entity.getHealth();
-					entity.resetMaxHealth();
-					double baseMaxHealth = entity.getMaxHealth();
+					double baseMaxHealth = healthAttribute.getMobsBaseValue();
 					if (entity.hasMetadata("itemattributes.basehealth")) {
 						List<MetadataValue> metadataValueList = entity.getMetadata("itemattributes.basehealth");
 						for (MetadataValue mv : metadataValueList) {
@@ -63,22 +67,13 @@ public final class ItemAttributesHealthUpdateTask implements HealthUpdateTask, R
 								break;
 							}
 						}
+					} else {
+						entity.resetMaxHealth();
+						baseMaxHealth = entity.getMaxHealth();
 					}
-
-					ItemAttributesAttributeEvent iaae = new ItemAttributesAttributeEvent(entity, entity,
-							healthAttribute, new ItemAttributeValue(d));
-					Bukkit.getPluginManager().callEvent(iaae);
-
-					if (iaae.isCancelled()) {
-						return;
-					}
-
-					entity.setHealth(Math.min(Math.max((iaae.getAttribute().getBaseValue() + iaae.getAttributeValue()
-							.asDouble()) / 2, 1), entity.getMaxHealth()));
-					entity.setMaxHealth(Math.max(iaae.getAttribute().getBaseValue() + iaae.getAttributeValue()
-							.asDouble(), 1));
-					entity.setHealth(Math.min(Math.max(currentHealth, 0), entity.getMaxHealth()));
-					getPlugin().getAttributeHandler().playAttributeSounds(entity.getEyeLocation(), healthAttribute);
+					entity.setHealth((baseMaxHealth + d) / 2);
+					entity.setMaxHealth(baseMaxHealth + d);
+					entity.setHealth(Math.max(1, Math.min(currentHealth, entity.getMaxHealth())));
 				}
 			}
 		}
