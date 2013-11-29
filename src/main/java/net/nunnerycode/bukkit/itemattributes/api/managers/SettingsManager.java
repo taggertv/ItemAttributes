@@ -48,6 +48,8 @@ public interface SettingsManager {
 
 	Double[] getAllowableDiceSizes();
 
-	Double[] setAllowableDiceSizes();
+	void addAllowableDiceSizes(Double... d);
+
+	void removeAllowableDiceSizes(Double... d);
 
 }
