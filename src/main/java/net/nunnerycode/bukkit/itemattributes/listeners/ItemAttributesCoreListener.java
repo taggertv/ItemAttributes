@@ -1013,6 +1013,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				criticalDamageEvent = new ItemAttributesAttributeEvent((LivingEntity) event.getDamager(),
 						(LivingEntity) event.getEntity(), criticalDamageAttribute,
 						new ItemAttributeValue(damagerCriticalDamage));
+				Bukkit.getPluginManager().callEvent(criticalDamageEvent);
 				criticalRateEvent = new ItemAttributesAttributeEvent((LivingEntity) event.getDamager(),
 						(LivingEntity) event.getEntity(), criticalRateAttribute,
 						new ItemAttributeValue(damagerCriticalChance));
