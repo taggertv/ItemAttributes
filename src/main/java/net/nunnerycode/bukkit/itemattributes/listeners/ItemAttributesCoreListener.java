@@ -314,7 +314,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 			double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(he, healthAttribute);
 			double currentHealth = event.getPlayer().getHealth();
-			double baseMaxHealth = getPlugin().getSettingsManager().getBasePlayerHealth();
+			double baseMaxHealth = healthAttribute.getPlayersBaseValue();
 
 			ItemAttributesAttributeEvent iaae = new ItemAttributesAttributeEvent(he, he,
 					healthAttribute, new ItemAttributeValue(d));
@@ -324,7 +324,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				return;
 			}
 
-			he.setMaxHealth(Math.max(healthAttribute.getBaseValue() + iaae.getAttributeValue().asDouble(), 1));
+			he.setMaxHealth(Math.max(baseMaxHealth + iaae.getAttributeValue().asDouble(), 1));
 			he.setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
 			if (he instanceof Player) {
 				((Player) he).setHealthScale(he.getMaxHealth());
@@ -972,9 +972,9 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 	private double handleAttackSpeedChecks(EntityDamageByEntityEvent event, double damage, Attribute attackSpeedAttribute) {
 		if (event.getDamager() instanceof Player) {
 			long timeLeft = getPlugin().getAttackSpeedTask().getTimeLeft((LivingEntity) event.getDamager());
-			double attackSpeed = attackSpeedAttribute.getBaseValue() - (attackSpeedAttribute.getBaseValue() * getPlugin
-					().getAttributeHandler().getAttributeValueFromEntity((LivingEntity) event.getDamager(),
-					attackSpeedAttribute));
+			double attackSpeed = attackSpeedAttribute.getPlayersBaseValue() - (attackSpeedAttribute.getPlayersBaseValue
+					() * getPlugin().getAttributeHandler().getAttributeValueFromEntity((LivingEntity) event
+					.getDamager(), attackSpeedAttribute));
 
 			ItemAttributesAttributeEvent attackSpeedEvent = new ItemAttributesAttributeEvent((LivingEntity) event
 					.getDamager(), (event.getEntity() instanceof LivingEntity) ? (LivingEntity) event.getEntity() :
@@ -998,7 +998,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		if (event.getEntity() instanceof Player && event.getDamager() instanceof LivingEntity) {
 			if (((Player) event.getEntity()).isBlocking()) {
 
-				double blockDamageReduction = blockAttribute.getBaseValue() + getPlugin().getAttributeHandler()
+				double blockDamageReduction = blockAttribute.getPlayersBaseValue() + getPlugin().getAttributeHandler()
 						.getAttributeValueFromEntity((LivingEntity) event.getEntity(), blockAttribute);
 
 				ItemAttributesAttributeEvent blockAttributeEvent = new ItemAttributesAttributeEvent((LivingEntity) event
@@ -1013,7 +1013,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 				if (event.getDamager() instanceof Player) {
 					long timeLeft = getPlugin().getAttackSpeedTask().getTimeLeft((LivingEntity) event.getDamager());
-					double parryTime = parryAttribute.getBaseValue() + getPlugin().getAttributeHandler()
+					double parryTime = parryAttribute.getPlayersBaseValue() + getPlugin().getAttributeHandler()
 							.getAttributeValueFromEntity((LivingEntity) event.getDamager(), parryAttribute);
 
 					ItemAttributesAttributeEvent parryAttributeEvent = new ItemAttributesAttributeEvent((LivingEntity)
