@@ -93,12 +93,16 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 						"-") + ".enabled", entry.getValue().isEnabled()));
 				entry.getValue().setFormat(section.getString(entry.getKey().toLowerCase().replace(" ",
 						"-") + ".format", entry.getValue().getFormat()));
-				entry.getValue().setMaxValue(section.getDouble(entry.getKey().toLowerCase().replace(" ",
-						"-") + ".max-value", entry.getValue().getMaxValue()));
+				entry.getValue().setMaxValuePlayers(section.getDouble(entry.getKey().toLowerCase().replace(" ",
+						"-") + ".players-max-value", entry.getValue().getMaxValuePlayers()));
+				entry.getValue().setMaxValueMobs(section.getDouble(entry.getKey().toLowerCase().replace(" ",
+						"-") + ".mobs-max-value", entry.getValue().getMaxValueMobs()));
 				entry.getValue().setPercentage(section.getBoolean(entry.getKey().toLowerCase().replace(" ",
 						"-") + ".percentage", entry.getValue().isPercentage()));
-				entry.getValue().setBaseValue(section.getDouble(entry.getKey().toLowerCase().replace(" ",
-						"-") + ".base-value", entry.getValue().getBaseValue()));
+				entry.getValue().setPlayersBaseValue(section.getDouble(entry.getKey().toLowerCase().replace(" ",
+						"-") + ".players-base-value", entry.getValue().getPlayersBaseValue()));
+				entry.getValue().setMobsBaseValue(section.getDouble(entry.getKey().toLowerCase().replace(" ",
+						"-") + ".mobs-base-value", entry.getValue().getMobsBaseValue()));
 				try {
 					entry.getValue().setSound(Sound.valueOf(section.getString(entry.getKey().toLowerCase().replace(" ",
 							"-") + ".sound", (entry.getValue().getSound() != null) ? entry.getValue().getSound().name
@@ -236,9 +240,13 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 			getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
 					"-") + ".percentage", entry.getValue().isPercentage());
 			getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
-					"-") + ".max-value", entry.getValue().getMaxValue());
+					"-") + ".players-max-value", entry.getValue().getMaxValuePlayers());
 			getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
-					"-") + ".base-value", entry.getValue().getBaseValue());
+					"-") + ".mobs-max-value", entry.getValue().getMaxValueMobs());
+			getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
+					"-") + ".players-base-value", entry.getValue().getPlayersBaseValue());
+			getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
+					"-") + ".mobs-base-value", entry.getValue().getMobsBaseValue());
 			try {
 				getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
 						"-") + ".sound", entry.getValue().getSound().name());
