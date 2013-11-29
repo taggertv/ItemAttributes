@@ -96,6 +96,25 @@ public class ItemAttributesCommands implements ItemAttributesCommand {
 				.getBaseDodgeRate());
 	}
 
+	private void sendStatMessage(CommandSender sender, Player player, Attribute attribute, double baseStat) {
+		double statHelmet = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, player
+				.getEquipment().getHelmet(), attribute);
+		double statChestplate = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, player
+				.getEquipment().getChestplate(), attribute);
+		double statLeggings = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, player
+				.getEquipment().getLeggings(), attribute);
+		double statBoots = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player,
+				player.getEquipment().getBoots(), attribute);
+		double statItem = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player,
+				player.getEquipment().getItemInHand(), attribute);
+		double statTotal = baseStat + statHelmet + statChestplate + statLeggings + statBoots + statItem;
+		String formatString = attribute.getFormat().replaceAll("%(?s)(.*?)%", "").trim();
+		getPlugin().getLanguageManager().sendMessage(sender, "commands.view-stats", new String[][]{{"%statname%",
+				formatString}, {"%totalvalue%", DF.format(statTotal)}, {"%helmet%", DF.format(statHelmet)},
+				{"%chestplate%", DF.format(statChestplate)}, {"%leggings%", DF.format(statLeggings)}, {"%boots%",
+				DF.format(statBoots)}, {"%item%", DF.format(statItem)}});
+	}
+
 	private void sendPercentageStatMessage(CommandSender sender, Player player, Attribute attribute, double baseStat) {
 		double statHelmet = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, player
 				.getEquipment().getHelmet(), attribute);
@@ -114,25 +133,6 @@ public class ItemAttributesCommands implements ItemAttributesCommand {
 						{"%helmet%", DF.format(statHelmet * 100)}, {"%chestplate%", DF.format(statChestplate * 100)},
 						{"%leggings%", DF.format(statLeggings * 100)}, {"%boots%", DF.format(statBoots * 100)},
 						{"%item%", DF.format(statItem * 100)}});
-	}
-
-	private void sendStatMessage(CommandSender sender, Player player, Attribute attribute, double baseStat) {
-		double statHelmet = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, player
-				.getEquipment().getHelmet(), attribute);
-		double statChestplate = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, player
-				.getEquipment().getChestplate(), attribute);
-		double statLeggings = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, player
-				.getEquipment().getLeggings(), attribute);
-		double statBoots = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player,
-				player.getEquipment().getBoots(), attribute);
-		double statItem = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player,
-				player.getEquipment().getItemInHand(), attribute);
-		double statTotal = baseStat + statHelmet + statChestplate + statLeggings + statBoots + statItem;
-		String formatString = attribute.getFormat().replaceAll("%(?s)(.*?)%", "").trim();
-		getPlugin().getLanguageManager().sendMessage(sender, "commands.view-stats", new String[][]{{"%statname%",
-				formatString}, {"%totalvalue%", DF.format(statTotal)}, {"%helmet%", DF.format(statHelmet)},
-				{"%chestplate%", DF.format(statChestplate)}, {"%leggings%", DF.format(statLeggings)}, {"%boots%",
-				DF.format(statBoots)}, {"%item%", DF.format(statItem)}});
 	}
 
 	private List<String> getItemStackLore(ItemStack itemStack) {
