@@ -197,6 +197,7 @@
                                     <include>se.ranzdo.bukkit:methodcommand</include>
                                     <include>org.mcstats.bukkit:metrics</include>
                                     <include>org.apache.commons:commons-lang3</include>
+                                    <include>de.congrace.exp4j:exp4j</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -288,6 +289,12 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.1</version>
             <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.congrace</groupId>
+            <artifactId>exp4j</artifactId>
+            <version>0.3.10</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
