@@ -13,6 +13,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class ItemAttributeHandler implements AttributeHandler {
@@ -66,7 +67,7 @@ public class ItemAttributeHandler implements AttributeHandler {
 		return d;
 	}
 
-	private double getValue(Collection<String> collection, Attribute attribute) {
+	private double getValue(LivingEntity livingEntity, Collection<String> collection, Attribute attribute) {
 		if (collection == null || attribute == null || !attribute.isEnabled()) {
 			return 0.0;
 		}
@@ -74,13 +75,13 @@ public class ItemAttributeHandler implements AttributeHandler {
 			return 0.0;
 		}
 		if (attribute.isPercentage()) {
-			return getDoublePercentage(collection, attribute);
+			return getDoublePercentage(livingEntity, collection, attribute);
 		}
 		return getDouble(collection, attribute);
 	}
 
 	@Override
-	public double getAttributeValueFromItemStack(ItemStack itemStack, Attribute attribute) {
+	public double getAttributeValueFromItemStack(LivingEntity livingEntity, ItemStack itemStack, Attribute attribute) {
 		if (itemStack == null || attribute == null || !attribute.isEnabled()) {
 			return 0.0D;
 		}
@@ -88,14 +89,15 @@ public class ItemAttributeHandler implements AttributeHandler {
 		if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
 			lore = itemStack.getItemMeta().getLore();
 		}
-		return getValue(lore, attribute);
+		return getValue(livingEntity, lore, attribute);
 	}
 
-	private double getDoublePercentage(Collection<String> collection, Attribute attribute) {
+	private double getDoublePercentage(LivingEntity livingEntity, Collection<String> collection, Attribute attribute) {
 		double d = 0.0;
 		if (collection == null || collection.isEmpty() || attribute == null || !attribute.isEnabled()) {
 			return d;
 		}
+		double maxVal = (livingEntity instanceof Player) ? attribute.getMaxValuePlayers() : attribute.getMaxValueMobs();
 		for (String s : collection) {
 			String stripped = ChatColor.stripColor(s);
 			String withoutNumbers = stripped.replaceAll("[0-9\\+%\\-]", "").trim();
@@ -110,11 +112,9 @@ public class ItemAttributeHandler implements AttributeHandler {
 					double first = NumberUtils.toDouble(split[0], 0.0);
 					double second = NumberUtils.toDouble(split[1], 0.0);
 					d += (RandomUtils.nextDouble() * (Math.max(first, second) - Math.min(first,
-							second)) + Math.min(first, second)) / ((attribute.getMaxValue() != 0D) ? attribute
-							.getMaxValue() : 100D);
+							second)) + Math.min(first, second)) / ((maxVal != 0D) ? maxVal : 100D);
 				} else {
-					d += NumberUtils.toDouble(withoutLetters, 0.0) / ((attribute.getMaxValue() != 0D) ? attribute
-							.getMaxValue() : 100D);
+					d += NumberUtils.toDouble(withoutLetters, 0.0) / ((maxVal != 0D) ? maxVal : 100D);
 				}
 			} else {
 				if (withoutLetters.contains(" - ")) {
@@ -140,9 +140,9 @@ public class ItemAttributeHandler implements AttributeHandler {
 			return d;
 		}
 		for (ItemStack itemStack : livingEntity.getEquipment().getArmorContents()) {
-			d += getAttributeValueFromItemStack(itemStack, attribute);
+			d += getAttributeValueFromItemStack(livingEntity, itemStack, attribute);
 		}
-		d += getAttributeValueFromItemStack(livingEntity.getEquipment().getItemInHand(), attribute);
+		d += getAttributeValueFromItemStack(livingEntity, livingEntity.getEquipment().getItemInHand(), attribute);
 		return d;
 	}
 

@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 public interface AttributeHandler {
 
-	double getAttributeValueFromItemStack(ItemStack itemStack, Attribute attribute);
+	double getAttributeValueFromItemStack(LivingEntity livingEntity, ItemStack itemStack, Attribute attribute);
 
 	double getAttributeValueFromEntity(LivingEntity livingEntity, Attribute attribute);
 

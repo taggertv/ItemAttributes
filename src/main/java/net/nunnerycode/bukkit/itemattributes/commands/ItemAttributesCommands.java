@@ -97,16 +97,16 @@ public class ItemAttributesCommands implements ItemAttributesCommand {
 	}
 
 	private void sendPercentageStatMessage(CommandSender sender, Player player, Attribute attribute, double baseStat) {
-		double statHelmet = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player.getEquipment()
-				.getItemInHand(), attribute);
-		double statChestplate = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player.getEquipment()
-				.getChestplate(), attribute);
-		double statLeggings = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player.getEquipment()
-				.getLeggings(), attribute);
-		double statBoots = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player.getEquipment()
-				.getBoots(), attribute);
-		double statItem = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player.getEquipment()
-				.getItemInHand(), attribute);
+		double statHelmet = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, player
+				.getEquipment().getHelmet(), attribute);
+		double statChestplate = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, player
+				.getEquipment().getChestplate(), attribute);
+		double statLeggings = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, player
+				.getEquipment().getLeggings(), attribute);
+		double statBoots = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player,
+				player.getEquipment().getBoots(), attribute);
+		double statItem = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player,
+				player.getEquipment().getItemInHand(), attribute);
 		double statTotal = baseStat + statHelmet + statChestplate + statLeggings + statBoots + statItem;
 		String formatString = attribute.getFormat().replaceAll("%(?s)(.*?)%", "").trim();
 		getPlugin().getLanguageManager().sendMessage(sender, "commands.view-stats-percentage",
@@ -117,16 +117,16 @@ public class ItemAttributesCommands implements ItemAttributesCommand {
 	}
 
 	private void sendStatMessage(CommandSender sender, Player player, Attribute attribute, double baseStat) {
-		double statHelmet = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player.getEquipment()
-				.getItemInHand(), attribute);
-		double statChestplate = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player.getEquipment()
-				.getChestplate(), attribute);
-		double statLeggings = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player.getEquipment()
-				.getLeggings(), attribute);
-		double statBoots = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player.getEquipment()
-				.getBoots(), attribute);
-		double statItem = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player.getEquipment()
-				.getItemInHand(), attribute);
+		double statHelmet = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, player
+				.getEquipment().getHelmet(), attribute);
+		double statChestplate = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, player
+				.getEquipment().getChestplate(), attribute);
+		double statLeggings = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, player
+				.getEquipment().getLeggings(), attribute);
+		double statBoots = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player,
+				player.getEquipment().getBoots(), attribute);
+		double statItem = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player,
+				player.getEquipment().getItemInHand(), attribute);
 		double statTotal = baseStat + statHelmet + statChestplate + statLeggings + statBoots + statItem;
 		String formatString = attribute.getFormat().replaceAll("%(?s)(.*?)%", "").trim();
 		getPlugin().getLanguageManager().sendMessage(sender, "commands.view-stats", new String[][]{{"%statname%",

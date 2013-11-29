@@ -90,7 +90,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		Attribute levelRequirementAttribute = getPlugin().getSettingsManager().getAttribute("LEVEL REQUIREMENT");
 
 		// item in hand check
-		int level = (int) getPlugin().getAttributeHandler().getAttributeValueFromItemStack(itemInHand,
+		int level = (int) getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, itemInHand,
 				levelRequirementAttribute);
 		if (player.getLevel() < level) {
 			if (player.getInventory().firstEmpty() >= 0) {
@@ -105,7 +105,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 
 		// helmet check
-		level = (int) getPlugin().getAttributeHandler().getAttributeValueFromItemStack(helmet,
+		level = (int) getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, helmet,
 				levelRequirementAttribute);
 		if (player.getLevel() < level) {
 			if (player.getInventory().firstEmpty() >= 0) {
@@ -120,7 +120,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 
 		// chestplate check
-		level = (int) getPlugin().getAttributeHandler().getAttributeValueFromItemStack(chestplate,
+		level = (int) getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, chestplate,
 				levelRequirementAttribute);
 		if (player.getLevel() < level) {
 			if (player.getInventory().firstEmpty() >= 0) {
@@ -135,7 +135,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 
 		// leggings check
-		level = (int) getPlugin().getAttributeHandler().getAttributeValueFromItemStack(leggings,
+		level = (int) getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, leggings,
 				levelRequirementAttribute);
 		if (player.getLevel() < level) {
 			if (player.getInventory().firstEmpty() >= 0) {
@@ -150,7 +150,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 
 		// boots check
-		level = (int) getPlugin().getAttributeHandler().getAttributeValueFromItemStack(boots,
+		level = (int) getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, boots,
 				levelRequirementAttribute);
 		if (player.getLevel() < level) {
 			if (player.getInventory().firstEmpty() >= 0) {
@@ -333,14 +333,14 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 	}
 
-	private void playAttributeSoundsAndEffects(Location location, Attribute... attributes) {
-		getPlugin().getAttributeHandler().playAttributeEffects(location, attributes);
-		getPlugin().getAttributeHandler().playAttributeSounds(location, attributes);
-	}
-
 	@Override
 	public ItemAttributes getPlugin() {
 		return plugin;
+	}
+
+	private void playAttributeSoundsAndEffects(Location location, Attribute... attributes) {
+		getPlugin().getAttributeHandler().playAttributeEffects(location, attributes);
+		getPlugin().getAttributeHandler().playAttributeSounds(location, attributes);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -454,7 +454,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		Attribute levelRequirementAttribute = getPlugin().getSettingsManager().getAttribute("LEVEL REQUIREMENT");
 
 		// item in hand check
-		int level = (int) getPlugin().getAttributeHandler().getAttributeValueFromItemStack(itemInHand,
+		int level = (int) getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, itemInHand,
 				levelRequirementAttribute);
 		if (player.getLevel() < level) {
 			if (player.getInventory().firstEmpty() >= 0) {
@@ -469,7 +469,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 
 		// helmet check
-		level = (int) getPlugin().getAttributeHandler().getAttributeValueFromItemStack(helmet,
+		level = (int) getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, helmet,
 				levelRequirementAttribute);
 		if (player.getLevel() < level) {
 			if (player.getInventory().firstEmpty() >= 0) {
@@ -484,7 +484,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 
 		// chestplate check
-		level = (int) getPlugin().getAttributeHandler().getAttributeValueFromItemStack(chestplate,
+		level = (int) getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, chestplate,
 				levelRequirementAttribute);
 		if (player.getLevel() < level) {
 			if (player.getInventory().firstEmpty() >= 0) {
@@ -499,7 +499,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 
 		// leggings check
-		level = (int) getPlugin().getAttributeHandler().getAttributeValueFromItemStack(leggings,
+		level = (int) getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, leggings,
 				levelRequirementAttribute);
 		if (player.getLevel() < level) {
 			if (player.getInventory().firstEmpty() >= 0) {
@@ -514,7 +514,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 
 		// boots check
-		level = (int) getPlugin().getAttributeHandler().getAttributeValueFromItemStack(boots,
+		level = (int) getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, boots,
 				levelRequirementAttribute);
 		if (player.getLevel() < level) {
 			if (player.getInventory().firstEmpty() >= 0) {
@@ -719,34 +719,35 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		Attribute stunLengthAttribute = getPlugin().getSettingsManager().getAttribute("STUN LENGTH");
 		Attribute armorPenetrationAttribute = getPlugin().getSettingsManager().getAttribute("ARMOR PENETRATION");
 
-		arrowDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(shotItem, damageAttribute);
-		arrowDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(shotItem, rangedDamageAttribute);
-		criticalRate += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(shotItem, criticalRateAttribute);
-		criticalDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(shotItem, criticalDamageAttribute);
-		armorPenetration += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(shotItem, armorPenetrationAttribute);
-		stunRate += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(shotItem, stunRateAttribute);
-		stunLength += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(shotItem, stunLengthAttribute);
+		arrowDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, damageAttribute);
+		arrowDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem,
+				rangedDamageAttribute);
+		criticalRate += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, criticalRateAttribute);
+		criticalDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, criticalDamageAttribute);
+		armorPenetration += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, armorPenetrationAttribute);
+		stunRate += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, stunRateAttribute);
+		stunLength += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, stunLengthAttribute);
 
 		if (shootingItem != null) {
-			bowDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(shotItem, damageAttribute);
-			bowDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(shotItem, rangedDamageAttribute);
-			criticalRate += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(shotItem, criticalRateAttribute);
-			criticalDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(shotItem, criticalDamageAttribute);
-			armorPenetration += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(shotItem, armorPenetrationAttribute);
-			stunRate += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(shotItem, stunRateAttribute);
-			stunLength += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(shotItem, stunLengthAttribute);
+			bowDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, damageAttribute);
+			bowDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, rangedDamageAttribute);
+			criticalRate += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, criticalRateAttribute);
+			criticalDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, criticalDamageAttribute);
+			armorPenetration += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, armorPenetrationAttribute);
+			stunRate += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, stunRateAttribute);
+			stunLength += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, stunLengthAttribute);
 		}
 
 		for (ItemStack is : le.getEquipment().getArmorContents()) {
-			armorDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(is, damageAttribute);
-			armorDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(is, rangedDamageAttribute);
-			criticalRate += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(is,
+			armorDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, is, damageAttribute);
+			armorDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, is, rangedDamageAttribute);
+			criticalRate += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, is,
 					criticalRateAttribute);
-			criticalDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(is,
+			criticalDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, is,
 					criticalDamageAttribute);
-			armorPenetration += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(is, armorPenetrationAttribute);
-			stunRate += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(is, stunRateAttribute);
-			stunLength += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(is, stunLengthAttribute);
+			armorPenetration += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, is, armorPenetrationAttribute);
+			stunRate += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, is, stunRateAttribute);
+			stunLength += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, is, stunLengthAttribute);
 		}
 
 		double totalDamage = arrowDamage + bowDamage + armorDamage;
