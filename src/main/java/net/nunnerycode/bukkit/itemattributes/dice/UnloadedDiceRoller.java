@@ -36,13 +36,15 @@ public class UnloadedDiceRoller implements DiceRoller {
 
 	@Override
 	public double getDiceRoll(String formula) {
-		try {
-			Calculable calculable = new ExpressionBuilder(formula).withOperation(diceRollOperator).build();
-			return calculable.calculate();
-		} catch (UnknownFunctionException e) {
-			e.printStackTrace();
-		} catch (UnparsableExpressionException e) {
-			e.printStackTrace();
+		if (canUseFormula(formula)) {
+			try {
+				Calculable calculable = new ExpressionBuilder(formula).withOperation(diceRollOperator).build();
+				return calculable.calculate();
+			} catch (UnknownFunctionException e) {
+				e.printStackTrace();
+			} catch (UnparsableExpressionException e) {
+				e.printStackTrace();
+			}
 		}
 		return 0D;
 	}
@@ -60,5 +62,10 @@ public class UnloadedDiceRoller implements DiceRoller {
 	@Override
 	public void removeAcceptableDiceSize(Double d) {
 		acceptableDiceSizes.remove(d);
+	}
+
+	@Override
+	public boolean canUseFormula(String string) {
+		return string != null && string.matches("\\d[d]\\d\\s+[\\+\\-\\*/]\\s+\\d");
 	}
 }
