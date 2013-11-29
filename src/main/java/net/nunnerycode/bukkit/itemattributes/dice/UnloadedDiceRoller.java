@@ -37,8 +37,9 @@ public class UnloadedDiceRoller implements DiceRoller {
 	@Override
 	public double getDiceRoll(String formula) {
 		if (canUseFormula(formula)) {
+			String s = formula.replace("d", ";");
 			try {
-				Calculable calculable = new ExpressionBuilder(formula).withOperation(diceRollOperator).build();
+				Calculable calculable = new ExpressionBuilder(s).withOperation(diceRollOperator).build();
 				return calculable.calculate();
 			} catch (UnknownFunctionException e) {
 				e.printStackTrace();
@@ -66,6 +67,6 @@ public class UnloadedDiceRoller implements DiceRoller {
 
 	@Override
 	public boolean canUseFormula(String string) {
-		return string != null && string.matches("\\d[d]\\d\\s+[\\+\\-\\*/]\\s+\\d");
+		return string != null && string.matches("\\d*[d]\\d*[\\s*[\\+\\-\\*/\\(\\)]*\\s*\\d*]*");
 	}
 }
