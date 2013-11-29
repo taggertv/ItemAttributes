@@ -29,15 +29,21 @@ public interface Attribute {
 
 	void setPercentage(boolean b);
 
+	boolean isDefaultPercentage();
+
 	String getFormat();
 
 	void setFormat(String s);
+
+	String getDefaultFormat();
 
 	String getName();
 
 	Sound getSound();
 
 	void setSound(Sound s);
+
+	Sound getDefaultSound();
 
 	@Deprecated
 	double getBaseValue();
@@ -49,20 +55,30 @@ public interface Attribute {
 
 	void setMobsBaseValue(double d);
 
+	double getDefaultMobsBaseValue();
+
 	double getPlayersBaseValue();
 
 	void setPlayersBaseValue(double d);
+
+	double getDefaultPlayersBaseValue();
 
 	Effect getEffect();
 
 	void setEffect(Effect e);
 
+	Effect getDefaultEffect();
+
 	boolean isAffectsMobs();
 
 	void setAffectsMobs(boolean b);
 
+	boolean isDefaultAffectsMobs();
+
 	boolean isAffectsPlayers();
 
 	void setAffectsPlayers(boolean b);
+
+	boolean isDefaultAffectsPlayers();
 
 }
