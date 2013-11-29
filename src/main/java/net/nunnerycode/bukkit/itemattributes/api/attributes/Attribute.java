@@ -9,9 +9,21 @@ public interface Attribute {
 
 	void setEnabled(boolean b);
 
+	boolean isDefaultEnabled();
+
+	@Deprecated
 	double getMaxValue();
 
+	@Deprecated
 	void setMaxValue(double d);
+
+	double getMaxValueMobs();
+
+	void setMaxValueMobs(double d);
+
+	double getMaxValuePlayers();
+
+	void setMaxValuePlayers(double d);
 
 	boolean isPercentage();
 
@@ -27,9 +39,19 @@ public interface Attribute {
 
 	void setSound(Sound s);
 
+	@Deprecated
 	double getBaseValue();
 
+	@Deprecated
 	void setBaseValue(double d);
+
+	double getMobsBaseValue();
+
+	void setMobsBaseValue(double d);
+
+	double getPlayersBaseValue();
+
+	void setPlayersBaseValue(double d);
 
 	Effect getEffect();
 
