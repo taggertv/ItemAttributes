@@ -118,6 +118,11 @@ public class ItemAttribute implements Attribute {
 	}
 
 	@Override
+	public double getDefaultMaxValueMobs() {
+		return defaultMobMaxValue;
+	}
+
+	@Override
 	public double getMaxValuePlayers() {
 		return playerMaxValue;
 	}
@@ -125,6 +130,11 @@ public class ItemAttribute implements Attribute {
 	@Override
 	public void setMaxValuePlayers(double d) {
 		this.playerMaxValue = d;
+	}
+
+	@Override
+	public double getDefaultMaxValuePlayers() {
+		return defaultPlayerMaxValue;
 	}
 
 	@Override
