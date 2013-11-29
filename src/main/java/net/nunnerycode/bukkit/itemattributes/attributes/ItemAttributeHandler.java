@@ -8,6 +8,8 @@ import java.util.Set;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.AttributeHandler;
+import net.nunnerycode.bukkit.itemattributes.api.dice.DiceRoller;
+import net.nunnerycode.bukkit.itemattributes.dice.UnloadedDiceRoller;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.ChatColor;
@@ -19,9 +21,11 @@ import org.bukkit.inventory.ItemStack;
 public class ItemAttributeHandler implements AttributeHandler {
 
 	private final ItemAttributes plugin;
+	private final DiceRoller diceRoller;
 
 	public ItemAttributeHandler(ItemAttributes plugin) {
 		this.plugin = plugin;
+		diceRoller = new UnloadedDiceRoller(this.plugin.getSettingsManager().getAllowableDiceSizes());
 	}
 
 	private List<String> getStrings(Collection<String> collection, Attribute attribute) {
@@ -46,22 +50,29 @@ public class ItemAttributeHandler implements AttributeHandler {
 		}
 		for (String s : collection) {
 			String stripped = ChatColor.stripColor(s);
-			String withoutNumbers = stripped.replaceAll("[0-9\\+%\\-]", "").trim();
-			String withoutLetters = stripped.replaceAll("[a-zA-Z\\+%:]", "").trim();
+			String withoutNumbers = stripped.replaceAll("[0-9\\+%\\-][^\\d*[d]\\d*]", "").trim();
+			String withoutLetters = stripped.replaceAll("[a-zA-Z%:][^\\d*[d]\\d*]", "").trim();
 			String withoutVariables = attribute.getFormat().replaceAll("%(?s)(.*?)%", "").trim();
+
 			if (!withoutNumbers.equals(withoutVariables)) {
 				continue;
 			}
-			if (withoutLetters.contains(" - ")) {
-				String[] split = withoutLetters.split(" - ");
-				if (split.length > 1) {
-					double first = NumberUtils.toDouble(split[0], 0.0);
-					double second = NumberUtils.toDouble(split[1], 0.0);
-					d += RandomUtils.nextDouble() * (Math.max(first, second) - Math.min(first,
-							second)) + Math.min(first, second);
-				}
+
+			if (diceRoller.canUseFormula(withoutLetters)) {
+				double diceRoll = diceRoller.getDiceRoll(withoutLetters);
+				d += diceRoll;
 			} else {
-				d += NumberUtils.toDouble(withoutLetters, 0.0);
+				if (withoutLetters.contains(" - ")) {
+					String[] split = withoutLetters.split(" - ");
+					if (split.length > 1) {
+						double first = NumberUtils.toDouble(split[0], 0.0);
+						double second = NumberUtils.toDouble(split[1], 0.0);
+						d += RandomUtils.nextDouble() * (Math.max(first, second) - Math.min(first,
+								second)) + Math.min(first, second);
+					}
+				} else {
+					d += NumberUtils.toDouble(withoutLetters, 0.0);
+				}
 			}
 		}
 		return d;
@@ -69,9 +80,6 @@ public class ItemAttributeHandler implements AttributeHandler {
 
 	private double getValue(LivingEntity livingEntity, Collection<String> collection, Attribute attribute) {
 		if (collection == null || attribute == null || !attribute.isEnabled()) {
-			return 0.0;
-		}
-		if (!attribute.isEnabled()) {
 			return 0.0;
 		}
 		if (attribute.isPercentage()) {

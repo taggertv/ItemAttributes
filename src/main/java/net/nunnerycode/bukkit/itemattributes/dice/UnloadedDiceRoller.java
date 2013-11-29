@@ -40,16 +40,14 @@ public class UnloadedDiceRoller implements DiceRoller {
 
 	@Override
 	public double getDiceRoll(String formula) {
-		if (canUseFormula(formula)) {
-			String s = formula.replace("d", ";");
-			try {
-				Calculable calculable = new ExpressionBuilder(s).withOperation(diceRollOperator).build();
-				return calculable.calculate();
-			} catch (UnknownFunctionException e) {
-				e.printStackTrace();
-			} catch (UnparsableExpressionException e) {
-				e.printStackTrace();
-			}
+		String s = formula.replace("d", ";");
+		try {
+			Calculable calculable = new ExpressionBuilder(s).withOperation(diceRollOperator).build();
+			return calculable.calculate();
+		} catch (UnknownFunctionException e) {
+			// do nothing
+		} catch (UnparsableExpressionException e) {
+			// do nothing
 		}
 		return 0D;
 	}

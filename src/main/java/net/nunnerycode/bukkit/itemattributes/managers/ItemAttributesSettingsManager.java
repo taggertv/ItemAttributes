@@ -1,7 +1,11 @@
 package net.nunnerycode.bukkit.itemattributes.managers;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -10,6 +14,7 @@ import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.managers.SettingsManager;
 import net.nunnerycode.bukkit.itemattributes.attributes.ItemAttribute;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.Effect;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
@@ -23,11 +28,13 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	private boolean itemOnlyDamageSystemEnabled;
 	private double itemOnlyDamageSystemBaseDamage;
 	private boolean pluginCompatible;
+	private List<Double> allowedDiceSizes;
 
 	public ItemAttributesSettingsManager(ItemAttributesPlugin plugin) {
 		this.plugin = plugin;
 		coreAttributeMap = new HashMap<String, Attribute>();
 		externalAttributeMap = new HashMap<String, Attribute>();
+		allowedDiceSizes = new ArrayList<Double>();
 	}
 
 	public void load() {
@@ -40,6 +47,23 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		itemOnlyDamageSystemBaseDamage = getPlugin().getConfigYAML().getDouble("options.item-only-damage-system" +
 				".base-damage", 1.0D);
 		pluginCompatible = getPlugin().getConfigYAML().getBoolean("options.enable-plugin-compatibility", true);
+
+		allowedDiceSizes.clear();
+		List<String> diceStrings = getPlugin().getConfigYAML().getStringList("options.allowed-dice-sizes");
+
+		for (String s : diceStrings) {
+			double d = NumberUtils.toDouble(s, 0);
+			if (d <= 0D) {
+				continue;
+			}
+			allowedDiceSizes.add(d);
+		}
+
+		if (allowedDiceSizes.isEmpty()) {
+			Collections.addAll(allowedDiceSizes, 2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 20.0);
+		}
+
+		coreAttributeMap.clear();
 
 		coreAttributeMap.put("HEALTH", new ItemAttribute("Health", true, 100D, 100D, false, "%value% Health", null,
 				20D, 20D, null, true, true));
@@ -99,6 +123,10 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 						"-") + ".players-base-value", entry.getValue().getPlayersBaseValue()));
 				entry.getValue().setMobsBaseValue(section.getDouble(entry.getKey().toLowerCase().replace(" ",
 						"-") + ".mobs-base-value", entry.getValue().getMobsBaseValue()));
+				entry.getValue().setAffectsMobs(section.getBoolean(entry.getKey().toLowerCase().replace(" ",
+						"-") + ".affects-mobs", entry.getValue().isAffectsMobs()));
+				entry.getValue().setAffectsPlayers(section.getBoolean(entry.getKey().toLowerCase().replace(" ",
+						"-") + ".affects-players", entry.getValue().isAffectsPlayers()));
 				try {
 					entry.getValue().setSound(Sound.valueOf(section.getString(entry.getKey().toLowerCase().replace(" ",
 							"-") + ".sound", (entry.getValue().getSound() != null) ? entry.getValue().getSound().name
@@ -224,10 +252,26 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		return pluginCompatible;
 	}
 
+	@Override
+	public Double[] getAllowableDiceSizes() {
+		return allowedDiceSizes.toArray(new Double[allowedDiceSizes.size()]);
+	}
+
+	@Override
+	public void addAllowableDiceSizes(Double... d) {
+		allowedDiceSizes.addAll(Arrays.asList(d));
+	}
+
+	@Override
+	public void removeAllowableDiceSizes(Double... d) {
+		allowedDiceSizes.removeAll(Arrays.asList(d));
+	}
+
 	public void save() {
 		getPlugin().getConfigYAML().set("options.seconds-between-health-updates", secondsBetweenHealthUpdates);
 		getPlugin().getConfigYAML().set("options.item-only-damage-system.enabled", itemOnlyDamageSystemEnabled);
 		getPlugin().getConfigYAML().set("options.item-only-damage-system.base-damage", itemOnlyDamageSystemBaseDamage);
+		getPlugin().getConfigYAML().set("options.allowed-dice-sizes", allowedDiceSizes);
 		for (Map.Entry<String, Attribute> entry : coreAttributeMap.entrySet()) {
 			getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
 					"-") + ".enabled", entry.getValue().isEnabled());
@@ -247,6 +291,10 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 					"-") + ".players-base-value", entry.getValue().getPlayersBaseValue());
 			getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
 					"-") + ".mobs-base-value", entry.getValue().getMobsBaseValue());
+			getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
+					"-") + ".affects-mobs", entry.getValue().isAffectsMobs());
+			getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
+					"-") + ".affects-players", entry.getValue().isAffectsPlayers());
 			try {
 				getPlugin().getConfigYAML().set("core-stats." + entry.getKey().toLowerCase().replace(" ",
 						"-") + ".sound", entry.getValue().getSound().name());

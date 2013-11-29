@@ -197,7 +197,7 @@
                                     <include>se.ranzdo.bukkit:methodcommand</include>
                                     <include>org.mcstats.bukkit:metrics</include>
                                     <include>org.apache.commons:commons-lang3</include>
-                                    <include>de.congrace.exp4j:exp4j</include>
+                                    <include>de.congrace:exp4j</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -208,14 +208,6 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>2.1</version>
-            </plugin>
-            <plugin>
-                <groupId>org.whitesource</groupId>
-                <artifactId>whitesource-maven-plugin</artifactId>
-                <version>1.1.5</version>
-                <configuration>
-                    <orgToken>71d53244-ab2e-4d9d-8d91-1f817a743720</orgToken>
-                </configuration>
             </plugin>
         </plugins>
         <extensions>
