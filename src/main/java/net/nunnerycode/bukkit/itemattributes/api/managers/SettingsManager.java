@@ -8,18 +8,24 @@ public interface SettingsManager {
 
 	ItemAttributes getPlugin();
 
+	@Deprecated
 	double getBasePlayerHealth();
 
 	int getSecondsBetweenHealthUpdates();
 
+	@Deprecated
 	double getBaseCriticalRate();
 
+	@Deprecated
 	double getBaseCriticalDamage();
 
+	@Deprecated
 	double getBaseStunRate();
 
+	@Deprecated
 	int getBaseStunLength();
 
+	@Deprecated
 	double getBaseDodgeRate();
 
 	Attribute getAttribute(String name);
