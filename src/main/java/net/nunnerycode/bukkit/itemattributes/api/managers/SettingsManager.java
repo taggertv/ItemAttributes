@@ -46,4 +46,8 @@ public interface SettingsManager {
 
 	boolean isPluginCompatible();
 
+	Double[] getAllowableDiceSizes();
+
+	Double[] setAllowableDiceSizes();
+
 }
