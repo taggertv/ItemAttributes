@@ -355,32 +355,6 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		handlePlayerHealthCheck(event);
 	}
 
-	private void handleLivingEntityHealthCheck(EntityEvent event) {
-		Attribute healthAttribute = getPlugin().getSettingsManager().getAttribute("HEALTH");
-		if (!(event.getEntity() instanceof LivingEntity) || event.getEntity() instanceof Player || !healthAttribute
-				.isEnabled() || !healthAttribute.isAffectsMobs() || event instanceof Cancellable && ((Cancellable)
-				event).isCancelled()) {
-			return;
-		}
-		LivingEntity entity = (LivingEntity) event.getEntity();
-		double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(entity, healthAttribute);
-		double currentHealth = entity.getHealth();
-		double baseMaxHealth = 0D;
-		if (entity.hasMetadata("itemattributes.basehealth")) {
-			List<MetadataValue> metadataValueList = entity.getMetadata("itemattributes.basehealth");
-			for (MetadataValue mv : metadataValueList) {
-				if (mv.getOwningPlugin().equals(getPlugin())) {
-					baseMaxHealth = mv.asDouble();
-					break;
-				}
-			}
-		} else {
-			entity.resetMaxHealth();
-			baseMaxHealth = entity.getMaxHealth();
-		}
-		entity.setMaxHealth(baseMaxHealth + d);
-	}
-
 	private void handlePlayerHealthCheck(PlayerEvent event) {
 		Attribute healthAttribute = getPlugin().getSettingsManager().getAttribute("HEALTH");
 
@@ -409,6 +383,32 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityTargetEventLowest(EntityTargetEvent event) {
 		handleLivingEntityHealthCheck(event);
+	}
+
+	private void handleLivingEntityHealthCheck(EntityEvent event) {
+		Attribute healthAttribute = getPlugin().getSettingsManager().getAttribute("HEALTH");
+		if (!(event.getEntity() instanceof LivingEntity) || event.getEntity() instanceof Player || !healthAttribute
+				.isEnabled() || !healthAttribute.isAffectsMobs() || event instanceof Cancellable && ((Cancellable)
+				event).isCancelled()) {
+			return;
+		}
+		LivingEntity entity = (LivingEntity) event.getEntity();
+		double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(entity, healthAttribute);
+		double currentHealth = entity.getHealth();
+		double baseMaxHealth = 0D;
+		if (entity.hasMetadata("itemattributes.basehealth")) {
+			List<MetadataValue> metadataValueList = entity.getMetadata("itemattributes.basehealth");
+			for (MetadataValue mv : metadataValueList) {
+				if (mv.getOwningPlugin().equals(getPlugin())) {
+					baseMaxHealth = mv.asDouble();
+					break;
+				}
+			}
+		} else {
+			entity.resetMaxHealth();
+			baseMaxHealth = entity.getMaxHealth();
+		}
+		entity.setMaxHealth(baseMaxHealth + d);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -984,19 +984,36 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 	}
 
 	private double handleBlockAndParryChecks(EntityDamageByEntityEvent event, double damage, Attribute blockAttribute, Attribute parryAttribute) {
-		if (event.getEntity() instanceof Player) {
+		if (event.getEntity() instanceof Player && event.getDamager() instanceof LivingEntity) {
 			if (((Player) event.getEntity()).isBlocking()) {
+
 				double blockDamageReduction = blockAttribute.getBaseValue() + getPlugin().getAttributeHandler()
 						.getAttributeValueFromEntity((LivingEntity) event.getEntity(), blockAttribute);
-				damage = Math.max(0D, damage * blockDamageReduction);
-				playAttributeSoundsAndEffects(((LivingEntity) event.getEntity()).getEyeLocation(), blockAttribute);
+
+				ItemAttributesAttributeEvent blockAttributeEvent = new ItemAttributesAttributeEvent((LivingEntity) event
+						.getEntity(), (LivingEntity) event.getDamager(), blockAttribute,
+						new ItemAttributeValue(blockDamageReduction));
+				Bukkit.getPluginManager().callEvent(blockAttributeEvent);
+
+				if (!blockAttributeEvent.isCancelled()) {
+					damage = Math.max(0D, damage * blockDamageReduction);
+					playAttributeSoundsAndEffects(((LivingEntity) event.getEntity()).getEyeLocation(), blockAttribute);
+				}
 
 				if (event.getDamager() instanceof Player) {
 					long timeLeft = getPlugin().getAttackSpeedTask().getTimeLeft((LivingEntity) event.getDamager());
 					double parryTime = parryAttribute.getBaseValue() + getPlugin().getAttributeHandler()
 							.getAttributeValueFromEntity((LivingEntity) event.getDamager(), parryAttribute);
-					getPlugin().getAttackSpeedTask().setTimeLeft((LivingEntity) event.getDamager(),
-							Math.round(timeLeft * parryTime));
+
+					ItemAttributesAttributeEvent parryAttributeEvent = new ItemAttributesAttributeEvent((LivingEntity)
+							event.getEntity(), (LivingEntity) event.getDamager(), parryAttribute,
+							new ItemAttributeValue(parryTime));
+					Bukkit.getPluginManager().callEvent(parryAttributeEvent);
+
+					if (!parryAttributeEvent.isCancelled()) {
+						getPlugin().getAttackSpeedTask().setTimeLeft((LivingEntity) event.getDamager(),
+								Math.round(timeLeft * parryTime));
+					}
 				}
 			}
 		}
