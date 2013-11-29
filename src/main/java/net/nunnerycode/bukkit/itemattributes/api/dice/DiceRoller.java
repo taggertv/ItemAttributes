@@ -2,7 +2,7 @@ package net.nunnerycode.bukkit.itemattributes.api.dice;
 
 public interface DiceRoller {
 
-	public String getFormula(double numberOfDice, double numberOfSides, double modifier);
+	public String getFormula(double numberOfDice, double numberOfSides);
 
 	public double getDiceRoll(String formula);
 

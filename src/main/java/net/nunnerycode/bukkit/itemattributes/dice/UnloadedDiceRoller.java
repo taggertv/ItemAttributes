@@ -29,9 +29,9 @@ public class UnloadedDiceRoller implements DiceRoller {
 	}
 
 	@Override
-	public String getFormula(double numberOfDice, double numberOfSides, double modifier) {
-		String format = "%sd%s%s%s";
-		return String.format(format, numberOfDice, numberOfSides, (modifier >= 0) ? "+" : "", modifier);
+	public String getFormula(double numberOfDice, double numberOfSides) {
+		String format = "%sd%s";
+		return String.format(format, numberOfDice, numberOfSides);
 	}
 
 	@Override
