@@ -333,14 +333,14 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 	}
 
-	@Override
-	public ItemAttributes getPlugin() {
-		return plugin;
-	}
-
 	private void playAttributeSoundsAndEffects(Location location, Attribute... attributes) {
 		getPlugin().getAttributeHandler().playAttributeEffects(location, attributes);
 		getPlugin().getAttributeHandler().playAttributeSounds(location, attributes);
+	}
+
+	@Override
+	public ItemAttributes getPlugin() {
+		return plugin;
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -1055,18 +1055,21 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 							criticalRateAttribute, criticalDamageAttribute);
 				}
 			} else {
-				double critPercentage = (1.00 + criticalDamageEvent.getAttributeValue().asDouble());
-				damage *= critPercentage;
-				if (event.getDamager() instanceof Player) {
-					getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "events.critical-hit",
-							new String[][]{{"%percentage%", decimalFormat.format(critPercentage * 100)}});
-				} else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter()
-						instanceof Player) {
-					getPlugin().getLanguageManager().sendMessage((Player) ((Projectile) event.getDamager()).getShooter(),
-							"events.critical-hit", new String[][]{{"%percentage%", decimalFormat.format(critPercentage
-							* 100)}});
+				if (!criticalDamageEvent.isCancelled() && !criticalRateEvent.isCancelled()) {
+					double critPercentage = (1.00 + criticalDamageEvent.getAttributeValue().asDouble());
+					if (event.getDamager() instanceof Player) {
+						damage *= critPercentage;
+						getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "events.critical-hit",
+								new String[][]{{"%percentage%", decimalFormat.format(critPercentage * 100)}});
+					} else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter()
+							instanceof Player) {
+						damage *= critPercentage;
+						getPlugin().getLanguageManager().sendMessage((Player) ((Projectile) event.getDamager()).getShooter(),
+								"events.critical-hit", new String[][]{{"%percentage%", decimalFormat.format(critPercentage
+								* 100)}});
+					}
+					playAttributeSoundsAndEffects(event.getDamager().getLocation().add(0D, 1D, 0D), criticalRateAttribute, criticalDamageAttribute);
 				}
-				playAttributeSoundsAndEffects(event.getDamager().getLocation().add(0D, 1D, 0D), criticalRateAttribute, criticalDamageAttribute);
 			}
 		}
 		return damage;
