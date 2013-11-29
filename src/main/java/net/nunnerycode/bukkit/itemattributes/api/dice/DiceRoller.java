@@ -12,4 +12,6 @@ public interface DiceRoller {
 
 	public void removeAcceptableDiceSize(Double d);
 
+	public boolean canUseFormula(String string);
+
 }
