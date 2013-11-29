@@ -136,7 +136,7 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 				}
 				try {
 					entry.getValue().setEffect(Effect.valueOf(section.getString(entry.getKey().toLowerCase().replace
-							(" ", "-") + ".sound", (entry.getValue().getEffect() != null) ? entry.getValue().getEffect
+							(" ", "-") + ".effect", (entry.getValue().getEffect() != null) ? entry.getValue().getEffect
 							().name() : "")));
 				} catch (Exception e) {
 					// do nothing
