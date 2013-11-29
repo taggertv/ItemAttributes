@@ -17,12 +17,6 @@ import org.bukkit.configuration.ConfigurationSection;
 public final class ItemAttributesSettingsManager implements SettingsManager {
 
 	private ItemAttributesPlugin plugin;
-	private double basePlayerHealth;
-	private double baseCriticalRate;
-	private double baseCriticalDamage;
-	private double baseStunRate;
-	private double baseDodgeRate;
-	private int baseStunLength;
 	private int secondsBetweenHealthUpdates;
 	private Map<String, Attribute> coreAttributeMap;
 	private Map<String, Attribute> externalAttributeMap;
@@ -38,12 +32,7 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 
 	public void load() {
 		getPlugin().getConfigYAML().load();
-		basePlayerHealth = getPlugin().getConfigYAML().getDouble("options.base-player-health", 20.0);
-		baseCriticalRate = getPlugin().getConfigYAML().getDouble("options.base-critical-rate", 0.05);
-		baseCriticalDamage = getPlugin().getConfigYAML().getDouble("options.base-critical-damage", 0.2);
-		baseStunRate = getPlugin().getConfigYAML().getDouble("options.base-stun-rate", 0.05);
-		baseStunLength = getPlugin().getConfigYAML().getInt("options.base-stun-length", 1);
-		baseDodgeRate = getPlugin().getConfigYAML().getDouble("options.base-dodge-rate", 0.0);
+
 		secondsBetweenHealthUpdates = getPlugin().getConfigYAML().getInt("options.seconds-between-health-updates",
 				10);
 		itemOnlyDamageSystemEnabled = getPlugin().getConfigYAML().getBoolean("options.item-only-damage-system" +
@@ -51,28 +40,33 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 		itemOnlyDamageSystemBaseDamage = getPlugin().getConfigYAML().getDouble("options.item-only-damage-system" +
 				".base-damage", 1.0D);
 		pluginCompatible = getPlugin().getConfigYAML().getBoolean("options.enable-plugin-compatibility", true);
-		coreAttributeMap.put("HEALTH", new ItemAttribute("Health", true, 100D, false, "%value% Health", null, 0));
-		coreAttributeMap.put("ARMOR", new ItemAttribute("Armor", true, 100D, false, "%value% Armor", null, 0));
-		coreAttributeMap.put("DAMAGE", new ItemAttribute("Damage", true, 100D, false, "%value% Damage", null, 1));
-		coreAttributeMap.put("MELEE DAMAGE", new ItemAttribute("Melee Damage", true, 100D, false, "%value% Melee Damage",
-				null, 0));
-		coreAttributeMap.put("RANGED DAMAGE", new ItemAttribute("Ranged Damage", true, 100D, false,
-				"%value% Ranged Damage", null, 0D));
-		coreAttributeMap.put("REGENERATION", new ItemAttribute("Regeneration", true, 100D, false, "%value% Regeneration",
-				null, 0D));
-		coreAttributeMap.put("CRITICAL RATE", new ItemAttribute("Critical Rate", true, 100D, true,
-				"%value% Critical Rate", null, 0.05));
-		coreAttributeMap.put("CRITICAL DAMAGE", new ItemAttribute("Critical Damage", true, 100D, true,
-				"%value% Critical Damage", null, 0.2));
-		coreAttributeMap.put("LEVEL REQUIREMENT", new ItemAttribute("Level Requirement", true, 100D, false,
-				"Level Requirement: %value%", null, 0));
-		coreAttributeMap.put("ARMOR PENETRATION", new ItemAttribute("Armor Penetration", true, 100D, false,
-				"%value% Armor Penetration", null, 0));
-		coreAttributeMap.put("STUN RATE", new ItemAttribute("Stun Rate", true, 100D, true, "%value% Stun Rate", null, 0D));
-		coreAttributeMap.put("STUN LENGTH", new ItemAttribute("Stun Length", true, 100D, false, "%value% Stun Length",
-				null, 1));
-		coreAttributeMap.put("DODGE RATE", new ItemAttribute("Dodge Rate", true, 100D, true, "%value% Dodge Rate", null,
-				0D));
+
+		coreAttributeMap.put("HEALTH", new ItemAttribute("Health", true, 100D, 100D, false, "%value% Health", null,
+				20D, 20D, null, true, true));
+		coreAttributeMap.put("ARMOR", new ItemAttribute("Armor", true, 100D, 100D, false, "%value% Armor", null, 0D,
+				0D, null, true, true));
+		coreAttributeMap.put("DAMAGE", new ItemAttribute("Damage", true, 100D, 100D, false, "%value% Damage", null,
+				1D, 1D, null, true, true));
+		coreAttributeMap.put("MELEE DAMAGE", new ItemAttribute("Melee Damage", true, 100D, 100D, false,
+				"%value% Melee Damage", null, 0D, 0D, null, true, true));
+		coreAttributeMap.put("RANGED DAMAGE", new ItemAttribute("Ranged Damage", true, 100D, 100D, false,
+				"%value% Ranged Damage", null, 0D, 0D, null, true, true));
+		coreAttributeMap.put("REGENERATION", new ItemAttribute("Regeneration", true, 100D, 100D, false,
+				"%value% Regeneration", null, 0D, 0D, null, true, true));
+		coreAttributeMap.put("CRITICAL RATE", new ItemAttribute("Critical Rate", true, 100D, 100D, true,
+				"%value% Critical Rate", null, 0.05, 0.00, null, true, true));
+		coreAttributeMap.put("CRITICAL DAMAGE", new ItemAttribute("Critical Damage", true, 100D, 100D, true,
+				"%value% Critical Damage", null, 0.2, 0.00, null, true, true));
+		coreAttributeMap.put("LEVEL REQUIREMENT", new ItemAttribute("Level Requirement", true, 100D, 100D, false,
+				"Level Requirement: %value%", null, 0, 0, null, true, true));
+		coreAttributeMap.put("ARMOR PENETRATION", new ItemAttribute("Armor Penetration", true, 100D, 100D, false,
+				"%value% Armor Penetration", null, 0, 0, null, true, true));
+		coreAttributeMap.put("STUN RATE", new ItemAttribute("Stun Rate", true, 100D, 100D, true, "%value% Stun Rate",
+				null, 0D, 0D, null, true, true));
+		coreAttributeMap.put("STUN LENGTH", new ItemAttribute("Stun Length", true, 100D, 100D, false,
+				"%value% Stun Length", null, 1D, 0D, null, true, true));
+		coreAttributeMap.put("DODGE RATE", new ItemAttribute("Dodge Rate", true, 100D, 100D, true,
+				"%value% Dodge Rate", null, 0D, 0D, null, true, true));
 		coreAttributeMap.put("FIRE IMMUNITY", new ItemAttribute("Fire Immunity", true, -1D, false,
 				"Fire Immunity", null, -1D));
 		coreAttributeMap.put("WITHER IMMUNITY", new ItemAttribute("Wither Immunity", true, -1D, false,
@@ -81,10 +75,12 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 				"Poison Immunity", null, -1D));
 		coreAttributeMap.put("PERMISSION REQUIREMENT", new ItemAttribute("Permission Requirement", true, -1D, false,
 				"Permission Requirement: %value%", null, -1D));
-		coreAttributeMap.put("ATTACK SPEED", new ItemAttribute("Attack Speed", true, 100D, true,
-				"%value% Attack Speed", null, 1D));
-		coreAttributeMap.put("BLOCK", new ItemAttribute("Block", true, 100D, true, "%value% Block", null, 0.5D));
-		coreAttributeMap.put("PARRY", new ItemAttribute("Parry", true, 100D, true, "%value% Parry", null, 1.5D));
+		coreAttributeMap.put("ATTACK SPEED", new ItemAttribute("Attack Speed", true, 100D, 100D, true,
+				"%value% Attack Speed", null, 1D, -1D, null, true, false));
+		coreAttributeMap.put("BLOCK", new ItemAttribute("Block", true, 100D, 100D, true, "%value% Block", null, 0.5D,
+				0.0D, null, true, false));
+		coreAttributeMap.put("PARRY", new ItemAttribute("Parry", true, 100D, 100D, true, "%value% Parry", null, 1.5D,
+				0.0D, null, true, false));
 
 		if (getPlugin().getConfigYAML().isConfigurationSection("core-stats")) {
 			ConfigurationSection section = getPlugin().getConfigYAML().getConfigurationSection("core-stats");
@@ -127,8 +123,9 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	}
 
 	@Override
+	@Deprecated
 	public double getBasePlayerHealth() {
-		return basePlayerHealth;
+		return getAttribute("HEALTH").getPlayersBaseValue();
 	}
 
 	@Override
@@ -137,28 +134,33 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	}
 
 	@Override
+	@Deprecated
 	public double getBaseCriticalRate() {
-		return baseCriticalRate;
+		return getAttribute("CRITICAL RATE").getPlayersBaseValue();
 	}
 
 	@Override
+	@Deprecated
 	public double getBaseCriticalDamage() {
-		return baseCriticalDamage;
+		return getAttribute("CRITICAL DAMAGE").getPlayersBaseValue();
 	}
 
 	@Override
+	@Deprecated
 	public double getBaseStunRate() {
-		return baseStunRate;
+		return getAttribute("STUN RATE").getPlayersBaseValue();
 	}
 
 	@Override
+	@Deprecated
 	public int getBaseStunLength() {
-		return baseStunLength;
+		return (int) Math.round(getAttribute("STUN LENGTH").getPlayersBaseValue());
 	}
 
 	@Override
+	@Deprecated
 	public double getBaseDodgeRate() {
-		return baseDodgeRate;
+		return getAttribute("DODGE RATE").getPlayersBaseValue();
 	}
 
 	public Attribute getAttribute(String name) {
@@ -223,12 +225,6 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 	}
 
 	public void save() {
-		getPlugin().getConfigYAML().load();
-		getPlugin().getConfigYAML().set("options.base-player-health", basePlayerHealth);
-		getPlugin().getConfigYAML().set("options.base-critical-rate", baseCriticalRate);
-		getPlugin().getConfigYAML().set("options.base-critical-damage", baseCriticalDamage);
-		getPlugin().getConfigYAML().set("options.base-stun-rate", baseStunRate);
-		getPlugin().getConfigYAML().set("options.base-stun-length", baseStunLength);
 		getPlugin().getConfigYAML().set("options.seconds-between-health-updates", secondsBetweenHealthUpdates);
 		getPlugin().getConfigYAML().set("options.item-only-damage-system.enabled", itemOnlyDamageSystemEnabled);
 		getPlugin().getConfigYAML().set("options.item-only-damage-system.base-damage", itemOnlyDamageSystemBaseDamage);
