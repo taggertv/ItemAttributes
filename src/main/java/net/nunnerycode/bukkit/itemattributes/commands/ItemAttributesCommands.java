@@ -52,51 +52,16 @@ public class ItemAttributesCommands implements ItemAttributesCommand {
 
 		getPlugin().getLanguageManager().sendMessage(sender, "commands.view-stats-help");
 
-		Attribute damageAttribute = getPlugin().getSettingsManager().getAttribute("DAMAGE");
-		Attribute meleeDamageAttribute = getPlugin().getSettingsManager().getAttribute("MELEE DAMAGE");
-		Attribute rangedDamageAttribute = getPlugin().getSettingsManager().getAttribute("RANGED DAMAGE");
-		Attribute criticalRateAttribute = getPlugin().getSettingsManager().getAttribute("CRITICAL RATE");
-		Attribute criticalDamageAttribute = getPlugin().getSettingsManager().getAttribute("CRITICAL DAMAGE");
-		Attribute stunRateAttribute = getPlugin().getSettingsManager().getAttribute("STUN RATE");
-		Attribute stunLengthAttribute = getPlugin().getSettingsManager().getAttribute("STUN LENGTH");
-		Attribute dodgeRateAttribute = getPlugin().getSettingsManager().getAttribute("DODGE RATE");
-		Attribute healthAttribute = getPlugin().getSettingsManager().getAttribute("HEALTH");
-		Attribute regenerationAttribute = getPlugin().getSettingsManager().getAttribute("REGENERATION");
-		Attribute armorPenetrationAttribute = getPlugin().getSettingsManager().getAttribute("ARMOR PENETRATION");
-		Attribute armorAttribute = getPlugin().getSettingsManager().getAttribute("ARMOR");
-
-		// health stat
-		sendStatMessage(sender, player, healthAttribute,
-				getPlugin().getSettingsManager().getBasePlayerHealth());
-		// damage stat
-		sendStatMessage(sender, player, damageAttribute, 0D);
-		// melee damage stat
-		sendStatMessage(sender, player, meleeDamageAttribute, 0D);
-		// ranged damage stat
-		sendStatMessage(sender, player, rangedDamageAttribute, 0D);
-		// regeneration stat
-		sendStatMessage(sender, player, regenerationAttribute, 0D);
-		// armor stat
-		sendStatMessage(sender, player, armorAttribute, 0D);
-		// critical rate stat
-		sendPercentageStatMessage(sender, player, criticalRateAttribute, getPlugin().getSettingsManager()
-				.getBaseCriticalRate());
-		// critical damage stat
-		sendPercentageStatMessage(sender, player, criticalDamageAttribute, getPlugin().getSettingsManager()
-				.getBaseCriticalDamage());
-		// armor penetration stat
-		sendStatMessage(sender, player, armorPenetrationAttribute, 0);
-		// stun rate stat
-		sendPercentageStatMessage(sender, player, stunRateAttribute, getPlugin().getSettingsManager().getBaseStunRate
-				());
-		// stun length stat
-		sendStatMessage(sender, player, stunLengthAttribute, getPlugin().getSettingsManager().getBaseStunLength());
-		// dodge rate stat
-		sendPercentageStatMessage(sender, player, dodgeRateAttribute, getPlugin().getSettingsManager()
-				.getBaseDodgeRate());
+		for (Attribute attribute : getPlugin().getSettingsManager().getLoadedAttributes()) {
+			if (attribute.isPercentage()) {
+				sendPercentageStatMessage(sender, player, attribute);
+			} else {
+				sendStatMessage(sender, player, attribute);
+			}
+		}
 	}
 
-	private void sendStatMessage(CommandSender sender, Player player, Attribute attribute, double baseStat) {
+	private void sendPercentageStatMessage(CommandSender sender, Player player, Attribute attribute) {
 		double statHelmet = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, player
 				.getEquipment().getHelmet(), attribute);
 		double statChestplate = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, player
@@ -107,32 +72,34 @@ public class ItemAttributesCommands implements ItemAttributesCommand {
 				player.getEquipment().getBoots(), attribute);
 		double statItem = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player,
 				player.getEquipment().getItemInHand(), attribute);
-		double statTotal = baseStat + statHelmet + statChestplate + statLeggings + statBoots + statItem;
-		String formatString = attribute.getFormat().replaceAll("%(?s)(.*?)%", "").trim();
-		getPlugin().getLanguageManager().sendMessage(sender, "commands.view-stats", new String[][]{{"%statname%",
-				formatString}, {"%totalvalue%", DF.format(statTotal)}, {"%helmet%", DF.format(statHelmet)},
-				{"%chestplate%", DF.format(statChestplate)}, {"%leggings%", DF.format(statLeggings)}, {"%boots%",
-				DF.format(statBoots)}, {"%item%", DF.format(statItem)}});
-	}
-
-	private void sendPercentageStatMessage(CommandSender sender, Player player, Attribute attribute, double baseStat) {
-		double statHelmet = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, player
-				.getEquipment().getHelmet(), attribute);
-		double statChestplate = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, player
-				.getEquipment().getChestplate(), attribute);
-		double statLeggings = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, player
-				.getEquipment().getLeggings(), attribute);
-		double statBoots = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player,
-				player.getEquipment().getBoots(), attribute);
-		double statItem = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player,
-				player.getEquipment().getItemInHand(), attribute);
-		double statTotal = baseStat + statHelmet + statChestplate + statLeggings + statBoots + statItem;
+		double statTotal = attribute.getPlayersBaseValue() + statHelmet + statChestplate + statLeggings + statBoots
+				+ statItem;
 		String formatString = attribute.getFormat().replaceAll("%(?s)(.*?)%", "").trim();
 		getPlugin().getLanguageManager().sendMessage(sender, "commands.view-stats-percentage",
 				new String[][]{{"%statname%", formatString}, {"%totalvalue%", DF.format(statTotal * 100)},
 						{"%helmet%", DF.format(statHelmet * 100)}, {"%chestplate%", DF.format(statChestplate * 100)},
 						{"%leggings%", DF.format(statLeggings * 100)}, {"%boots%", DF.format(statBoots * 100)},
 						{"%item%", DF.format(statItem * 100)}});
+	}
+
+	private void sendStatMessage(CommandSender sender, Player player, Attribute attribute) {
+		double statHelmet = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, player
+				.getEquipment().getHelmet(), attribute);
+		double statChestplate = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, player
+				.getEquipment().getChestplate(), attribute);
+		double statLeggings = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player, player
+				.getEquipment().getLeggings(), attribute);
+		double statBoots = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player,
+				player.getEquipment().getBoots(), attribute);
+		double statItem = getPlugin().getAttributeHandler().getAttributeValueFromItemStack(player,
+				player.getEquipment().getItemInHand(), attribute);
+		double statTotal = attribute.getPlayersBaseValue() + statHelmet + statChestplate + statLeggings + statBoots
+				+ statItem;
+		String formatString = attribute.getFormat().replaceAll("%(?s)(.*?)%", "").trim();
+		getPlugin().getLanguageManager().sendMessage(sender, "commands.view-stats", new String[][]{{"%statname%",
+				formatString}, {"%totalvalue%", DF.format(statTotal)}, {"%helmet%", DF.format(statHelmet)},
+				{"%chestplate%", DF.format(statChestplate)}, {"%leggings%", DF.format(statLeggings)}, {"%boots%",
+				DF.format(statBoots)}, {"%item%", DF.format(statItem)}});
 	}
 
 	private List<String> getItemStackLore(ItemStack itemStack) {
