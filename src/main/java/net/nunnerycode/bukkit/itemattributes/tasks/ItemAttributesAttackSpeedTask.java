@@ -6,7 +6,6 @@ import java.util.Map;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.tasks.AttackSpeedTask;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -78,7 +77,6 @@ public final class ItemAttributesAttackSpeedTask implements AttackSpeedTask, Run
 				if (!attackSpeedAttribute.isAffectsPlayers()) {
 					continue;
 				}
-				((Player) entry.getKey()).sendMessage(ChatColor.BLUE + "Attack Speed Checks Left: " + entry.getValue());
 				if (entry.getValue() < 1) {
 					LivingEntity entity = entry.getKey();
 					getPlugin().getAttributeHandler().playAttributeEffects(entity.getEyeLocation(), attackSpeedAttribute);
