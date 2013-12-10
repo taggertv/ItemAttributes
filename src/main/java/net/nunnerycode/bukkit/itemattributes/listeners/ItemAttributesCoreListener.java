@@ -307,40 +307,44 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		if (!healthAttribute.isEnabled()) {
 			return;
 		}
-		for (HumanEntity he : event.getViewers()) {
-			if (he.isDead()) {
-				continue;
+		try {
+			for (HumanEntity he : event.getViewers()) {
+				if (he.isDead()) {
+					continue;
+				}
+
+				double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(he, healthAttribute);
+				double currentHealth = event.getPlayer().getHealth();
+				double baseMaxHealth = healthAttribute.getPlayersBaseValue();
+
+				ItemAttributesAttributeEvent iaae = new ItemAttributesAttributeEvent(he, he,
+						healthAttribute, new ItemAttributeValue(d));
+				Bukkit.getPluginManager().callEvent(iaae);
+
+				if (iaae.isCancelled()) {
+					return;
+				}
+
+				he.setMaxHealth(Math.max(baseMaxHealth + iaae.getAttributeValue().asDouble(), 1));
+				he.setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
+				if (he instanceof Player) {
+					((Player) he).setHealthScale(he.getMaxHealth());
+				}
+				playAttributeSoundsAndEffects(he.getEyeLocation(), healthAttribute);
 			}
-
-			double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(he, healthAttribute);
-			double currentHealth = event.getPlayer().getHealth();
-			double baseMaxHealth = healthAttribute.getPlayersBaseValue();
-
-			ItemAttributesAttributeEvent iaae = new ItemAttributesAttributeEvent(he, he,
-					healthAttribute, new ItemAttributeValue(d));
-			Bukkit.getPluginManager().callEvent(iaae);
-
-			if (iaae.isCancelled()) {
-				return;
-			}
-
-			he.setMaxHealth(Math.max(baseMaxHealth + iaae.getAttributeValue().asDouble(), 1));
-			he.setHealth(Math.min(Math.max(currentHealth, 0), event.getPlayer().getMaxHealth()));
-			if (he instanceof Player) {
-				((Player) he).setHealthScale(he.getMaxHealth());
-			}
-			playAttributeSoundsAndEffects(he.getEyeLocation(), healthAttribute);
+		} catch (Exception e) {
+			// do nothing
 		}
-	}
-
-	@Override
-	public ItemAttributes getPlugin() {
-		return plugin;
 	}
 
 	private void playAttributeSoundsAndEffects(Location location, Attribute... attributes) {
 		getPlugin().getAttributeHandler().playAttributeEffects(location, attributes);
 		getPlugin().getAttributeHandler().playAttributeSounds(location, attributes);
+	}
+
+	@Override
+	public ItemAttributes getPlugin() {
+		return plugin;
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
