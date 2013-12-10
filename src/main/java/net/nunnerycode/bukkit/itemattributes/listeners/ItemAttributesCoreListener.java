@@ -64,13 +64,17 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onInventoryCloseEventLowest(InventoryCloseEvent event) {
-		for (HumanEntity he : event.getViewers()) {
-			if (!(he instanceof Player) || he.isDead()) {
-				continue;
+		try {
+			for (HumanEntity he : event.getViewers()) {
+				if (!(he instanceof Player) || he.isDead()) {
+					continue;
+				}
+				Player player = (Player) he;
+				handleLevelRequirementCheck(player);
+				handlePermissionCheck(player);
 			}
-			Player player = (Player) he;
-			handleLevelRequirementCheck(player);
-			handlePermissionCheck(player);
+		} catch (Exception e) {
+			// do nothing
 		}
 	}
 
@@ -834,16 +838,6 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 					.getSettingsManager().getItemOnlyDamageSystemBaseDamage() : event.getDamage();
 		}
 
-		double damage;
-
-		double damagerEquipmentDamage = 0D;
-		double damagerCriticalChance = getPlugin().getSettingsManager().getBaseCriticalRate();
-		double damagerCriticalDamage = getPlugin().getSettingsManager().getBaseCriticalDamage();
-		double armorPenetration = 0D;
-		double stunRate = getPlugin().getSettingsManager().getBaseStunRate();
-		int stunLength = getPlugin().getSettingsManager().getBaseStunLength();
-		double dodgeRate = getPlugin().getSettingsManager().getBaseDodgeRate();
-
 		Attribute damageAttribute = getPlugin().getSettingsManager().getAttribute("DAMAGE");
 		Attribute meleeDamageAttribute = getPlugin().getSettingsManager().getAttribute("MELEE DAMAGE");
 		Attribute criticalRateAttribute = getPlugin().getSettingsManager().getAttribute("CRITICAL RATE");
@@ -856,6 +850,14 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		Attribute attackSpeedAttribute = getPlugin().getSettingsManager().getAttribute("ATTACK SPEED");
 		Attribute blockAttribute = getPlugin().getSettingsManager().getAttribute("BLOCK");
 		Attribute parryAttribute = getPlugin().getSettingsManager().getAttribute("PARRY");
+
+		double damagerEquipmentDamage = 0;
+		double damagerCriticalChance = 0;
+		double damagerCriticalDamage = 0;
+		double armorPenetration = 0;
+		double stunRate = 0;
+		int stunLength = 0;
+		double dodgeRate = 0;
 
 		if (event.getDamager() instanceof Projectile) {
 			Projectile projectile = (Projectile) event.getDamager();
@@ -916,26 +918,77 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 					}
 				}
 			}
-		} else if (event.getDamager() instanceof LivingEntity) {
-			LivingEntity damager = (LivingEntity) event.getDamager();
+		} else if (event.getDamager() instanceof Player) {
+			Player damager = (Player) event.getDamager();
+			damagerEquipmentDamage = damageAttribute.getPlayersBaseValue() + meleeDamageAttribute.getPlayersBaseValue
+					();
 			damagerEquipmentDamage += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager,
 					meleeDamageAttribute);
 			damagerEquipmentDamage += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager,
 					damageAttribute);
+
+			damagerCriticalChance = criticalRateAttribute.getPlayersBaseValue();
 			damagerCriticalChance += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager,
 					criticalRateAttribute);
+
+			damagerCriticalDamage = criticalDamageAttribute.getPlayersBaseValue();
 			damagerCriticalDamage += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager,
 					criticalDamageAttribute);
+
+			stunRate = stunRateAttribute.getPlayersBaseValue();
 			stunRate += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager, stunRateAttribute);
+
+			stunLength = (int) stunLengthAttribute.getPlayersBaseValue();
 			stunLength += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager, stunLengthAttribute);
+
+			armorPenetration = armorPenetrationAttribute.getPlayersBaseValue();
+			armorPenetration += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager,
+					armorPenetrationAttribute);
+		} else if (event.getDamager() instanceof LivingEntity) {
+			LivingEntity damager = (LivingEntity) event.getDamager();
+			damagerEquipmentDamage = damageAttribute.getMobsBaseValue() + meleeDamageAttribute.getMobsBaseValue();
+			damagerEquipmentDamage += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager,
+					meleeDamageAttribute);
+			damagerEquipmentDamage += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager,
+					damageAttribute);
+
+			damagerCriticalChance = criticalRateAttribute.getMobsBaseValue();
+			damagerCriticalChance += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager,
+					criticalRateAttribute);
+
+			damagerCriticalDamage = criticalDamageAttribute.getMobsBaseValue();
+			damagerCriticalDamage += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager,
+					criticalDamageAttribute);
+
+			stunRate = stunRateAttribute.getMobsBaseValue();
+			stunRate += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager, stunRateAttribute);
+
+			stunLength = (int) stunLengthAttribute.getMobsBaseValue();
+			stunLength += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager, stunLengthAttribute);
+
+			armorPenetration = armorPenetrationAttribute.getMobsBaseValue();
 			armorPenetration += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager,
 					armorPenetrationAttribute);
 		}
 
 		double damagedEquipmentReduction = 0D;
-		if (event.getEntity() instanceof LivingEntity) {
+		if (event.getEntity() instanceof Player) {
+			Player entity = (Player) event.getEntity();
+
+			dodgeRate = dodgeRateAttribute.getPlayersBaseValue();
+			dodgeRate += getPlugin().getAttributeHandler()
+					.getAttributeValueFromEntity(entity, dodgeRateAttribute);
+
+			damagedEquipmentReduction = armorAttribute.getPlayersBaseValue();
+			damagedEquipmentReduction += getPlugin().getAttributeHandler().getAttributeValueFromEntity(entity,
+					armorAttribute);
+		} else if (event.getEntity() instanceof LivingEntity) {
 			LivingEntity entity = (LivingEntity) event.getEntity();
+
+			dodgeRate = dodgeRateAttribute.getMobsBaseValue();
 			dodgeRate += getPlugin().getAttributeHandler().getAttributeValueFromEntity(entity, dodgeRateAttribute);
+
+			damagedEquipmentReduction = armorAttribute.getMobsBaseValue();
 			damagedEquipmentReduction += getPlugin().getAttributeHandler().getAttributeValueFromEntity(entity,
 					armorAttribute);
 		}
@@ -951,7 +1004,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 
 		double equipmentDamage = damagerEquipmentDamage - (damagedEquipmentReduction - armorPenetration);
-		damage = originalDamage + equipmentDamage;
+
+		double damage = originalDamage + equipmentDamage;
 
 		double maximumDamage = damage;
 
@@ -988,8 +1042,6 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 			if (!attackSpeedEvent.isCancelled()) {
 				double timeToSet = 4D * Math.max(attackSpeed, 0D);
-				((Player) event.getDamager()).sendMessage(ChatColor.GRAY + "Attack Speed Checks Set: " + decimalFormat
-						.format(timeToSet));
 				if (timeLeft > 0) {
 					double frac = Math.max(0D, Math.min(1D, 1 - (timeLeft / timeToSet)));
 					damage = Math.max(1D, damage * frac);
@@ -1055,7 +1107,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				Bukkit.getPluginManager().callEvent(criticalRateEvent);
 			}
 
-			if (criticalDamageEvent == null || criticalRateEvent == null) {
+			if (criticalDamageEvent == null) {
 				double critPercentage = (1.00 + damagerCriticalDamage);
 				if (event.getDamager() instanceof Player) {
 					damage *= critPercentage;
