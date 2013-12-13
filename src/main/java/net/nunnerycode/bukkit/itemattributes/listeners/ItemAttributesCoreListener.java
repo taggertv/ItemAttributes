@@ -1,7 +1,5 @@
 package net.nunnerycode.bukkit.itemattributes.listeners;
 
-import java.text.DecimalFormat;
-import java.util.List;
 import net.nunnerycode.bukkit.itemattributes.ItemAttributesPlugin;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
@@ -41,6 +39,10 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.logging.Level;
 
 public final class ItemAttributesCoreListener implements Listener, CoreListener {
 
@@ -832,11 +834,16 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			return;
 		}
 
+		getPlugin().getDebugPrinter().debug(Level.FINE, "-------- BEGIN DAMAGE EVENT --------");
+
 		double originalDamage = event.getDamage();
-		if (event.getDamager() instanceof Player) {
-			originalDamage = (getPlugin().getSettingsManager().isItemOnlyDamageSystemEnabled()) ? getPlugin()
-					.getSettingsManager().getItemOnlyDamageSystemBaseDamage() : event.getDamage();
+		if (event.getDamager() instanceof Player && getPlugin().getSettingsManager().isItemOnlyDamageSystemEnabled()) {
+			originalDamage = getPlugin().getSettingsManager().getItemOnlyDamageSystemBaseDamage();
 		}
+
+		getPlugin().getDebugPrinter().debug(Level.FINE, "Damager type: " + event.getDamager().getType().name());
+		getPlugin().getDebugPrinter().debug(Level.FINE, "Defender type: " + event.getEntity().getType().name());
+		getPlugin().getDebugPrinter().debug(Level.FINE, "Original damage amount: " + originalDamage);
 
 		Attribute damageAttribute = getPlugin().getSettingsManager().getAttribute("DAMAGE");
 		Attribute meleeDamageAttribute = getPlugin().getSettingsManager().getAttribute("MELEE DAMAGE");
@@ -971,6 +978,11 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 					armorPenetrationAttribute);
 		}
 
+		getPlugin().getDebugPrinter().debug(Level.FINE, "damagerEquipmentDamage : " + damagerEquipmentDamage,
+				"damagerCriticalChance : " + damagerCriticalChance, "damagerCriticalDamage : " +
+				damagerCriticalDamage, "stunRate : " + stunRate, "stunLength : " + stunLength,
+				"armorPenetration : " + armorPenetration);
+
 		double damagedEquipmentReduction = 0D;
 		if (event.getEntity() instanceof Player) {
 			Player entity = (Player) event.getEntity();
@@ -993,9 +1005,13 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 					armorAttribute);
 		}
 
+		getPlugin().getDebugPrinter().debug(Level.FINE, "dodgeRate : " + dodgeRate, "damagedEquipmentReduction : " +
+				damagedEquipmentReduction);
+
 		boolean dodged = RandomUtils.nextDouble() < dodgeRate;
 
 		if (dodged && event.getEntity() instanceof Player) {
+			getPlugin().getDebugPrinter().debug(Level.FINE, "defender dodged", "--------  END DAMAGE EVENT  --------");
 			getPlugin().getLanguageManager().sendMessage(((Player) event.getEntity()), "events.dodge");
 			event.setDamage(0);
 			event.setCancelled(true);
@@ -1005,13 +1021,21 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 		double equipmentDamage = damagerEquipmentDamage - (damagedEquipmentReduction - armorPenetration);
 
+		getPlugin().getDebugPrinter().debug(Level.FINE, "equipmentDamage : " + equipmentDamage);
+
 		double damage = originalDamage + equipmentDamage;
+
+		getPlugin().getDebugPrinter().debug(Level.FINE, "damage : " + damage);
 
 		double maximumDamage = damage;
 
 		damage = handleAttackSpeedChecks(event, damage, attackSpeedAttribute);
 
+		getPlugin().getDebugPrinter().debug(Level.FINE, "damage (attack speed) : " + damage);
+
 		damage = handleBlockAndParryChecks(event, damage, blockAttribute, parryAttribute);
+
+		getPlugin().getDebugPrinter().debug(Level.FINE, "damage (block && parry): " + damage);
 
 		if (damagedEquipmentReduction != 0D) {
 			playAttributeSoundsAndEffects(event.getEntity().getLocation().add(0D, 1D, 0D), armorAttribute);
@@ -1023,9 +1047,12 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		damage = handleCriticalChecks(event, damage, damagerCriticalChance, damagerCriticalDamage,
 				criticalRateAttribute, criticalDamageAttribute);
 
+		getPlugin().getDebugPrinter().debug(Level.FINE, "damage (critical) : " + damage);
+
 		handleStunChecks(event, stunRate, stunLength, stunRateAttribute, stunLengthAttribute);
 
 		event.setDamage(damage);
+		getPlugin().getDebugPrinter().debug(Level.FINE, "--------  END DAMAGE EVENT  --------");
 	}
 
 	private double handleAttackSpeedChecks(EntityDamageByEntityEvent event, double damage, Attribute attackSpeedAttribute) {
