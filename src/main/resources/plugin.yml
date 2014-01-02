@@ -13,6 +13,9 @@ permissions:
     itemattributes.admin.ignorepermissions:
         description: Allows player to have the plugin ignore their permissions on check.
         default: op
+    itemattributes.testing.spam:
+        description: Allows user to be spammed by all kinds of awesome information.
+        default: false
 
 commands:
     itemattributes:
