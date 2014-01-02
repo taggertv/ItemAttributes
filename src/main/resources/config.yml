@@ -1,10 +1,22 @@
-version: 1.0.19
+version: 1.0.20
 options:
   seconds-between-health-updates: 10
   item-only-damage-system:
     enabled: false
     base-damage: 1.0
 core-stats:
+  attack-speed:
+    enabled: true
+    format: '%value% Attack Speed'
+    percentage: true
+    players-max-value: 100.0
+    mobs-max-value: 100.0
+    players-base-value: 1.0
+    mobs-base-value: -1.0
+    affects-mobs: false
+    affects-players: true
+    effect: MOBSPAWNER_FLAMES
+    sound: BURP
   poison-immunity:
     enabled: true
     format: Poison Immunity
@@ -154,16 +166,6 @@ core-stats:
     players-base-value: 0.05
     mobs-base-value: 0.0
     affects-mobs: true
-    affects-players: true
-  attack-speed:
-    enabled: true
-    format: '%value% Attack Speed'
-    percentage: true
-    players-max-value: 100.0
-    mobs-max-value: 100.0
-    players-base-value: 1.0
-    mobs-base-value: -1.0
-    affects-mobs: false
     affects-players: true
   armor-penetration:
     enabled: true
