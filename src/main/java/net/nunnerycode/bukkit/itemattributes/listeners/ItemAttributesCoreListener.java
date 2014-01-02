@@ -737,11 +737,11 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		armorPenetration += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, armorPenetrationAttribute);
 		stunRate += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, stunRateAttribute);
 		stunLength += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, stunLengthAttribute);
-		fireDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, 
+		fireDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem,
 				fireDamageAttribute);
 
 		if (shootingItem != null) {
-			bowDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shootingItem, 
+			bowDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shootingItem,
 					damageAttribute);
 			bowDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shootingItem, rangedDamageAttribute);
 			criticalRate += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shootingItem, criticalRateAttribute);
@@ -749,7 +749,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			armorPenetration += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shootingItem, armorPenetrationAttribute);
 			stunRate += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shootingItem, stunRateAttribute);
 			stunLength += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shootingItem, stunLengthAttribute);
-			fireDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shootingItem, 
+			fireDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shootingItem,
 					fireDamageAttribute);
 		}
 
@@ -1058,7 +1058,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 		event.setDamage(damage);
 
-		if (fireDamage > 0) {
+		if (fireDamage > 0 && fireDamageAttribute.isEnabled()) {
 			// multiply fireDamage by 20 to match ticks
 			int fireTicks = event.getEntity().getFireTicks() + fireDamage * 20;
 			event.getEntity().setFireTicks(fireTicks);
@@ -1066,6 +1066,10 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 	}
 
 	private double handleAttackSpeedChecks(EntityDamageByEntityEvent event, double damage, Attribute attackSpeedAttribute) {
+		if (!attackSpeedAttribute.isEnabled()) {
+			return damage;
+		}
+
 		if (event.getDamager() instanceof Player) {
 			long timeLeft = getPlugin().getAttackSpeedTask().getTimeLeft((LivingEntity) event.getDamager());
 			double attackSpeed = attackSpeedAttribute.getPlayersBaseValue() - (attackSpeedAttribute.getPlayersBaseValue
@@ -1100,20 +1104,22 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		if (event.getEntity() instanceof Player && event.getDamager() instanceof LivingEntity) {
 			if (((Player) event.getEntity()).isBlocking()) {
 
-				double blockDamageReduction = blockAttribute.getPlayersBaseValue() + getPlugin().getAttributeHandler()
-						.getAttributeValueFromEntity((LivingEntity) event.getEntity(), blockAttribute);
+				if (blockAttribute.isEnabled()) {
+					double blockDamageReduction = blockAttribute.getPlayersBaseValue() + getPlugin().getAttributeHandler()
+							.getAttributeValueFromEntity((LivingEntity) event.getEntity(), blockAttribute);
 
-				ItemAttributesAttributeEvent blockAttributeEvent = new ItemAttributesAttributeEvent((LivingEntity) event
-						.getEntity(), (LivingEntity) event.getDamager(), blockAttribute,
-						new ItemAttributeValue(blockDamageReduction));
-				Bukkit.getPluginManager().callEvent(blockAttributeEvent);
+					ItemAttributesAttributeEvent blockAttributeEvent = new ItemAttributesAttributeEvent((LivingEntity) event
+							.getEntity(), (LivingEntity) event.getDamager(), blockAttribute,
+							new ItemAttributeValue(blockDamageReduction));
+					Bukkit.getPluginManager().callEvent(blockAttributeEvent);
 
-				if (!blockAttributeEvent.isCancelled()) {
-					damage = Math.max(0D, damage * blockDamageReduction);
-					playAttributeSoundsAndEffects(((LivingEntity) event.getEntity()).getEyeLocation(), blockAttribute);
+					if (!blockAttributeEvent.isCancelled()) {
+						damage = Math.max(0D, damage * blockDamageReduction);
+						playAttributeSoundsAndEffects(((LivingEntity) event.getEntity()).getEyeLocation(), blockAttribute);
+					}
 				}
 
-				if (event.getDamager() instanceof Player) {
+				if (event.getDamager() instanceof Player && parryAttribute.isEnabled()) {
 					long timeLeft = getPlugin().getAttackSpeedTask().getTimeLeft((LivingEntity) event.getDamager());
 					double parryTime = parryAttribute.getPlayersBaseValue() + getPlugin().getAttributeHandler()
 							.getAttributeValueFromEntity((LivingEntity) event.getDamager(), parryAttribute);
@@ -1134,8 +1140,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 	}
 
 	private double handleCriticalChecks(EntityDamageByEntityEvent event, double damage, double damagerCriticalChance, double damagerCriticalDamage, Attribute criticalRateAttribute, Attribute criticalDamageAttribute) {
-		if (RandomUtils.nextDouble() < damagerCriticalChance) {
-
+		if (RandomUtils.nextDouble() < damagerCriticalChance && criticalRateAttribute.isEnabled() &&
+				criticalDamageAttribute.isEnabled()) {
 			if (event.getDamager() instanceof Player && ((Player) event.getDamager()).hasPermission("itemattributes" +
 					".testing.spam")) {
 				((Player) event.getDamager()).sendMessage("Critical hit!");
@@ -1204,7 +1210,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 								"events.critical-hit", new String[][]{{"%percentage%", DECIMAL_FORMAT.format(critPercentage
 								* 100)}});
 
-						playAttributeSoundsAndEffects(event.getDamager().getLocation().add(0D, 1D, 0D), criticalRateAttribute, criticalDamageAttribute); 					}
+						playAttributeSoundsAndEffects(event.getDamager().getLocation().add(0D, 1D, 0D), criticalRateAttribute, criticalDamageAttribute);
+					}
 				}
 			}
 			return damage;
@@ -1217,7 +1224,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 	}
 
 	private void handleStunChecks(EntityDamageByEntityEvent event, double stunRate, int stunLength, Attribute stunRateAttribute, Attribute stunLengthAttribute) {
-		if (RandomUtils.nextDouble() < stunRate) {
+		if (RandomUtils.nextDouble() < stunRate && stunRateAttribute.isEnabled() && stunLengthAttribute.isEnabled()) {
 			if (event.getEntity() instanceof LivingEntity) {
 				LivingEntity defender = (LivingEntity) event.getEntity();
 				LivingEntity attacker = null;
