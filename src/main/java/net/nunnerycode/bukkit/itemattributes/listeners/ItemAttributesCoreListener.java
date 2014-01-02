@@ -1051,7 +1051,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 		handleStunChecks(event, stunRate, stunLength, stunRateAttribute, stunLengthAttribute);
 
-		if (((Player) event.getDamager()).hasPermission("itemattributes.testing.spam")) {
+		if (event.getDamager() instanceof Player && ((Player) event.getDamager()).hasPermission("itemattributes" +
+				".testing.spam")) {
 			((Player) event.getDamager()).sendMessage("Maximum damage: " + maximumDamage);
 			((Player) event.getDamager()).sendMessage("Actual damage: " + damage);
 		}
