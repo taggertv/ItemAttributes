@@ -1,8 +1,9 @@
 package net.nunnerycode.bukkit.itemattributes.api.managers;
 
-import java.util.Set;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
+
+import java.util.Set;
 
 public interface SettingsManager {
 
@@ -45,11 +46,5 @@ public interface SettingsManager {
 	Set<Attribute> getLoadedExtraAttributes();
 
 	boolean isPluginCompatible();
-
-	Double[] getAllowableDiceSizes();
-
-	void addAllowableDiceSizes(Double... d);
-
-	void removeAllowableDiceSizes(Double... d);
 
 }

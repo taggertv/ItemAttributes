@@ -1,12 +1,6 @@
 package net.nunnerycode.bukkit.itemattributes;
 
 import com.conventnunnery.libraries.config.CommentedConventYamlConfiguration;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Level;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.AttributeHandler;
@@ -28,6 +22,12 @@ import net.nunnerycode.java.libraries.cannonball.DebugPrinter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
 
 public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttributes {
 
@@ -159,8 +159,6 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 			loadedAttributes.add(attribute.getName());
 		}
 
-		debugPrinter.debug(Level.INFO, "Allowed dice sizes: " + Arrays.toString(itemAttributesSettingsManager
-				.getAllowableDiceSizes()));
 		debugPrinter.debug(Level.INFO, "Loaded attributes: " + loadedAttributes.toString());
 		debugPrinter.debug(Level.INFO, "v" + getDescription().getVersion() + " enabled");
 	}
