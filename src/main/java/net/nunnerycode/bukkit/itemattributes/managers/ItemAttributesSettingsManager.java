@@ -1,23 +1,19 @@
 package net.nunnerycode.bukkit.itemattributes.managers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
 import net.nunnerycode.bukkit.itemattributes.ItemAttributesPlugin;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.managers.SettingsManager;
 import net.nunnerycode.bukkit.itemattributes.attributes.ItemAttribute;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.Effect;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
 
 public final class ItemAttributesSettingsManager implements SettingsManager {
 
@@ -88,6 +84,8 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 				0.0D, null, true, false));
 		coreAttributeMap.put("PARRY", new ItemAttribute("Parry", true, 100D, 100D, true, "%value% Parry", null, 1.5D,
 				0.0D, null, true, false));
+		coreAttributeMap.put("FIRE DAMAGE", new ItemAttribute("Fire Damage", true, 100D, 100D, false,
+				"%value% Fire Damage", null, 0D, 0D, null, true, true));
 
 		if (getPlugin().getConfigYAML().isConfigurationSection("core-stats")) {
 			ConfigurationSection section = getPlugin().getConfigYAML().getConfigurationSection("core-stats");
