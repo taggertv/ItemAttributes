@@ -46,11 +46,10 @@ import java.util.List;
 public final class ItemAttributesCoreListener implements Listener, CoreListener {
 
 	private final ItemAttributesPlugin plugin;
-	private final DecimalFormat decimalFormat;
+	private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
 
 	public ItemAttributesCoreListener(ItemAttributesPlugin plugin) {
 		this.plugin = plugin;
-		decimalFormat = new DecimalFormat("#.##");
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -1025,6 +1024,11 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 		handleStunChecks(event, stunRate, stunLength, stunRateAttribute, stunLengthAttribute);
 
+		if (((Player) event.getDamager()).hasPermission("itemattributes.testing.spam")) {
+			((Player) event.getDamager()).sendMessage("Maximum damage: " + maximumDamage);
+			((Player) event.getDamager()).sendMessage("Actual damage: " + damage);
+		}
+
 		event.setDamage(damage);
 	}
 
@@ -1044,6 +1048,12 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				double timeToSet = 4D * Math.max(attackSpeed, 0D);
 				if (timeLeft > 0) {
 					double frac = Math.max(0D, Math.min(1D, 1 - (timeLeft / timeToSet)));
+
+					if (((Player) event.getDamager()).hasPermission("itemattributes.testing.spam")) {
+						((Player) event.getDamager()).sendMessage("Attack recharge percent: " + DECIMAL_FORMAT.format
+								(frac * 100));
+					}
+
 					damage = Math.max(1D, damage * frac);
 				}
 
@@ -1093,6 +1103,11 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 	private double handleCriticalChecks(EntityDamageByEntityEvent event, double damage, double damagerCriticalChance, double damagerCriticalDamage, Attribute criticalRateAttribute, Attribute criticalDamageAttribute) {
 		if (RandomUtils.nextDouble() < damagerCriticalChance) {
 
+			if (event.getDamager() instanceof Player && ((Player) event.getDamager()).hasPermission("itemattributes" +
+					".testing.spam")) {
+				((Player) event.getDamager()).sendMessage("Critical hit!");
+			}
+
 			ItemAttributesAttributeEvent criticalDamageEvent = null;
 			ItemAttributesAttributeEvent criticalRateEvent = null;
 
@@ -1112,17 +1127,34 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				if (event.getDamager() instanceof Player) {
 					damage *= critPercentage;
 					getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "events.critical-hit",
-							new String[][]{{"%percentage%", decimalFormat.format(critPercentage * 100)}});
+							new String[][]{{"%percentage%", DECIMAL_FORMAT.format(critPercentage * 100)}});
 					playAttributeSoundsAndEffects(event.getDamager().getLocation().add(0D, 1D, 0D),
 							criticalRateAttribute, criticalDamageAttribute);
+
+					if (((Player) event.getDamager()).hasPermission("itemattributes.testing.spam")) {
+						((Player) event.getDamager()).sendMessage("Critical damage percent: " + DECIMAL_FORMAT.format
+								(critPercentage * 100));
+						((Player) event.getDamager()).sendMessage("Critical damage result: " + DECIMAL_FORMAT.format
+								(damage));
+						((Player) event.getDamager()).sendMessage("Critical damage increase: " + DECIMAL_FORMAT.format
+								(damage - (damage / critPercentage)));
+					}
 				} else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter()
 						instanceof Player) {
 					damage *= critPercentage;
 					getPlugin().getLanguageManager().sendMessage((Player) ((Projectile) event.getDamager()).getShooter(),
-							"events.critical-hit", new String[][]{{"%percentage%", decimalFormat.format(critPercentage
+							"events.critical-hit", new String[][]{{"%percentage%", DECIMAL_FORMAT.format(critPercentage
 							* 100)}});
 					playAttributeSoundsAndEffects(event.getDamager().getLocation().add(0D, 1D, 0D),
 							criticalRateAttribute, criticalDamageAttribute);
+					if (((Player) event.getDamager()).hasPermission("itemattributes.testing.spam")) {
+						((Player) event.getDamager()).sendMessage("Critical damage percent: " + DECIMAL_FORMAT.format
+								(critPercentage * 100));
+						((Player) event.getDamager()).sendMessage("Critical damage result: " + DECIMAL_FORMAT.format
+								(damage));
+						((Player) event.getDamager()).sendMessage("Critical damage increase: " + DECIMAL_FORMAT.format
+								(damage - (damage / critPercentage)));
+					}
 				}
 			} else {
 				if (!criticalDamageEvent.isCancelled() && !criticalRateEvent.isCancelled()) {
@@ -1130,17 +1162,23 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 					if (event.getDamager() instanceof Player) {
 						damage *= critPercentage;
 						getPlugin().getLanguageManager().sendMessage((Player) event.getDamager(), "events.critical-hit",
-								new String[][]{{"%percentage%", decimalFormat.format(critPercentage * 100)}});
+								new String[][]{{"%percentage%", DECIMAL_FORMAT.format(critPercentage * 100)}});
+						playAttributeSoundsAndEffects(event.getDamager().getLocation().add(0D, 1D, 0D), criticalRateAttribute, criticalDamageAttribute);
 					} else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter()
 							instanceof Player) {
 						damage *= critPercentage;
 						getPlugin().getLanguageManager().sendMessage((Player) ((Projectile) event.getDamager()).getShooter(),
-								"events.critical-hit", new String[][]{{"%percentage%", decimalFormat.format(critPercentage
+								"events.critical-hit", new String[][]{{"%percentage%", DECIMAL_FORMAT.format(critPercentage
 								* 100)}});
-					}
-					playAttributeSoundsAndEffects(event.getDamager().getLocation().add(0D, 1D, 0D), criticalRateAttribute, criticalDamageAttribute);
+
+						playAttributeSoundsAndEffects(event.getDamager().getLocation().add(0D, 1D, 0D), criticalRateAttribute, criticalDamageAttribute); 					}
 				}
 			}
+			return damage;
+		}
+		if (event.getDamager() instanceof Player && ((Player) event.getDamager()).hasPermission("itemattributes" +
+				".testing.spam")) {
+			((Player) event.getDamager()).sendMessage("Not a critical hit!");
 		}
 		return damage;
 	}
