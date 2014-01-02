@@ -1073,9 +1073,14 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 		if (event.getDamager() instanceof Player) {
 			long timeLeft = getPlugin().getAttackSpeedTask().getTimeLeft((LivingEntity) event.getDamager());
-			double attackSpeed = attackSpeedAttribute.getPlayersBaseValue() - (attackSpeedAttribute.getPlayersBaseValue
-					() * getPlugin().getAttributeHandler().getAttributeValueFromEntity((LivingEntity) event
-					.getDamager(), attackSpeedAttribute));
+			double attackSpeed = attackSpeedAttribute.getPlayersBaseValue();
+			if (attackSpeedAttribute.isPercentage()) {
+				attackSpeed -= attackSpeedAttribute.getPlayersBaseValue() * getPlugin().getAttributeHandler()
+						.getAttributeValueFromEntity((LivingEntity) event.getDamager(), attackSpeedAttribute);
+			} else {
+				attackSpeed -= getPlugin().getAttributeHandler().getAttributeValueFromEntity((LivingEntity) event.getDamager(),
+						attackSpeedAttribute);
+			}
 
 			ItemAttributesAttributeEvent attackSpeedEvent = new ItemAttributesAttributeEvent((LivingEntity) event
 					.getDamager(), (event.getEntity() instanceof LivingEntity) ? (LivingEntity) event.getEntity() :
