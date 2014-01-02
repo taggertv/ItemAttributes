@@ -718,6 +718,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		double armorPenetration = 0.0;
 		double stunRate = 0.0;
 		int stunLength = 0;
+		int fireDamage = 0;
 
 		Attribute damageAttribute = getPlugin().getSettingsManager().getAttribute("DAMAGE");
 		Attribute rangedDamageAttribute = getPlugin().getSettingsManager().getAttribute("RANGED DAMAGE");
@@ -726,6 +727,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		Attribute stunRateAttribute = getPlugin().getSettingsManager().getAttribute("STUN RATE");
 		Attribute stunLengthAttribute = getPlugin().getSettingsManager().getAttribute("STUN LENGTH");
 		Attribute armorPenetrationAttribute = getPlugin().getSettingsManager().getAttribute("ARMOR PENETRATION");
+		Attribute fireDamageAttribute = getPlugin().getSettingsManager().getAttribute("FIRE DAMAGE");
 
 		arrowDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, damageAttribute);
 		arrowDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem,
@@ -735,15 +737,20 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		armorPenetration += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, armorPenetrationAttribute);
 		stunRate += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, stunRateAttribute);
 		stunLength += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, stunLengthAttribute);
+		fireDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, 
+				fireDamageAttribute);
 
 		if (shootingItem != null) {
-			bowDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, damageAttribute);
-			bowDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, rangedDamageAttribute);
-			criticalRate += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, criticalRateAttribute);
-			criticalDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, criticalDamageAttribute);
-			armorPenetration += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, armorPenetrationAttribute);
-			stunRate += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, stunRateAttribute);
-			stunLength += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shotItem, stunLengthAttribute);
+			bowDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shootingItem, 
+					damageAttribute);
+			bowDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shootingItem, rangedDamageAttribute);
+			criticalRate += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shootingItem, criticalRateAttribute);
+			criticalDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shootingItem, criticalDamageAttribute);
+			armorPenetration += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shootingItem, armorPenetrationAttribute);
+			stunRate += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shootingItem, stunRateAttribute);
+			stunLength += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shootingItem, stunLengthAttribute);
+			fireDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, shootingItem, 
+					fireDamageAttribute);
 		}
 
 		for (ItemStack is : le.getEquipment().getArmorContents()) {
@@ -756,6 +763,8 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			armorPenetration += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, is, armorPenetrationAttribute);
 			stunRate += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, is, stunRateAttribute);
 			stunLength += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, is, stunLengthAttribute);
+			fireDamage += getPlugin().getAttributeHandler().getAttributeValueFromItemStack(le, is,
+					fireDamageAttribute);
 		}
 
 		double totalDamage = arrowDamage + bowDamage + armorDamage;
@@ -767,6 +776,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				armorPenetration));
 		event.getEntity().setMetadata("itemattributes.stunrate", new FixedMetadataValue(plugin, stunRate));
 		event.getEntity().setMetadata("itemattributes.stunlength", new FixedMetadataValue(plugin, stunLength));
+		event.getEntity().setMetadata("itemattributes.firedamage", new FixedMetadataValue(plugin, fireDamage));
 	}
 
 	private Material getMaterialFromEntityType(EntityType entityType) {
@@ -849,6 +859,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		Attribute attackSpeedAttribute = getPlugin().getSettingsManager().getAttribute("ATTACK SPEED");
 		Attribute blockAttribute = getPlugin().getSettingsManager().getAttribute("BLOCK");
 		Attribute parryAttribute = getPlugin().getSettingsManager().getAttribute("PARRY");
+		Attribute fireDamageAttribute = getPlugin().getSettingsManager().getAttribute("FIRE DAMAGE");
 
 		double damagerEquipmentDamage = 0;
 		double damagerCriticalChance = 0;
@@ -857,6 +868,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		double stunRate = 0;
 		int stunLength = 0;
 		double dodgeRate = 0;
+		int fireDamage = 0;
 
 		if (event.getDamager() instanceof Projectile) {
 			Projectile projectile = (Projectile) event.getDamager();
@@ -916,6 +928,15 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 						}
 					}
 				}
+				if (projectile.hasMetadata("itemattributes.firedamage")) {
+					List<MetadataValue> metadataValueList = projectile.getMetadata("itemattributes.firedamage");
+					for (MetadataValue mv : metadataValueList) {
+						if (mv.getOwningPlugin().equals(getPlugin())) {
+							fireDamage += mv.asInt();
+							break;
+						}
+					}
+				}
 			}
 		} else if (event.getDamager() instanceof Player) {
 			Player damager = (Player) event.getDamager();
@@ -943,6 +964,9 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			armorPenetration = armorPenetrationAttribute.getPlayersBaseValue();
 			armorPenetration += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager,
 					armorPenetrationAttribute);
+
+			fireDamage = (int) fireDamageAttribute.getPlayersBaseValue();
+			fireDamage += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager, fireDamageAttribute);
 		} else if (event.getDamager() instanceof LivingEntity) {
 			LivingEntity damager = (LivingEntity) event.getDamager();
 			damagerEquipmentDamage = damageAttribute.getMobsBaseValue() + meleeDamageAttribute.getMobsBaseValue();
@@ -968,6 +992,9 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			armorPenetration = armorPenetrationAttribute.getMobsBaseValue();
 			armorPenetration += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager,
 					armorPenetrationAttribute);
+
+			fireDamage = (int) fireDamageAttribute.getMobsBaseValue();
+			fireDamage += getPlugin().getAttributeHandler().getAttributeValueFromEntity(damager, fireDamageAttribute);
 		}
 
 		double damagedEquipmentReduction = 0D;
@@ -1030,6 +1057,12 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		}
 
 		event.setDamage(damage);
+
+		if (fireDamage > 0) {
+			// multiply fireDamage by 20 to match ticks
+			int fireTicks = event.getEntity().getFireTicks() + fireDamage * 20;
+			event.getEntity().setFireTicks(fireTicks);
+		}
 	}
 
 	private double handleAttackSpeedChecks(EntityDamageByEntityEvent event, double damage, Attribute attackSpeedAttribute) {
