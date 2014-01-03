@@ -1082,6 +1082,10 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 						attackSpeedAttribute);
 			}
 
+			if (((Player) event.getDamager()).hasPermission("itemattributes.testing.spam")) {
+				((Player) event.getDamager()).sendMessage("Attack speed: " + attackSpeed);
+			}
+
 			ItemAttributesAttributeEvent attackSpeedEvent = new ItemAttributesAttributeEvent((LivingEntity) event
 					.getDamager(), (event.getEntity() instanceof LivingEntity) ? (LivingEntity) event.getEntity() :
 					null, attackSpeedAttribute, new ItemAttributeValue(attackSpeed));
@@ -1146,6 +1150,13 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 	}
 
 	private double handleCriticalChecks(EntityDamageByEntityEvent event, double damage, double damagerCriticalChance, double damagerCriticalDamage, Attribute criticalRateAttribute, Attribute criticalDamageAttribute) {
+		if (event.getDamager() instanceof Player && ((Player) event.getDamager()).hasPermission("itemattributes" +
+				".testing.spam")) {
+			((Player) event.getDamager()).sendMessage("Critical rate: " + DECIMAL_FORMAT.format
+					(damagerCriticalChance * 100));
+			((Player) event.getDamager()).sendMessage("Critical damage: " + DECIMAL_FORMAT.format
+					(damagerCriticalDamage * 100));
+		}
 		if (RandomUtils.nextDouble() < damagerCriticalChance && criticalRateAttribute.isEnabled() &&
 				criticalDamageAttribute.isEnabled()) {
 			if (event.getDamager() instanceof Player && ((Player) event.getDamager()).hasPermission("itemattributes" +
