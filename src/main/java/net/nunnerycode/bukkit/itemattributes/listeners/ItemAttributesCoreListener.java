@@ -1242,7 +1242,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onEntityDamageByEntityEventMonitor(EntityDamageByEntityEvent event) {
-		if (!(event.getDamager() instanceof Player) && !(event.getEntity() instanceof LivingEntity)) {
+		if (!(event.getDamager() instanceof Player) || !(event.getEntity() instanceof LivingEntity)) {
 			return;
 		}
 		Player player = (Player) event.getDamager();
