@@ -1240,6 +1240,21 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 		return damage;
 	}
 
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onEntityDamageByEntityEventMonitor(EntityDamageByEntityEvent event) {
+		if (!(event.getDamager() instanceof Player) && !(event.getEntity() instanceof LivingEntity)) {
+			return;
+		}
+		Player player = (Player) event.getDamager();
+		if (!player.hasPermission("itemattributes.testing.spam")) {
+			return;
+		}
+		LivingEntity livingEntity = (LivingEntity) event.getEntity();
+		player.sendMessage("Entity health before: " + livingEntity.getHealth());
+		player.sendMessage("Damage: " + event.getDamage());
+		player.sendMessage("Entity health after: " + (livingEntity.getHealth() - event.getDamage()));
+	}
+
 	private void handleStunChecks(EntityDamageByEntityEvent event, double stunRate, int stunLength, Attribute stunRateAttribute, Attribute stunLengthAttribute) {
 		if (RandomUtils.nextDouble() < stunRate && stunRateAttribute.isEnabled() && stunLengthAttribute.isEnabled()) {
 			if (event.getEntity() instanceof LivingEntity) {
