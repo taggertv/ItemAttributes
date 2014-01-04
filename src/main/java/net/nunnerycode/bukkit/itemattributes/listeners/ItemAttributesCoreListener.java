@@ -1092,9 +1092,9 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			Bukkit.getPluginManager().callEvent(attackSpeedEvent);
 
 			if (!attackSpeedEvent.isCancelled()) {
-				double timeToSet = 4D * Math.max(attackSpeed, 0D);
+				double timeToSet = 4D * Math.max(attackSpeedEvent.getAttributeValue().asDouble(), 0D);
 				if (timeLeft > 0) {
-					double frac = Math.max(0D, Math.min(1D, 1 - (timeLeft / timeToSet)));
+					double frac = Math.max(0D, Math.min(1D, 1D - (timeLeft / timeToSet)));
 
 					if (((Player) event.getDamager()).hasPermission("itemattributes.testing.spam")) {
 						((Player) event.getDamager()).sendMessage("Attack recharge percent: " + DECIMAL_FORMAT.format
