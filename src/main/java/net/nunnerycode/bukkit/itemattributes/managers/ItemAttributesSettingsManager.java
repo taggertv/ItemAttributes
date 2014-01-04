@@ -9,8 +9,8 @@ import org.bukkit.Effect;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -27,8 +27,8 @@ public final class ItemAttributesSettingsManager implements SettingsManager {
 
 	public ItemAttributesSettingsManager(ItemAttributesPlugin plugin) {
 		this.plugin = plugin;
-		coreAttributeMap = new HashMap<String, Attribute>();
-		externalAttributeMap = new HashMap<String, Attribute>();
+		coreAttributeMap = new LinkedHashMap<String, Attribute>();
+		externalAttributeMap = new LinkedHashMap<String, Attribute>();
 	}
 
 	public void load() {
