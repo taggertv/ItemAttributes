@@ -1,6 +1,5 @@
 package net.nunnerycode.bukkit.itemattributes.tasks;
 
-import java.util.List;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.tasks.HealthUpdateTask;
@@ -12,6 +11,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
+
+import java.util.List;
 
 public final class ItemAttributesHealthUpdateTask implements HealthUpdateTask, Runnable {
 
@@ -71,7 +72,7 @@ public final class ItemAttributesHealthUpdateTask implements HealthUpdateTask, R
 						entity.resetMaxHealth();
 						baseMaxHealth = entity.getMaxHealth();
 					}
-					entity.setHealth((baseMaxHealth + d) / 2);
+					entity.setHealth(1);
 					entity.setMaxHealth(baseMaxHealth + d);
 					entity.setHealth(Math.max(1, Math.min(currentHealth, entity.getMaxHealth())));
 				}
