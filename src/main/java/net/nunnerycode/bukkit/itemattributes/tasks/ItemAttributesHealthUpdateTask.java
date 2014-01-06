@@ -11,10 +11,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
-public final class ItemAttributesHealthUpdateTask implements HealthUpdateTask, Runnable {
+public final class ItemAttributesHealthUpdateTask extends BukkitRunnable implements HealthUpdateTask{
 
 	private final ItemAttributes plugin;
 

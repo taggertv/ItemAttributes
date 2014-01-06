@@ -21,6 +21,7 @@ import net.nunnerycode.bukkit.itemattributes.tasks.ItemAttributesHealthUpdateTas
 import net.nunnerycode.java.libraries.cannonball.DebugPrinter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -106,6 +107,13 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 
 	@Override
 	public void onDisable() {
+		if (itemAttributesHealthUpdateTask != null) {
+			itemAttributesHealthUpdateTask.cancel();
+		}
+		if (itemAttributesAttackSpeedTask != null) {
+			itemAttributesAttackSpeedTask.cancel();
+		}
+		HandlerList.unregisterAll(this);
 		itemAttributesSettingsManager.save();
 		debugPrinter.debug(Level.INFO, "v" + getDescription().getVersion() + " disabled");
 	}
@@ -142,10 +150,12 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 
 		itemAttributesCoreListener = new ItemAttributesCoreListener(this);
 
-		itemAttributesHealthUpdateTask = new ItemAttributesHealthUpdateTask(this);
-		getServer().getScheduler().runTaskTimer(this, itemAttributesHealthUpdateTask,
-				20 * getSettingsManager().getSecondsBetweenHealthUpdates(),
-				20 * getSettingsManager().getSecondsBetweenHealthUpdates());
+		if (getSettingsManager().getSecondsBetweenHealthUpdates() > 0) {
+			itemAttributesHealthUpdateTask = new ItemAttributesHealthUpdateTask(this);
+			getServer().getScheduler().runTaskTimer(this, itemAttributesHealthUpdateTask,
+					20 * getSettingsManager().getSecondsBetweenHealthUpdates(),
+					20 * getSettingsManager().getSecondsBetweenHealthUpdates());
+		}
 
 		itemAttributesAttackSpeedTask = new ItemAttributesAttackSpeedTask(this);
 		getServer().getScheduler().runTaskTimer(this, itemAttributesAttackSpeedTask, 20L / 4, 20L / 4);

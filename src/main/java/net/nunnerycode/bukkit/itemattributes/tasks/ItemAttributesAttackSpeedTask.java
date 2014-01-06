@@ -1,15 +1,17 @@
 package net.nunnerycode.bukkit.itemattributes.tasks;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.tasks.AttackSpeedTask;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
-public final class ItemAttributesAttackSpeedTask implements AttackSpeedTask, Runnable {
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+public final class ItemAttributesAttackSpeedTask extends BukkitRunnable implements AttackSpeedTask {
 
 	private final ItemAttributes plugin;
 	private final Map<LivingEntity, Long> chargeTimer;
