@@ -371,7 +371,23 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			return;
 		}
 
-		double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(event.getPlayer(), healthAttribute);
+		double d = 0;
+		if (event instanceof PlayerItemHeldEvent) {
+			for (ItemStack itemStack : event.getPlayer().getInventory().getArmorContents()) {
+				d += plugin.getAttributeHandler().getAttributeValueFromItemStack(event.getPlayer(), itemStack,
+						healthAttribute);
+			}
+			d += plugin.getAttributeHandler().getAttributeValueFromItemStack(event.getPlayer(),
+					event.getPlayer().getInventory().getItem(((PlayerItemHeldEvent) event).getNewSlot()), healthAttribute);
+		} else {
+			for (ItemStack itemStack : event.getPlayer().getInventory().getArmorContents()) {
+				d += plugin.getAttributeHandler().getAttributeValueFromItemStack(event.getPlayer(), itemStack,
+						healthAttribute);
+			}
+			d += plugin.getAttributeHandler().getAttributeValueFromItemStack(event.getPlayer(),
+					event.getPlayer().getItemInHand(), healthAttribute);
+		}
+
 		double currentHealth = event.getPlayer().getHealth();
 
 		ItemAttributesAttributeEvent iaae = new ItemAttributesAttributeEvent(event.getPlayer(), event.getPlayer(),
