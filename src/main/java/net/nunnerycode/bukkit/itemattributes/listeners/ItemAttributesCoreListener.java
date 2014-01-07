@@ -325,7 +325,7 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 				}
 				playAttributeSoundsAndEffects(he.getEyeLocation(), healthAttribute);
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			// do nothing
 		}
 	}
