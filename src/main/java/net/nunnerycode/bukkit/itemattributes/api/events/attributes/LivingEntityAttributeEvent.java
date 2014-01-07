@@ -8,8 +8,6 @@ public interface LivingEntityAttributeEvent {
 
 	LivingEntity getLivingEntity();
 
-	LivingEntity getTarget();
-
 	Attribute getAttribute();
 
 	AttributeValue getAttributeValue();

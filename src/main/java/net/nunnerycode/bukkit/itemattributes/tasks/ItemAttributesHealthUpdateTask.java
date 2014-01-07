@@ -3,8 +3,6 @@ package net.nunnerycode.bukkit.itemattributes.tasks;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.tasks.HealthUpdateTask;
-import net.nunnerycode.bukkit.itemattributes.attributes.ItemAttributeValue;
-import net.nunnerycode.bukkit.itemattributes.events.ItemAttributesAttributeEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -39,16 +37,7 @@ public final class ItemAttributesHealthUpdateTask extends BukkitRunnable impleme
 					double d = getPlugin().getAttributeHandler().getAttributeValueFromEntity(player, healthAttribute);
 					double currentHealth = player.getHealth();
 
-					ItemAttributesAttributeEvent iaae = new ItemAttributesAttributeEvent(player, player,
-							healthAttribute, new ItemAttributeValue(d));
-					Bukkit.getPluginManager().callEvent(iaae);
-
-					if (iaae.isCancelled()) {
-						return;
-					}
-
-					player.setMaxHealth(Math.max(healthAttribute.getPlayersBaseValue() + iaae.getAttributeValue()
-							.asDouble(), 1));
+					player.setMaxHealth(Math.max(healthAttribute.getPlayersBaseValue() + d, 1));
 					player.setHealth(Math.min(Math.max(currentHealth, 0), player.getMaxHealth()));
 					player.setHealthScale(player.getMaxHealth());
 					getPlugin().getAttributeHandler().playAttributeSounds(player.getEyeLocation(), healthAttribute);

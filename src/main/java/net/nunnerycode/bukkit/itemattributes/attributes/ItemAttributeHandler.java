@@ -3,8 +3,10 @@ package net.nunnerycode.bukkit.itemattributes.attributes;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.AttributeHandler;
+import net.nunnerycode.bukkit.itemattributes.events.ItemAttributesAttributeEvent;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
@@ -144,7 +146,13 @@ public class ItemAttributeHandler implements AttributeHandler {
 			d += getAttributeValueFromItemStack(livingEntity, itemStack, attribute);
 		}
 		d += getAttributeValueFromItemStack(livingEntity, livingEntity.getEquipment().getItemInHand(), attribute);
-		return d;
+		ItemAttributesAttributeEvent iaae = new ItemAttributesAttributeEvent(livingEntity, attribute,
+				new ItemAttributeValue(d));
+		Bukkit.getPluginManager().callEvent(iaae);
+		if (iaae.isCancelled()) {
+			return 0;
+		}
+		return iaae.getAttributeValue().asDouble();
 	}
 
 	@Override

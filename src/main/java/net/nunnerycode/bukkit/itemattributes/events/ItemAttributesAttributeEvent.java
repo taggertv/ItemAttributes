@@ -11,15 +11,13 @@ public class ItemAttributesAttributeEvent extends ItemAttributesEvent implements
 		Cancellable {
 
 	private final LivingEntity livingEntity;
-	private final LivingEntity target;
 	private final Attribute attribute;
 	private AttributeValue attributeValue;
 	private boolean cancelled;
 
-	public ItemAttributesAttributeEvent(LivingEntity livingEntity, LivingEntity target, Attribute attribute,
+	public ItemAttributesAttributeEvent(LivingEntity livingEntity, Attribute attribute,
 										AttributeValue attributeValue) {
 		this.livingEntity = livingEntity;
-		this.target = target;
 		this.attribute = attribute;
 		this.attributeValue = attributeValue;
 	}
@@ -27,11 +25,6 @@ public class ItemAttributesAttributeEvent extends ItemAttributesEvent implements
 	@Override
 	public LivingEntity getLivingEntity() {
 		return livingEntity;
-	}
-
-	@Override
-	public LivingEntity getTarget() {
-		return target;
 	}
 
 	@Override
