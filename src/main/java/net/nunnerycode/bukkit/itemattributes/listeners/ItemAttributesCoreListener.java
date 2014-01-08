@@ -4,8 +4,11 @@ import net.nunnerycode.bukkit.itemattributes.ItemAttributesPlugin;
 import net.nunnerycode.bukkit.itemattributes.api.ItemAttributes;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.Attribute;
 import net.nunnerycode.bukkit.itemattributes.api.listeners.CoreListener;
+import net.nunnerycode.bukkit.itemattributes.attributes.ItemAttributeValue;
+import net.nunnerycode.bukkit.itemattributes.events.ItemAttributesAttributeEvent;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.text.WordUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -362,19 +365,22 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 		double d = 0;
 		if (event instanceof PlayerItemHeldEvent) {
+			double dd = 0;
 			for (ItemStack itemStack : event.getPlayer().getInventory().getArmorContents()) {
-				d += plugin.getAttributeHandler().getAttributeValueFromItemStack(event.getPlayer(), itemStack,
+				dd += plugin.getAttributeHandler().getAttributeValueFromItemStack(event.getPlayer(), itemStack,
 						healthAttribute);
 			}
-			d += plugin.getAttributeHandler().getAttributeValueFromItemStack(event.getPlayer(),
+			dd += plugin.getAttributeHandler().getAttributeValueFromItemStack(event.getPlayer(),
 					event.getPlayer().getInventory().getItem(((PlayerItemHeldEvent) event).getNewSlot()), healthAttribute);
-		} else {
-			for (ItemStack itemStack : event.getPlayer().getInventory().getArmorContents()) {
-				d += plugin.getAttributeHandler().getAttributeValueFromItemStack(event.getPlayer(), itemStack,
-						healthAttribute);
+
+			ItemAttributesAttributeEvent iaae = new ItemAttributesAttributeEvent(event.getPlayer(), healthAttribute,
+					new ItemAttributeValue(dd));
+			Bukkit.getPluginManager().callEvent(iaae);
+			if (!iaae.isCancelled()) {
+				d = iaae.getAttributeValue().asDouble();
 			}
-			d += plugin.getAttributeHandler().getAttributeValueFromItemStack(event.getPlayer(),
-					event.getPlayer().getItemInHand(), healthAttribute);
+		} else {
+			d += plugin.getAttributeHandler().getAttributeValueFromEntity(event.getPlayer(), healthAttribute);
 		}
 
 		double currentHealth = event.getPlayer().getHealth();
