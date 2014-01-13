@@ -107,7 +107,7 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 
 	@Override
 	public void onDisable() {
-		if (itemAttributesHealthUpdateTask != null) {
+		if (itemAttributesHealthUpdateTask != null && getSettingsManager().getSecondsBetweenHealthUpdates() > 0) {
 			itemAttributesHealthUpdateTask.cancel();
 		}
 		if (itemAttributesAttackSpeedTask != null) {
