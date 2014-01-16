@@ -153,8 +153,7 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 		if (getSettingsManager().getSecondsBetweenHealthUpdates() > 0) {
 			itemAttributesHealthUpdateTask = new ItemAttributesHealthUpdateTask(this);
 			getServer().getScheduler().runTaskTimer(this, itemAttributesHealthUpdateTask,
-					20 * getSettingsManager().getSecondsBetweenHealthUpdates(),
-					20 * getSettingsManager().getSecondsBetweenHealthUpdates());
+					0, 20 * getSettingsManager().getSecondsBetweenHealthUpdates());
 		}
 
 		itemAttributesAttackSpeedTask = new ItemAttributesAttackSpeedTask(this);

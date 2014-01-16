@@ -1089,6 +1089,9 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 						attackSpeedAttribute);
 			}
 
+			Bukkit.getLogger().info("Base attack speed: " + attackSpeedAttribute.getPlayersBaseValue() + " | Attack " +
+					"speed: " + attackSpeed);
+
 			if (((Player) event.getDamager()).hasPermission("itemattributes.testing.spam")) {
 				((Player) event.getDamager()).sendMessage("Attack speed: " + attackSpeed);
 			}
