@@ -193,4 +193,5 @@ public final class ItemAttributesPlugin extends JavaPlugin implements ItemAttrib
 			}
 		}
 	}
+
 }

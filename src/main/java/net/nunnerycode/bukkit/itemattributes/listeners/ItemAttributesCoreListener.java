@@ -1031,7 +1031,12 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 			return;
 		}
 
-		double equipmentDamage = damagerEquipmentDamage - (damagedEquipmentReduction - armorPenetration);
+		double equipmentDamage = damagerEquipmentDamage;
+		if (armorAttribute.isPercentage()) {
+			equipmentDamage -= equipmentDamage * (damagedEquipmentReduction - armorPenetration);
+		} else {
+			equipmentDamage -= damagedEquipmentReduction - armorPenetration;
+		}
 
 		double damage = originalDamage + equipmentDamage;
 
