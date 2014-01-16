@@ -14,7 +14,7 @@ public enum AttributeFlag {
 	CRITICAL_DAMAGE(Double.class), DODGE_RATE(Double.class), HEALTH(Double.class), BLOCK(Double.class),
 	PARRY(Double.class), STUN_RATE(Double.class), STUN_LENGTH(Integer.class), ARMOR_PENETRATION(Double.class),
 	ARMOR(Double.class), PERMISSION_REQUIREMENT(String.class), LEVEL_REQUIREMENT(Integer.class),
-	DAMAGE_IMMUNITY(EntityDamageEvent.DamageCause.class);
+	DAMAGE_IMMUNITY(EntityDamageEvent.DamageCause.class), PLAYER_CAP_VALUE(Double.class), MOB_CAP_VALUE(Double.class);
 
 	private final Class<?> clazz;
 
