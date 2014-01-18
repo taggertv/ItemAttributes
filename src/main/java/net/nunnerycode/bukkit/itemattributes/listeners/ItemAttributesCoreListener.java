@@ -1080,26 +1080,29 @@ public final class ItemAttributesCoreListener implements Listener, CoreListener 
 
 		if (event.getDamager() instanceof Player) {
 			long timeLeft = getPlugin().getAttackSpeedTask().getTimeLeft((LivingEntity) event.getDamager());
-			double attackSpeed = attackSpeedAttribute.getPlayersBaseValue();
+			double attackSpeed = 0;
+			double baseVal = attackSpeedAttribute.getPlayersBaseValue();
+			double maxVal = attackSpeedAttribute.getMaxValuePlayers();
+			double entityVal = plugin.getAttributeHandler().getAttributeValueFromEntity((LivingEntity) event.getDamager(), attackSpeedAttribute);
+			Player player = (Player) event.getDamager();
 			if (attackSpeedAttribute.isPercentage()) {
-				attackSpeed -= attackSpeedAttribute.getPlayersBaseValue() * (attackSpeedAttribute.getMaxValuePlayers
-						() / (attackSpeedAttribute.getMaxValuePlayers() + plugin.getAttributeHandler()
-						.getAttributeValueFromEntity((LivingEntity) event.getDamager(), attackSpeedAttribute)));
+				double val = maxVal / (maxVal + entityVal);
+				attackSpeed = baseVal * val;
 			} else {
-				attackSpeed -= getPlugin().getAttributeHandler().getAttributeValueFromEntity((LivingEntity) event.getDamager(),
-						attackSpeedAttribute);
+				attackSpeed = baseVal -  getPlugin().getAttributeHandler().getAttributeValueFromEntity((LivingEntity)
+						event.getDamager(), attackSpeedAttribute);
 			}
 
-			if (((Player) event.getDamager()).hasPermission("itemattributes.testing.spam")) {
-				((Player) event.getDamager()).sendMessage("Attack speed: " + attackSpeed);
+			if (player.hasPermission("itemattributes.testing.spam")) {
+				player.sendMessage("Attack speed: " + attackSpeed);
 			}
 
 			double timeToSet = 4D * Math.max(attackSpeed, 0D);
 			if (timeLeft > 0) {
 				double frac = Math.max(0D, Math.min(1D, 1D - (timeLeft / timeToSet)));
 
-				if (((Player) event.getDamager()).hasPermission("itemattributes.testing.spam")) {
-					((Player) event.getDamager()).sendMessage("Attack recharge percent: " + DECIMAL_FORMAT.format
+				if (player.hasPermission("itemattributes.testing.spam")) {
+					player.sendMessage("Attack recharge percent: " + DECIMAL_FORMAT.format
 							(frac * 100));
 				}
 
