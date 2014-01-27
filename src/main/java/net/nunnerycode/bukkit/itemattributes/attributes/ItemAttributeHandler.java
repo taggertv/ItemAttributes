@@ -110,21 +110,21 @@ public class ItemAttributeHandler implements AttributeHandler {
 				continue;
 			}
 			if (!s.contains("%")) {
-				if (withoutLetters.contains(" - ")) {
-					String[] split = withoutLetters.split(" - ");
-					double first = NumberUtils.toDouble(split[0], 0.0);
-					double second = NumberUtils.toDouble(split[1], 0.0);
+				if (withoutLetters.contains("-")) {
+					String[] split = withoutLetters.split("-");
+					double first = NumberUtils.toDouble(split[0].trim(), 0.0);
+					double second = NumberUtils.toDouble(split[1].trim(), 0.0);
 					d += (RandomUtils.nextDouble() * (Math.max(first, second) - Math.min(first,
 							second)) + Math.min(first, second)) / ((maxVal != 0D) ? maxVal : 100D);
 				} else {
 					d += NumberUtils.toDouble(withoutLetters, 0.0) / ((maxVal != 0D) ? maxVal : 100D);
 				}
 			} else {
-				if (withoutLetters.contains(" - ")) {
-					String[] split = withoutLetters.split(" - ");
+				if (withoutLetters.contains("-")) {
+					String[] split = withoutLetters.split("-");
 					if (split.length > 1) {
-						double first = NumberUtils.toDouble(split[0], 0.0);
-						double second = NumberUtils.toDouble(split[1], 0.0);
+						double first = NumberUtils.toDouble(split[0].trim(), 0.0);
+						double second = NumberUtils.toDouble(split[1].trim(), 0.0);
 						d += (RandomUtils.nextDouble() * (Math.max(first, second) - Math.min(first,
 								second)) + Math.min(first, second)) / 100D;
 					}
