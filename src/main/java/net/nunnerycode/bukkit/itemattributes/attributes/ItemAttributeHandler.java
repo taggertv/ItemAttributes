@@ -51,7 +51,7 @@ public class ItemAttributeHandler implements AttributeHandler {
 			String stripped = ChatColor.stripColor(s);
 
 			String withoutNumbers = stripped.replaceAll("[0-9\\+%\\-]", "").trim();
-			String withoutLetters = stripped.replaceAll("[a-zA-Z%:]", "").trim();
+			String withoutLetters = stripped.replaceAll(withoutNumbers, "").trim();
 			String withoutVariables = attribute.getFormat().replaceAll("%(?s)(.*?)%", "").trim();
 
 			if (!withoutNumbers.equals(withoutVariables)) {
