@@ -26,7 +26,7 @@ public enum AttributeFlag {
     return clazz;
   }
 
-  public boolean matches(Object object) {
+  public boolean matchesType(Object object) {
     return object.getClass().equals(clazz);
   }
 
