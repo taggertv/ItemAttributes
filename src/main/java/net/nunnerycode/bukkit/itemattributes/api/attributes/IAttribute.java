@@ -19,9 +19,12 @@ public interface IAttribute {
 
   /**
    * Sets the value of the AttributeFlag.
+   * </br>
+   * Throws an IllegalArgumentException if the value does not pass match the flag's accepted type.
    * @param flag AttributeFlag to set for
    * @param value value to set as
+   * @throws java.lang.IllegalArgumentException when Object does not match type
    */
-  void setFlagValue(AttributeFlag flag, Object value);
+  void setFlagValue(AttributeFlag flag, Object value) throws IllegalArgumentException;
 
 }
