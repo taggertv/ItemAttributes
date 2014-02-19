@@ -1,30 +1,46 @@
 package net.nunnerycode.bukkit.itemattributes.api.attributes;
 
+import org.bukkit.Effect;
+import org.bukkit.Sound;
+
 public interface IAttribute {
 
-  /**
-   * Gets and returns the name of the IAttribute.
-   * @return name of the IAttribute
-   */
   String getName();
 
-  /**
-   * Gets the value of the AttributeFlag for the IAttribute. Returns the defaultValue if the
-   * AttributeFlag is not set.
-   * @param flag AttributeFlag to check against
-   * @param defaultValue default value of the AttributeFlag
-   * @return value of flag or defaultValue
-   */
-  Object getFlagValue(AttributeFlag flag, Object defaultValue);
+  boolean isEnabled();
 
-  /**
-   * Sets the value of the AttributeFlag.
-   * </br>
-   * Throws an IllegalArgumentException if the value does not pass match the flag's accepted type.
-   * @param flag AttributeFlag to set for
-   * @param value value to set as
-   * @throws java.lang.IllegalArgumentException when Object does not match type
-   */
-  void setFlagValue(AttributeFlag flag, Object value) throws IllegalArgumentException;
+  void setEnabled(boolean b);
+
+  boolean isPercentage();
+
+  void setPercentage(boolean b);
+
+  String getFormat();
+
+  void setFormat(String s);
+
+  double getPercentageDivisor();
+
+  void setPercentageDivisor(double d);
+
+  Sound getSound();
+
+  void setSound(Sound s);
+
+  Effect getEffect();
+
+  void setEffect(Effect e);
+
+  double getBaseValue();
+
+  void setBaseValue(double d);
+
+  double getMinimumValue();
+
+  void setMinimumValue(double d);
+
+  double getMaximumValue();
+
+  void setMaximumValue(double d);
 
 }
