@@ -15,7 +15,11 @@ public final class ItemAttributeValue implements IAttributeValue {
     if (object instanceof Double) {
       return (Double) object;
     }
-    return 0;
+    try {
+      return Double.parseDouble(String.valueOf(object));
+    } catch (Exception e) {
+      return 0;
+    }
   }
 
   @Override
@@ -23,7 +27,11 @@ public final class ItemAttributeValue implements IAttributeValue {
     if (object instanceof Integer) {
       return (Integer) object;
     }
-    return 0;
+    try {
+      return Integer.parseInt(String.valueOf(object));
+    } catch (Exception e) {
+      return 0;
+    }
   }
 
   @Override
@@ -31,7 +39,11 @@ public final class ItemAttributeValue implements IAttributeValue {
     if (object instanceof Long) {
       return (Long) object;
     }
-    return 0;
+    try {
+      return Long.parseLong(String.valueOf(object));
+    } catch (Exception e) {
+      return 0;
+    }
   }
 
   @Override
@@ -44,7 +56,7 @@ public final class ItemAttributeValue implements IAttributeValue {
     if (object instanceof Boolean) {
       return (Boolean) object;
     }
-    return false;
+    return Boolean.parseBoolean(String.valueOf(object));
   }
 
 }
