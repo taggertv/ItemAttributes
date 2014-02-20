@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 import java.util.Set;
 
-public interface AttributeHandler {
+public interface IAttributeHandler {
 
   /**
    * Gets and returns the value of the {@link IAttribute} on the {@link ItemStack}
