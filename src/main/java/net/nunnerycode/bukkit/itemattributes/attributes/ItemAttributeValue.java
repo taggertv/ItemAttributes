@@ -11,6 +11,25 @@ public final class ItemAttributeValue implements IAttributeValue {
   }
 
   @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof ItemAttributeValue)) {
+      return false;
+    }
+
+    ItemAttributeValue that = (ItemAttributeValue) o;
+
+    return !(object != null ? !object.equals(that.object) : that.object != null);
+  }
+
+  @Override
+  public int hashCode() {
+    return object != null ? object.hashCode() : 0;
+  }
+
+  @Override
   public double asDouble() {
     if (object instanceof Double) {
       return (Double) object;
