@@ -1,0 +1,28 @@
+version: "0.0.1"
+attributes:
+  attack-speed:
+    enabled: true
+    format: "%value% Attack Speed"
+    percentage: true
+    percentage-divisor: 100.0
+    base-value: 2.0
+    minimum-value: 0.0
+    maximum-value: 4.0
+  melee-damage:
+    enabled: true
+    format: "%value% Melee Damage"
+    base-value: 0.0
+    minimum-value: -100.0
+    maximum-value: 100.0
+  ranged-damage:
+    enabled: true
+    format: "%value% Ranged Damage"
+    base-value: 0.0
+    minimum-value: -100.0
+    maximum-value: 100.0
+  damage:
+    enabled: false
+    format: "%value% Damage"
+    base-value: 0.0
+    minimum-value: -100.0
+    maximum-value: 100.0
