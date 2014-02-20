@@ -163,8 +163,7 @@
                                     <include>net.nunnerycode.bukkit:ivory-lib</include>
                                     <include>se.ranzdo.bukkit:methodcommand</include>
                                     <include>org.mcstats.bukkit:metrics</include>
-                                    <include>com.google.guava:guava</include>
-                                    <!--<include>org.apache.commons:commons-lang3</include>-->
+                                    <include>org.apache.commons:commons-lang3</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -243,17 +242,10 @@
             <version>R7</version>
             <scope>compile</scope>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.apache.commons</groupId>-->
-            <!--<artifactId>commons-lang3</artifactId>-->
-            <!--<version>3.1</version>-->
-            <!--<type>jar</type>-->
-            <!--<scope>compile</scope>-->
-        <!--</dependency>-->
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>16.0.1</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.1</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
