@@ -83,9 +83,18 @@ public final class ItemAttributesPlugin extends JavaPlugin {
     }
     permissionsYAML.load();
 
+    loadSettings();
     loadAttributes();
 
     debug(Level.INFO, "v" + getDescription().getVersion() + " enabled");
+  }
+
+  private void loadSettings() {
+    YamlConfiguration c = configYAML;
+    getSettings().setSettingValue("config.item-only-damage-system.enabled",
+                                  c.getBoolean("item-only-damage-system.enabled", false));
+    getSettings().setSettingValue("config.item-only-damage-system.base-damage",
+                                  c.getDouble("item-only-damage-system.base-damage", 1.0));
   }
 
   private void loadAttributes() {
