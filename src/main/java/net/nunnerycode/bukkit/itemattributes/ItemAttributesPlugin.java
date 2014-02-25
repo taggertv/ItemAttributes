@@ -1,8 +1,10 @@
 package net.nunnerycode.bukkit.itemattributes;
 
+import net.nunnerycode.bukkit.itemattributes.api.attributes.IAttribute;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.IAttributeBuilder;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.IAttributeHandler;
 import net.nunnerycode.bukkit.itemattributes.api.settings.ISettings;
+import net.nunnerycode.bukkit.itemattributes.attributes.AttributeMap;
 import net.nunnerycode.bukkit.itemattributes.attributes.ItemAttributeBuilder;
 import net.nunnerycode.bukkit.itemattributes.attributes.ItemAttributeHandler;
 import net.nunnerycode.bukkit.itemattributes.settings.ItemAttributesSettings;
@@ -30,6 +32,12 @@ public final class ItemAttributesPlugin extends JavaPlugin {
   public void onEnable() {
     settings = new ItemAttributesSettings();
     attributeHandler = new ItemAttributeHandler();
+
+    IAttribute attribute =
+        getAttributeBuilder("DAMAGE").withEnabled(true).withPercentage(false).withBaseValue(1.0)
+            .withMaximumValue(100.0).withMinimumValue(100.0).withPercentageDivisor(100.0).build();
+
+    AttributeMap.getInstance().put("DAMAGE", attribute);
 
     debugPrinter.debug(Level.INFO, "v" + getDescription().getVersion() + " enabled");
   }
