@@ -23,4 +23,6 @@ public interface IAttributeBuilder {
 
   IAttributeBuilder withMaximumValue(double d);
 
+  IAttribute build();
+
 }
