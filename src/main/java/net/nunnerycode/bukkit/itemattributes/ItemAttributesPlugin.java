@@ -95,6 +95,14 @@ public final class ItemAttributesPlugin extends JavaPlugin {
                                   c.getBoolean("item-only-damage-system.enabled", false));
     getSettings().setSettingValue("config.item-only-damage-system.base-damage",
                                   c.getDouble("item-only-damage-system.base-damage", 1.0));
+
+    c = languageYAML;
+    for (String key : c.getKeys(true)) {
+      if (c.isConfigurationSection(key) || key.equals("version")) {
+        continue;
+      }
+      getSettings().setSettingValue("language." + key, c.getString(key, key));
+    }
   }
 
   private void loadAttributes() {
