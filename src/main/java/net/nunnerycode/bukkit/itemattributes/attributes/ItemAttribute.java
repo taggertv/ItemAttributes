@@ -51,7 +51,6 @@ public final class ItemAttribute implements IAttribute {
     return enabled;
   }
 
-  @Override
   public void setEnabled(boolean enabled) {
     this.enabled = enabled;
   }
@@ -61,7 +60,6 @@ public final class ItemAttribute implements IAttribute {
     return sound;
   }
 
-  @Override
   public void setSound(Sound sound) {
     this.sound = sound;
   }
@@ -71,7 +69,6 @@ public final class ItemAttribute implements IAttribute {
     return effect;
   }
 
-  @Override
   public void setEffect(Effect effect) {
     this.effect = effect;
   }
@@ -81,7 +78,6 @@ public final class ItemAttribute implements IAttribute {
     return percentage;
   }
 
-  @Override
   public void setPercentage(boolean percentage) {
     this.percentage = percentage;
   }
@@ -91,7 +87,6 @@ public final class ItemAttribute implements IAttribute {
     return percentageDivisor;
   }
 
-  @Override
   public void setPercentageDivisor(double percentageDivisor) {
     this.percentageDivisor = percentageDivisor;
   }
@@ -101,7 +96,6 @@ public final class ItemAttribute implements IAttribute {
     return baseValue;
   }
 
-  @Override
   public void setBaseValue(double baseValue) {
     this.baseValue = baseValue;
   }
@@ -111,7 +105,6 @@ public final class ItemAttribute implements IAttribute {
     return minimumValue;
   }
 
-  @Override
   public void setMinimumValue(double minimumValue) {
     this.minimumValue = minimumValue;
   }
@@ -121,7 +114,6 @@ public final class ItemAttribute implements IAttribute {
     return maximumValue;
   }
 
-  @Override
   public void setMaximumValue(double maximumValue) {
     this.maximumValue = maximumValue;
   }
@@ -131,8 +123,8 @@ public final class ItemAttribute implements IAttribute {
     return format;
   }
 
-  @Override
   public void setFormat(String format) {
     this.format = format;
   }
+
 }
