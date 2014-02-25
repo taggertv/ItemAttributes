@@ -1,7 +1,9 @@
 package net.nunnerycode.bukkit.itemattributes;
 
+import net.nunnerycode.bukkit.itemattributes.api.attributes.IAttributeBuilder;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.IAttributeHandler;
 import net.nunnerycode.bukkit.itemattributes.api.settings.ISettings;
+import net.nunnerycode.bukkit.itemattributes.attributes.ItemAttributeBuilder;
 import net.nunnerycode.bukkit.itemattributes.attributes.ItemAttributeHandler;
 import net.nunnerycode.bukkit.itemattributes.settings.ItemAttributesSettings;
 import net.nunnerycode.java.libraries.cannonball.DebugPrinter;
@@ -37,6 +39,10 @@ public final class ItemAttributesPlugin extends JavaPlugin {
       debugPrinter = new DebugPrinter(getDataFolder().getPath(), "debug.log");
     }
     debugPrinter.debug(level, messages);
+  }
+
+  public IAttributeBuilder getAttributeBuilder(String name) {
+    return new ItemAttributeBuilder(name);
   }
 
 }
