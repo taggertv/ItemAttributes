@@ -17,8 +17,7 @@ import java.util.List;
 public final class ItemAttributeHandler implements IAttributeHandler {
 
   /**
-   * Gets and returns the value of the {@link net.nunnerycode.bukkit.itemattributes.api.attributes.IAttribute} on the {@link org.bukkit.inventory.ItemStack}
-   *
+   * Gets and returns the value of the {@link IAttribute} on the {@link ItemStack}
    *
    * @param itemStack ItemStack to check
    * @param attribute IAttribute to check for
@@ -54,7 +53,8 @@ public final class ItemAttributeHandler implements IAttributeHandler {
           double first = NumberUtils.toDouble(split[0].trim(), 0.0);
           double second = NumberUtils.toDouble(split[1].trim(), 0.0);
           double d = RandomUtils.nextDouble() * (Math.max(first, second) - Math.min(first,
-                                                                              second)) + Math.min(first, second);
+                                                                                    second)) + Math
+                         .min(first, second);
           iAttributeValues.add(new ItemAttributeValue(d));
         }
       } else {
@@ -66,10 +66,9 @@ public final class ItemAttributeHandler implements IAttributeHandler {
   }
 
   /**
-   * Gets and returns the value of the {@link net.nunnerycode.bukkit.itemattributes.api.attributes.IAttribute} on the LivingEntity </br> Equivalent of
-   * calling {@link #getAttributesPresentOnItemStack(org.bukkit.inventory.ItemStack)} on all {@link org.bukkit.inventory.ItemStack}s in {@link
-   * org.bukkit.entity.LivingEntity#getEquipment()}.
-   *
+   * Gets and returns the value of the {@link IAttribute} on the LivingEntity </br> Equivalent of
+   * calling {@link #getAttributeValueFromItemStack(ItemStack, IAttribute)} on all {@link
+   * ItemStack}s in {@link LivingEntity#getEquipment()}.
    *
    * @param livingEntity LivingEntity to check on
    * @param attribute    IAttribute to check for
@@ -88,7 +87,8 @@ public final class ItemAttributeHandler implements IAttributeHandler {
   }
 
   /**
-   * Plays the {@link org.bukkit.Effect} of some {@link net.nunnerycode.bukkit.itemattributes.api.attributes.IAttribute}s at a {@link org.bukkit.Location}.
+   * Plays the {@link org.bukkit.Effect} of some {@link IAttribute}s at a {@link
+   * org.bukkit.Location}.
    *
    * @param location   Location to play Effects
    * @param attributes IAttributes to use for Sounds
@@ -103,7 +103,8 @@ public final class ItemAttributeHandler implements IAttributeHandler {
   }
 
   /**
-   * Plays the {@link org.bukkit.Sound} of some {@link net.nunnerycode.bukkit.itemattributes.api.attributes.IAttribute}s at a {@link org.bukkit.Location}.
+   * Plays the {@link org.bukkit.Sound} of some {@link IAttribute}s at a {@link
+   * org.bukkit.Location}.
    *
    * @param location   Location to play Sounds
    * @param attributes IAttributes to use for Sounds
