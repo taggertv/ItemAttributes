@@ -6,8 +6,9 @@ messages:
     stun: "&AYou have stunned your opponent!"
     dodge: "&AYou dodged an attack!"
   commands:
+    target-is-not-player: "&CThat is not a player."
     cannot-use: "&CYou cannot use that command."
     view-stats-help: "&7Stat Name &8- &FTotal &8| &9(Helmet) &A(Chestplate) &B(Leggings) &C(Boots) &D(Item in Hand)"
     view-stats: "&7%statname% &8- &F%totalvalue% &8| &9(%helmet%) &A(%chestplate%) &B(%leggings%) &C(%boots%) &D(%item%)"
     view-stats-percentage: "&7%statname% &8- &F%totalvalue%% &8| &9(%helmet%%) &A(%chestplate%%) &B(%leggings%%) &C(%boots%%) &D(%item%%)"
-version: "1.0.6"
+version: "1.0.7"
