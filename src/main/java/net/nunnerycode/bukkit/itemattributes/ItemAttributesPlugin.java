@@ -7,6 +7,7 @@ import net.nunnerycode.bukkit.itemattributes.api.settings.ISettings;
 import net.nunnerycode.bukkit.itemattributes.attributes.AttributeMap;
 import net.nunnerycode.bukkit.itemattributes.attributes.ItemAttributeBuilder;
 import net.nunnerycode.bukkit.itemattributes.attributes.ItemAttributeHandler;
+import net.nunnerycode.bukkit.itemattributes.commands.ItemAttributesCommands;
 import net.nunnerycode.bukkit.itemattributes.settings.ItemAttributesSettings;
 import net.nunnerycode.bukkit.libraries.ivory.config.VersionedIvoryYamlConfiguration;
 import net.nunnerycode.java.libraries.cannonball.DebugPrinter;
@@ -16,6 +17,8 @@ import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import se.ranzdo.bukkit.methodcommand.CommandHandler;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -86,6 +89,9 @@ public final class ItemAttributesPlugin extends JavaPlugin {
     loadSettings();
     loadAttributes();
 
+    CommandHandler commandHandler = new CommandHandler(this);
+    commandHandler.registerCommands(new ItemAttributesCommands(this));
+
     debug(Level.INFO, "v" + getDescription().getVersion() + " enabled");
   }
 
@@ -114,10 +120,10 @@ public final class ItemAttributesPlugin extends JavaPlugin {
     List<String> loadedAttributes = new ArrayList<>();
     AttributeMap.getInstance().clear();
     for (String key : attributes.getKeys(false)) {
-      if (!c.isConfigurationSection(key)) {
+      if (!attributes.isConfigurationSection(key)) {
         continue;
       }
-      ConfigurationSection cs = c.getConfigurationSection(key);
+      ConfigurationSection cs = attributes.getConfigurationSection(key);
       IAttributeBuilder attributeBuilder = getAttributeBuilder(key);
       attributeBuilder.withFormat(cs.getString("format"));
       attributeBuilder.withBaseValue(cs.getDouble("base-value", 0));
