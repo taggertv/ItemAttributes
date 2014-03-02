@@ -1,17 +1,18 @@
 package net.nunnerycode.bukkit.itemattributes.api.attributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public interface IAttributeValueList extends List<IAttributeValue> {
+public abstract class IAttributeValueList extends ArrayList<IAttributeValue> {
 
-  double asDouble();
+  public abstract double asDouble();
 
-  int asInt();
+  public abstract int asInt();
 
-  long asLong();
+  public abstract long asLong();
 
-  boolean asBoolean();
+  public abstract boolean asBoolean();
 
-  List<String> asStrings();
+  public abstract List<String> asStrings();
 
 }
