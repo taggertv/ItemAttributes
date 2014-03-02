@@ -6,8 +6,6 @@ import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.List;
-
 public interface IAttributeHandler {
 
   /**
@@ -16,7 +14,7 @@ public interface IAttributeHandler {
    * @param attribute IAttribute to check for
    * @return value of IAttribute on ItemStack
    */
-  List<IAttributeValue> getAttributeValueFromItemStack(ItemStack itemStack, IAttribute attribute);
+  IAttributeValueList getAttributeValueFromItemStack(ItemStack itemStack, IAttribute attribute);
 
   /**
    * Gets and returns the value of the {@link IAttribute} on the LivingEntity
@@ -27,7 +25,7 @@ public interface IAttributeHandler {
    * @param attribute IAttribute to check for
    * @return value of IAttribute on ItemStack
    */
-  List<IAttributeValue> getAttributeValueFromEntity(LivingEntity livingEntity,
+  IAttributeValueList getAttributeValueFromEntity(LivingEntity livingEntity,
                                                    IAttribute attribute);
 
   /**

@@ -2,7 +2,7 @@ package net.nunnerycode.bukkit.itemattributes.attributes;
 
 import net.nunnerycode.bukkit.itemattributes.api.attributes.IAttribute;
 import net.nunnerycode.bukkit.itemattributes.api.attributes.IAttributeHandler;
-import net.nunnerycode.bukkit.itemattributes.api.attributes.IAttributeValue;
+import net.nunnerycode.bukkit.itemattributes.api.attributes.IAttributeValueList;
 
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -10,9 +10,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public final class ItemAttributeHandler implements IAttributeHandler {
 
@@ -24,9 +21,9 @@ public final class ItemAttributeHandler implements IAttributeHandler {
    * @return value of IAttribute on ItemStack
    */
   @Override
-  public List<IAttributeValue> getAttributeValueFromItemStack(ItemStack itemStack,
+  public IAttributeValueList getAttributeValueFromItemStack(ItemStack itemStack,
                                                               IAttribute attribute) {
-    List<IAttributeValue> iAttributeValues = new ArrayList<>();
+    IAttributeValueList iAttributeValues = new ItemAttributeValueList();
     if (itemStack == null || attribute == null) {
       return iAttributeValues;
     }
@@ -75,9 +72,9 @@ public final class ItemAttributeHandler implements IAttributeHandler {
    * @return value of IAttribute on ItemStack
    */
   @Override
-  public List<IAttributeValue> getAttributeValueFromEntity(LivingEntity livingEntity,
+  public IAttributeValueList getAttributeValueFromEntity(LivingEntity livingEntity,
                                                            IAttribute attribute) {
-    List<IAttributeValue> values = new ArrayList<>();
+    IAttributeValueList values = new ItemAttributeValueList();
     for (ItemStack is : livingEntity.getEquipment().getArmorContents()) {
       values.addAll(getAttributeValueFromItemStack(is, attribute));
     }
