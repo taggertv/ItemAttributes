@@ -71,6 +71,18 @@ public final class ItemAttributeBuilder implements IAttributeBuilder {
   }
 
   @Override
+  public IAttributeBuilder withDisplayName(String s) {
+    itemAttribute.setDisplayName(s);
+    return this;
+  }
+
+  @Override
+  public IAttributeBuilder withDescription(String s) {
+    itemAttribute.setDescription(s);
+    return this;
+  }
+
+  @Override
   public IAttribute build() {
     return itemAttribute;
   }

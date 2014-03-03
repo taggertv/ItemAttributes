@@ -25,4 +25,7 @@ public interface IAttribute {
 
   double getMaximumValue();
 
+  String getDisplayName();
+
+  String getDescription();
 }

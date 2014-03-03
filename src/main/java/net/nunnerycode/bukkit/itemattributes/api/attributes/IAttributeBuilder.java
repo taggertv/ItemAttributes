@@ -23,6 +23,10 @@ public interface IAttributeBuilder {
 
   IAttributeBuilder withMaximumValue(double d);
 
+  IAttributeBuilder withDisplayName(String s);
+
+  IAttributeBuilder withDescription(String s);
+
   IAttribute build();
 
 }
