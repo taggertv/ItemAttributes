@@ -21,3 +21,10 @@ attributes:
     base-value: 0.0
     minimum-value: -100.0
     maximum-value: 100.0
+  armor:
+    display-name: "Armor"
+    enabled: true
+    format: "%value% Armor"
+    base-value: 0.0
+    minimum-value: -100.0
+    maximum-value: 100.0
