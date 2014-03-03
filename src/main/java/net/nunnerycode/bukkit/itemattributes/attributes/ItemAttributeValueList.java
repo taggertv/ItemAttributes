@@ -6,7 +6,7 @@ import net.nunnerycode.bukkit.itemattributes.api.attributes.IAttributeValueList;
 import java.util.Collections;
 import java.util.List;
 
-public class ItemAttributeValueList extends IAttributeValueList {
+public final class ItemAttributeValueList extends IAttributeValueList {
 
   @Override
   public double asDouble() {
