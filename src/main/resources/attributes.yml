@@ -1,14 +1,5 @@
 version: "0.0.2"
 attributes:
-  attack-speed:
-    display-name: "Attack Speed"
-    enabled: true
-    format: "%value% Attack Speed"
-    percentage: true
-    percentage-divisor: 100.0
-    base-value: 2.0
-    minimum-value: 0.0
-    maximum-value: 4.0
   melee-damage:
     display-name: "Melee Damage"
     enabled: true
