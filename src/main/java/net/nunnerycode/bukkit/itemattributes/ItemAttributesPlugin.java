@@ -125,6 +125,8 @@ public final class ItemAttributesPlugin extends JavaPlugin {
       }
       ConfigurationSection cs = attributes.getConfigurationSection(key);
       IAttributeBuilder attributeBuilder = getAttributeBuilder(key);
+      attributeBuilder.withDisplayName(cs.getString("display-name", key));
+      attributeBuilder.withDescription(cs.getString("description"));
       attributeBuilder.withFormat(cs.getString("format"));
       attributeBuilder.withBaseValue(cs.getDouble("base-value", 0));
       attributeBuilder.withMinimumValue(cs.getDouble("minimum-value", 0));
