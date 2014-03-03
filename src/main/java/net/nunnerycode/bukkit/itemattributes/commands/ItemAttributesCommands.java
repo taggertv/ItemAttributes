@@ -14,7 +14,7 @@ import se.ranzdo.bukkit.methodcommand.Command;
 
 import java.text.DecimalFormat;
 
-public class ItemAttributesCommands {
+public final class ItemAttributesCommands {
 
   private ItemAttributesPlugin plugin;
   private final DecimalFormat decimalFormat = new DecimalFormat("#.##");
