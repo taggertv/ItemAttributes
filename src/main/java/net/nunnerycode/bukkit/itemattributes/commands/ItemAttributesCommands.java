@@ -84,7 +84,7 @@ public final class ItemAttributesCommands {
 
       if (att.isPercentage()) {
         MessageUtil.sendColoredArgumentMessage(player, languagePercentageKey,
-                                               new String[][]{{"%statname%", att.getName()},
+                                               new String[][]{{"%statname%", att.getDisplayName()},
                                                               {"%totalvalue%",
                                                                decimalFormat.format(totalValue)},
                                                               {"%helmet%",
@@ -99,7 +99,7 @@ public final class ItemAttributesCommands {
                                                                decimalFormat.format(handValue)}});
       } else {
         MessageUtil.sendColoredArgumentMessage(player, languageKey,
-                                               new String[][]{{"%statname%", att.getName()},
+                                               new String[][]{{"%statname%", att.getDisplayName()},
                                                               {"%totalvalue%",
                                                                decimalFormat.format(totalValue)},
                                                               {"%helmet%",
