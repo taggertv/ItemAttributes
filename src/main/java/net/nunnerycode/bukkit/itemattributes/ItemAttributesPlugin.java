@@ -7,11 +7,13 @@ import net.nunnerycode.bukkit.itemattributes.api.settings.ISettings;
 import net.nunnerycode.bukkit.itemattributes.attributes.AttributeMap;
 import net.nunnerycode.bukkit.itemattributes.attributes.ItemAttributeBuilder;
 import net.nunnerycode.bukkit.itemattributes.attributes.ItemAttributeHandler;
+import net.nunnerycode.bukkit.itemattributes.combat.CombatListener;
 import net.nunnerycode.bukkit.itemattributes.commands.ItemAttributesCommands;
 import net.nunnerycode.bukkit.itemattributes.settings.ItemAttributesSettings;
 import net.nunnerycode.bukkit.libraries.ivory.config.VersionedIvoryYamlConfiguration;
 import net.nunnerycode.java.libraries.cannonball.DebugPrinter;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
@@ -91,6 +93,8 @@ public final class ItemAttributesPlugin extends JavaPlugin {
 
     CommandHandler commandHandler = new CommandHandler(this);
     commandHandler.registerCommands(new ItemAttributesCommands(this));
+
+    Bukkit.getPluginManager().registerEvents(new CombatListener(this), this);
 
     debug(Level.INFO, "v" + getDescription().getVersion() + " enabled");
   }
