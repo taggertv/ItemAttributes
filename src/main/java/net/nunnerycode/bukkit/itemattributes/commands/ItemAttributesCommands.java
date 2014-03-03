@@ -12,9 +12,12 @@ import org.bukkit.entity.Player;
 import se.ranzdo.bukkit.methodcommand.Arg;
 import se.ranzdo.bukkit.methodcommand.Command;
 
+import java.text.DecimalFormat;
+
 public class ItemAttributesCommands {
 
   private ItemAttributesPlugin plugin;
+  private final DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
   public ItemAttributesCommands(ItemAttributesPlugin plugin) {
     this.plugin = plugin;
@@ -83,32 +86,32 @@ public class ItemAttributesCommands {
         MessageUtil.sendColoredArgumentMessage(player, languagePercentageKey,
                                                new String[][]{{"%statname%", att.getName()},
                                                               {"%totalvalue%",
-                                                               String.valueOf(totalValue)},
+                                                               decimalFormat.format(totalValue)},
                                                               {"%helmet%",
-                                                               String.valueOf(headValue)},
+                                                               decimalFormat.format(headValue)},
                                                               {"%chestplate%",
-                                                               String.valueOf(chestValue)},
+                                                               decimalFormat.format(chestValue)},
                                                               {"%leggings%",
-                                                               String.valueOf(legValue)},
+                                                               decimalFormat.format(legValue)},
                                                               {"%boots%",
-                                                               String.valueOf(footValue)},
+                                                               decimalFormat.format(footValue)},
                                                               {"%item%",
-                                                               String.valueOf(handValue)}});
+                                                               decimalFormat.format(handValue)}});
       } else {
         MessageUtil.sendColoredArgumentMessage(player, languageKey,
                                                new String[][]{{"%statname%", att.getName()},
                                                               {"%totalvalue%",
-                                                               String.valueOf(totalValue)},
+                                                               decimalFormat.format(totalValue)},
                                                               {"%helmet%",
-                                                               String.valueOf(headValue)},
+                                                               decimalFormat.format(headValue)},
                                                               {"%chestplate%",
-                                                               String.valueOf(chestValue)},
+                                                               decimalFormat.format(chestValue)},
                                                               {"%leggings%",
-                                                               String.valueOf(legValue)},
+                                                               decimalFormat.format(legValue)},
                                                               {"%boots%",
-                                                               String.valueOf(footValue)},
+                                                               decimalFormat.format(footValue)},
                                                               {"%item%",
-                                                               String.valueOf(handValue)}});
+                                                               decimalFormat.format(handValue)}});
       }
     }
   }
