@@ -32,17 +32,33 @@ public final class CombatListener implements Listener {
 
     IAttribute rangedDamageAttribute = AttributeMap.getInstance().get("ranged-damage");
     IAttribute damageAttribute = AttributeMap.getInstance().get("damage");
-    double rangedDamageAttributeD =
-        plugin.getAttributeHandler()
-            .getAttributeValueFromEntity(event.getEntity().getShooter(), rangedDamageAttribute)
-            .asDouble();
-    double damageAttributeD = plugin.getAttributeHandler()
-        .getAttributeValueFromEntity(event.getEntity().getShooter(),
-                                     rangedDamageAttribute).asDouble();
+    IAttribute armorPenAttribute = AttributeMap.getInstance().get("armor-penetration");
+    double rangedDamageAttributeD = 0;
+    if (rangedDamageAttribute != null) {
+      rangedDamageAttributeD = rangedDamageAttribute.getBaseValue() +
+                               plugin.getAttributeHandler()
+                                   .getAttributeValueFromEntity(event.getEntity().getShooter(),
+                                                                rangedDamageAttribute).asDouble();
+    }
+    double damageAttributeD = 0;
+    if (damageAttribute != null) {
+      damageAttributeD = damageAttribute.getBaseValue() + plugin.getAttributeHandler()
+          .getAttributeValueFromEntity(event.getEntity().getShooter(),
+                                       rangedDamageAttribute).asDouble();
+    }
+    double armorPenD = 0;
+    if (armorPenAttribute != null) {
+      armorPenD =
+          armorPenAttribute.getBaseValue() + plugin.getAttributeHandler()
+              .getAttributeValueFromEntity(event.getEntity().getShooter(), armorPenAttribute)
+              .asDouble();
+    }
 
     event.getEntity().setMetadata("itemattributes.ranged-damage", new FixedMetadataValue(plugin,
                                                                                          rangedDamageAttributeD
                                                                                          + damageAttributeD));
+    event.getEntity()
+        .setMetadata("itemattributes.armor-penetration", new FixedMetadataValue(plugin, armorPenD));
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
@@ -54,7 +70,8 @@ public final class CombatListener implements Listener {
     double eventDamage = event.getDamage();
     if ((Boolean) plugin.getSettings()
         .getSettingValue("config.item-only-damage-system.enabled", false)) {
-      eventDamage = 0;
+      eventDamage = (Double) plugin.getSettings()
+          .getSettingValue("config.item-only-damage-system.base-damage", 1.0);
     }
 
     LivingEntity damager;
@@ -63,6 +80,7 @@ public final class CombatListener implements Listener {
     IAttribute damageAttribute = AttributeMap.getInstance().get("damage");
     IAttribute meleeDamageAttribute = AttributeMap.getInstance().get("melee-damage");
     IAttribute armorAttribute = AttributeMap.getInstance().get("armor");
+    IAttribute armorPenetrationAttribute = AttributeMap.getInstance().get("armor-penetration");
 
     double armorAttributeD = 0;
     if (armorAttribute != null) {
@@ -71,6 +89,7 @@ public final class CombatListener implements Listener {
     }
 
     double damageD = 0;
+    double armorPenD = 0;
 
     if (event.getDamager() instanceof Projectile) {
       damager = ((Projectile) event.getDamager()).getShooter();
@@ -80,24 +99,39 @@ public final class CombatListener implements Listener {
           damageD += mv.asDouble();
         }
       }
+      if (event.getDamager().hasMetadata("itemattributes.armor-penetration")) {
+        List<MetadataValue>
+            list =
+            event.getDamager().getMetadata("itemattributes.armor-penetration");
+        for (MetadataValue mv : list) {
+          armorPenD += mv.asDouble();
+        }
+      }
     } else if (event.getDamager() instanceof LivingEntity) {
       damager = (LivingEntity) event.getDamager();
       double damageAttributeD = 0;
       if (damageAttribute != null) {
-        damageAttributeD = plugin.getAttributeHandler()
+        damageAttributeD = damageAttribute.getBaseValue() + plugin.getAttributeHandler()
             .getAttributeValueFromEntity(damager, damageAttribute).asDouble();
       }
       double meleeDamageAttributeD = 0;
       if (meleeDamageAttribute != null) {
-        meleeDamageAttributeD = plugin.getAttributeHandler()
+        meleeDamageAttributeD = meleeDamageAttribute.getBaseValue() + plugin.getAttributeHandler()
             .getAttributeValueFromEntity(damager, meleeDamageAttribute).asDouble();
       }
       damageD += damageAttributeD + meleeDamageAttributeD;
+      if (armorPenetrationAttribute != null) {
+        armorPenD = armorPenetrationAttribute.getBaseValue() +
+                    plugin.getAttributeHandler()
+                        .getAttributeValueFromEntity(damager, armorPenetrationAttribute).asDouble();
+      }
     } else {
       return;
     }
 
-    eventDamage += Math.max(damageD - armorAttributeD, 0);
+    double armorD = armorAttributeD - armorPenD;
+
+    eventDamage += Math.max(damageD - armorD, 0);
 
     event.setDamage(eventDamage);
   }
