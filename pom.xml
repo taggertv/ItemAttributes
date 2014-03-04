@@ -284,20 +284,42 @@
         <project.build.number>UNKNOWN</project.build.number>
         <project.build.version>UNKNOWN</project.build.version>
         <project.build.name>UNKNOWN</project.build.name>
+        <project.build.type>UNKNOWN</project.build.type>
     </properties>
 
     <profiles>
         <profile>
-            <id>jenkins</id>
+            <id>stable</id>
             <activation>
                 <property>
-                    <name>env.BUILD_NUMBER</name>
+                    <name>env.JOB_NAME</name>
+                    <value>ItemAttributes</value>
                 </property>
             </activation>
             <properties>
                 <project.build.number>${env.BUILD_NUMBER}</project.build.number>
-                <project.build.version>${project.version}-b${project.build.number}</project.build.version>
-                <project.build.name>${env.JOB_NAME}</project.build.name>
+                <project.build.type>STABLE</project.build.type>
+                <project.build.version>
+                    ${project.version}-b${project.build.number}-${project.build.type}
+                </project.build.version>
+                <project.build.name>${project.name}</project.build.name>
+            </properties>
+        </profile>
+        <profile>
+            <id>bleeding</id>
+            <activation>
+                <property>
+                    <name>env.JOB_NAME</name>
+                    <value>ItemAttributes-Bleeding</value>
+                </property>
+            </activation>
+            <properties>
+                <project.build.number>${env.BUILD_NUMBER}</project.build.number>
+                <project.build.type>BLEEDING</project.build.type>
+                <project.build.version>
+                    ${project.version}-b${project.build.number}-${project.build.type}
+                </project.build.version>
+                <project.build.name>${project.name}</project.build.name>
             </properties>
         </profile>
         <profile>
