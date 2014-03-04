@@ -1,4 +1,4 @@
-version: "0.0.2"
+version: "0.0.3"
 attributes:
   melee-damage:
     display-name: "Melee Damage"
@@ -25,6 +25,13 @@ attributes:
     display-name: "Armor"
     enabled: true
     format: "%value% Armor"
+    base-value: 0.0
+    minimum-value: -100.0
+    maximum-value: 100.0
+  armor-penetration:
+    display-name: "Armor Penetration"
+    enabled: true
+    format: "%value% Armor Penetration"
     base-value: 0.0
     minimum-value: -100.0
     maximum-value: 100.0
